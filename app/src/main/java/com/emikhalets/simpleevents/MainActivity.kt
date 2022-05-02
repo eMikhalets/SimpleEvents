@@ -3,41 +3,38 @@ package com.emikhalets.simpleevents
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsNavHost
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsScaffold
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            SimpleEventsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+        setContent { Application() }
+    }
+}
+
+@Composable
+fun Application() {
+    val navHost = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
+
+    SimpleEventsTheme {
+        SimpleEventsScaffold(navHost) {
+            SimpleEventsNavHost(
+                navController = navHost,
+                scaffoldState = scaffoldState
+            )
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    SimpleEventsTheme {
-        Greeting("Android")
-    }
+fun ApplicationPreview() {
+    Application()
 }

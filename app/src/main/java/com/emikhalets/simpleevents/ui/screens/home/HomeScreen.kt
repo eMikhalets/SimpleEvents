@@ -24,7 +24,7 @@ import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(scaffoldState: ScaffoldState) {
     var searchQuery by remember { mutableStateOf("") }
 
     HomeScreen(
