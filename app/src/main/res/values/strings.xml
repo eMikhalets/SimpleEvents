@@ -8,6 +8,13 @@
     <string name="home_upcoming_events">Upcoming events</string>
     <string name="home_search_placeholder">Search for a event\'s name</string>
 
+    <string name="add_event_adding_new_event">Adding a new event</string>
+    <string name="add_event_placeholder_name">Name</string>
+    <string name="add_event_choose_date">Choose date</string>
+    <string name="add_event_btn_save">Save Event</string>
+    <string name="add_event_empty_name">Name required</string>
+    <string name="add_event_empty_date">Date required</string>
+
     <plurals name="event_list_item_days">
         <item quantity="one">DAY</item>
         <item quantity="other">DAYS</item>

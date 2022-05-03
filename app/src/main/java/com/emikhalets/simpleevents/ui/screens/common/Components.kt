@@ -14,12 +14,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
@@ -69,7 +73,7 @@ fun SimpleEventsScaffold(
 private fun SimpleEventsBottomBar(navController: NavHostController) {
     val screens = listOf(
         AppScreen.Home,
-        AppScreen.Add,
+        AppScreen.AddEvent,
         AppScreen.Settings
     )
 
@@ -81,7 +85,7 @@ private fun SimpleEventsBottomBar(navController: NavHostController) {
         screens.forEach { screen ->
             BottomNavigationItem(
                 icon = {
-                    if (screen.route == AppScreen.Add.route) {
+                    if (screen.route == AppScreen.AddEvent.route) {
                         Icon(
                             imageVector = screen.icon,
                             contentDescription = null,
@@ -157,7 +161,7 @@ fun EventListItem(event: EventEntity) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "$date • $type • $turns",
+                text = if (event.ageTurns == 0) "$date • $type" else "$date • $type • $turns",
                 color = MaterialTheme.colors.secondary,
                 fontSize = 16.sp,
                 maxLines = 1,
@@ -187,6 +191,7 @@ private fun PreviewEventListItem() {
     SimpleEventsTheme {
         EventListItem(
             event = EventEntity(
+                id = 0,
                 daysCount = 6,
                 ageTurns = 42,
                 name = "Test Full Name",
@@ -195,4 +200,34 @@ private fun PreviewEventListItem() {
             )
         )
     }
+}
+
+@Composable
+fun AppTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: (@Composable () -> Unit)?,
+    modifier: Modifier = Modifier,
+    leadingIcon: (@Composable () -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(),
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        colors = TextFieldDefaults.textFieldColors(
+            leadingIconColor = MaterialTheme.colors.primary,
+            textColor = MaterialTheme.colors.primary,
+            backgroundColor = MaterialTheme.colors.backgroundSecondary,
+            placeholderColor = MaterialTheme.colors.onBackgroundSecondary,
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(12.dp),
+        keyboardOptions = keyboardOptions,
+        modifier = modifier
+    )
 }
