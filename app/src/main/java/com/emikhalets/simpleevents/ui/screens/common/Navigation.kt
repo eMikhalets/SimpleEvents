@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -40,6 +41,7 @@ fun SimpleEventsNavHost(
         }
         composable(AppScreen.AddEvent.route) {
             AddEventScreen(
+                viewModel = hiltViewModel(),
                 navController = navController,
                 scaffoldState = scaffoldState
             )

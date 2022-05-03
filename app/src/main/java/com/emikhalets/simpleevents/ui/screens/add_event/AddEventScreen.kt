@@ -25,6 +25,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.ui.screens.common.AppTextField
+import com.emikhalets.simpleevents.ui.screens.common.navToEventAfterAdding
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
@@ -53,14 +55,20 @@ import java.util.*
 
 @Composable
 fun AddEventScreen(
+    viewModel: AddEventViewModel,
     navController: NavHostController,
     scaffoldState: ScaffoldState,
 ) {
     val context = LocalContext.current
+    val state = viewModel.state
 
     var type by remember { mutableStateOf(EventType.BIRTHDAY) }
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(0L) }
+
+    LaunchedEffect(state.savedId) {
+        if (state.savedId > 0) navController.navToEventAfterAdding(state.savedId)
+    }
 
     AddEventScreen(
         type = type,
@@ -73,7 +81,7 @@ fun AddEventScreen(
             when {
                 name.isEmpty() -> scaffoldState.showSnackBar(context, R.string.add_event_empty_name)
                 date == 0L -> scaffoldState.showSnackBar(context, R.string.add_event_empty_date)
-                else -> Unit /*TODO: save in viewmodel*/
+                else -> viewModel.saveNewEvent(name, date, type)
             }
         }
     )

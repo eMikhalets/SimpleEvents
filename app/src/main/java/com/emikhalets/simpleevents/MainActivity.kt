@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsNavHost
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsScaffold
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
