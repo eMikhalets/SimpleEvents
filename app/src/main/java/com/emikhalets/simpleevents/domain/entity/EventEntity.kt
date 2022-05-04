@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.ui.entity
+package com.emikhalets.simpleevents.domain.entity
 
 import com.emikhalets.simpleevents.utils.enums.EventType
 

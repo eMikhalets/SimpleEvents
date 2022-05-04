@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.ui.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.ui.screens.common.AppTextField
 import com.emikhalets.simpleevents.ui.screens.common.EventListItem
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme

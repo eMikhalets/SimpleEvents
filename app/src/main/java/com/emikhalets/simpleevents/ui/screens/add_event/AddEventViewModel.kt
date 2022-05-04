@@ -8,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.utils.enums.EventType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class AddEventViewModel : ViewModel() {
+class AddEventViewModel @Inject constructor(
+) : ViewModel() {
 
     var state by mutableStateOf(AddEventState())
         private set

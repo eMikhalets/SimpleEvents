@@ -1,6 +1,6 @@
 package com.emikhalets.simpleevents.ui.screens.add_event
 
-import com.emikhalets.simpleevents.ui.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 data class AddEventState(
     val event: EventEntity? = null,
