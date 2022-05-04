@@ -14,4 +14,5 @@ data class EventEntityDB(
     @ColumnInfo(name = "ageTurns") val ageTurns: Int,
     @ColumnInfo(name = "daysCount") val daysCount: Int,
     @ColumnInfo(name = "eventType") val eventType: EventType,
+    @ColumnInfo(name = "note") val note: String,
 )

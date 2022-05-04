@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.emikhalets.simpleevents.ui.screens.add_event.AddEventScreen
+import com.emikhalets.simpleevents.ui.screens.event_item.EventItemScreen
 import com.emikhalets.simpleevents.ui.screens.home.HomeScreen
 
 private const val ARGS_EVENT_ID = "app_args_event_id"
@@ -52,7 +53,13 @@ fun SimpleEventsNavHost(
             route = AppScreen.Event.route,
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
-            backStackEntry.arguments?.get(ARGS_EVENT_ID)?.let { id ->
+            backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->
+                EventItemScreen(
+                    eventId = id,
+                    viewModel = hiltViewModel(),
+                    navController = navController,
+                    scaffoldState = scaffoldState
+                )
             }
         }
         composable(

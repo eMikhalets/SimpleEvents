@@ -47,9 +47,8 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
+import com.emikhalets.simpleevents.utils.extensions.formatDate
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Composable
 fun SimpleEventsScaffold(
@@ -116,7 +115,7 @@ private fun SimpleEventsBottomBar(navController: NavHostController) {
 
 @Composable
 fun EventListItem(event: EventEntity) {
-    val date = SimpleDateFormat("EE, MM/dd", Locale.getDefault()).format(event.date)
+    val date = event.date.formatDate("EE, MM/dd")
     val type = stringResource(event.eventType.nameRes)
     val turns = stringResource(R.string.event_list_item_turns, event.ageTurns)
 
@@ -196,7 +195,8 @@ private fun PreviewEventListItem() {
                 ageTurns = 42,
                 name = "Test Full Name",
                 date = System.currentTimeMillis(),
-                eventType = EventType.BIRTHDAY
+                eventType = EventType.BIRTHDAY,
+                note = "Some note text"
             )
         )
     }

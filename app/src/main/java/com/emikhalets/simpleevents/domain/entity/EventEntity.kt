@@ -8,5 +8,6 @@ data class EventEntity(
     val name: String,
     val ageTurns: Int,
     val daysCount: Int,
-    val eventType: EventType
+    val eventType: EventType,
+    val note: String,
 )

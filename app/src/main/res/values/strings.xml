@@ -15,6 +15,10 @@
     <string name="add_event_empty_name">Name required</string>
     <string name="add_event_empty_date">Date required</string>
 
+    <string name="event_item_turns">Turns %d</string>
+    <string name="event_item_btn_edit">Edit Event</string>
+    <string name="event_item_notes_title">Notes</string>
+
     <plurals name="event_list_item_days">
         <item quantity="one">DAY</item>
         <item quantity="other">DAYS</item>

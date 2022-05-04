@@ -94,7 +94,8 @@ private fun PreviewHomeScreen() {
                     ageTurns = 42,
                     name = "Test Full Name",
                     date = System.currentTimeMillis(),
-                    eventType = EventType.BIRTHDAY
+                    eventType = EventType.BIRTHDAY,
+                    note = "Some note text"
                 ),
                 EventEntity(
                     id = 0,
@@ -102,7 +103,8 @@ private fun PreviewHomeScreen() {
                     ageTurns = 42,
                     name = "Test Full Name",
                     date = System.currentTimeMillis(),
-                    eventType = EventType.BIRTHDAY
+                    eventType = EventType.BIRTHDAY,
+                    note = "Some note text"
                 ),
                 EventEntity(
                     id = 0,
@@ -110,7 +112,8 @@ private fun PreviewHomeScreen() {
                     ageTurns = 42,
                     name = "Test Full Name",
                     date = System.currentTimeMillis(),
-                    eventType = EventType.BIRTHDAY
+                    eventType = EventType.BIRTHDAY,
+                    note = "Some note text"
                 )
             ),
             searchQuery = "",
