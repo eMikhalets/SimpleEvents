@@ -38,6 +38,8 @@ fun SimpleEventsNavHost(
     NavHost(navController, AppScreen.Home.route) {
         composable(AppScreen.Home.route) {
             HomeScreen(
+                viewModel = hiltViewModel(),
+                navController = navController,
                 scaffoldState = scaffoldState
             )
         }
