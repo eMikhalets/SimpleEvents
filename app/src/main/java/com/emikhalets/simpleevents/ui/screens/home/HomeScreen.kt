@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.ui.screens.common.AppTextField
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTextField
 import com.emikhalets.simpleevents.ui.screens.common.EventListItem
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
@@ -68,7 +68,7 @@ fun HomeScreen(
                 .padding(horizontal = 8.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        AppTextField(
+        SimpleEventsTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
             placeholder = { Text(text = stringResource(R.string.home_search_placeholder)) },

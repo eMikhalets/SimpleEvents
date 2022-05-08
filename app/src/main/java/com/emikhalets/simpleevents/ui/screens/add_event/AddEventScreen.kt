@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.ui.screens.common.AppTextField
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTextField
 import com.emikhalets.simpleevents.ui.screens.common.navToEventAfterAdding
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
@@ -118,7 +118,7 @@ fun AddEventScreen(
             onTypeSelected = onTypeChange
         )
         Spacer(modifier = Modifier.height(16.dp))
-        AppTextField(
+        SimpleEventsTextField(
             value = name,
             onValueChange = onNameChanged,
             placeholder = { Text(text = stringResource(R.string.add_event_placeholder_name)) },

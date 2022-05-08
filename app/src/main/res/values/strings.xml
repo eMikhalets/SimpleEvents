@@ -19,6 +19,16 @@
     <string name="event_item_btn_edit">Edit Event</string>
     <string name="event_item_notes_title">Notes</string>
 
+    <string name="edit_event_header">Editing event</string>
+    <string name="edit_event_adding_new_event">Adding a new event</string>
+    <string name="edit_event_placeholder_name">Name</string>
+    <string name="edit_event_placeholder_note">Note</string>
+    <string name="edit_event_choose_date">Choose date</string>
+    <string name="edit_event_btn_save">Save Event</string>
+    <string name="edit_event_empty_name">Name required</string>
+    <string name="edit_event_empty_date">Date required</string>
+    <string name="edit_event_update_error">Updating error</string>
+
     <plurals name="event_list_item_days">
         <item quantity="one">DAY</item>
         <item quantity="other">DAYS</item>

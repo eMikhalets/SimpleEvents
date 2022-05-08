@@ -53,8 +53,13 @@ fun EventItemScreen(
     val context = LocalContext.current
     val state = viewModel.state
 
-    LaunchedEffect("") { viewModel.loadEvent(eventId) }
-    LaunchedEffect(state.error) { scaffoldState.showSnackBar(state.error) }
+    LaunchedEffect("") {
+        viewModel.loadEvent(eventId)
+    }
+
+    LaunchedEffect(state.error) {
+        if (state.error.isNotEmpty()) scaffoldState.showSnackBar(state.error)
+    }
 
     if (state.event != null) {
         EventItemScreen(
