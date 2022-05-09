@@ -39,18 +39,13 @@ fun SimpleEventsScaffold(
 
 @Composable
 private fun SimpleEventsBottomBar(navController: NavHostController) {
-    val screens = listOf(
-        AppScreen.Home,
-        AppScreen.AddEvent,
-        AppScreen.Settings
-    )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.background,
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        screens.forEach { screen ->
+        getBottomScreens().forEach { screen ->
             BottomNavigationItem(
                 icon = {
                     if (screen.route == AppScreen.AddEvent.route) {

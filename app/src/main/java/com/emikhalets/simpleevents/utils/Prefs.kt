@@ -24,8 +24,17 @@ class Prefs(context: Context) {
         sp.edit().putInt(EVENT_MINUTE, value).apply()
     }
 
+    fun getLastUpdate(): Long {
+        return sp.getLong(LAST_UPDATE, 0)
+    }
+
+    fun setLastUpdate(value: Long) {
+        sp.edit().putLong(LAST_UPDATE, value).apply()
+    }
+
     private companion object {
         const val EVENT_HOUR = "sp_event_hour"
         const val EVENT_MINUTE = "sp_event_minute"
+        const val LAST_UPDATE = "sp_last_update"
     }
 }

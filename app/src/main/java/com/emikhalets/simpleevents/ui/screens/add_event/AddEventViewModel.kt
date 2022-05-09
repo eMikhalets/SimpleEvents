@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.data.database.EventEntityDB
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.utils.enums.EventType
+import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +32,7 @@ class AddEventViewModel @Inject constructor(
                 name = name,
                 eventType = type
             )
-            userCase.saveEvent(entity)
+            userCase.saveEvent(entity.calculateEventData())
                 .onSuccess {
                     state = state.copy(
                         savedId = it

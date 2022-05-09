@@ -53,7 +53,7 @@ fun SimpleEventsNavHost(
         composable(AppScreen.Settings.route) {
         }
         composable(
-            route = "${AppScreen.Event.route}/$ARGS_EVENT_ID",
+            route = "${AppScreen.Event.route}/{$ARGS_EVENT_ID}",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->
@@ -66,7 +66,7 @@ fun SimpleEventsNavHost(
             }
         }
         composable(
-            route = "${AppScreen.EditEvent.route}/$ARGS_EVENT_ID",
+            route = "${AppScreen.EditEvent.route}/{$ARGS_EVENT_ID}",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->
@@ -79,6 +79,10 @@ fun SimpleEventsNavHost(
             }
         }
     }
+}
+
+fun getBottomScreens(): List<AppScreen> {
+    return listOf(AppScreen.Home, AppScreen.AddEvent, AppScreen.Settings)
 }
 
 fun NavHostController.navToEvent(id: Long) {

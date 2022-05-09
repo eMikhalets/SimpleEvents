@@ -45,7 +45,9 @@ import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.formatDate
-import java.util.*
+import com.emikhalets.simpleevents.utils.extensions.localDate
+import com.emikhalets.simpleevents.utils.extensions.milliseconds
+import java.time.LocalDate
 
 @Composable
 fun SimpleEventsTextField(
@@ -185,31 +187,26 @@ fun SimpleEventsButton(
 }
 
 @Composable
-fun datePicker(onDateSelected: (Long) -> Unit): DatePickerDialog {
-    val context = LocalContext.current
-
-    val calendar = Calendar.getInstance()
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-    val listener = DatePickerDialog.OnDateSetListener { _, newYear, newMonth, newDay ->
-        calendar.apply {
-            set(Calendar.YEAR, newYear)
-            set(Calendar.MONTH, newMonth)
-            set(Calendar.DAY_OF_MONTH, newDay)
-        }
-        onDateSelected(calendar.timeInMillis)
-    }
-
-    return DatePickerDialog(context, listener, year, month, day)
-}
-
-@Composable
 fun SimpleEventsDatePicker(
     timestamp: Long,
-    datePicker: DatePickerDialog,
+    onDateSelected: (Long) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
+    val listener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+        onDateSelected(LocalDate.now()
+            .withYear(year)
+            .withMonth(month + 1)
+            .withDayOfMonth(day)
+            .milliseconds)
+    }
+
+    val date = if (timestamp == 0L) LocalDate.now() else timestamp.localDate
+    val datePicker = DatePickerDialog(
+        context, listener, date.year, date.monthValue - 1, date.dayOfMonth
+    )
+
     Text(
         text = if (timestamp != 0L) {
             timestamp.formatDate("EEEE, dd MMM, yyyy")
@@ -222,9 +219,7 @@ fun SimpleEventsDatePicker(
             MaterialTheme.colors.onBackgroundSecondary
         },
         fontSize = 16.sp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
+        modifier = modifier
             .background(
                 color = MaterialTheme.colors.backgroundSecondary,
                 shape = RoundedCornerShape(12.dp)

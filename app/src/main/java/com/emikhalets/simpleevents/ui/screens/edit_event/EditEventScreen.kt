@@ -29,7 +29,6 @@ import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsDatePicker
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsEventTypeSpinner
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.ui.screens.common.datePicker
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
@@ -93,8 +92,6 @@ private fun EditEventScreen(
     onNoteChange: (String) -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    val datePicker = datePicker { timestamp -> onDateChange(timestamp) }
-
     Column(modifier = Modifier.fillMaxSize()) {
         SimpleEventsHeaderText(
             text = stringResource(R.string.edit_event_header)
@@ -116,7 +113,10 @@ private fun EditEventScreen(
         )
         SimpleEventsDatePicker(
             timestamp = event.date,
-            datePicker = datePicker
+            onDateSelected = onDateChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
         SimpleEventsTextField(
             value = event.note,

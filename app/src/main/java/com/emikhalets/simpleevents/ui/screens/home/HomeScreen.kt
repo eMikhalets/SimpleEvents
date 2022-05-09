@@ -52,6 +52,7 @@ import com.emikhalets.simpleevents.utils.extensions.formatDate
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 
+// TODO: загружать события в порядке возрастания daysLeft, с разделителем по месяцам
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,

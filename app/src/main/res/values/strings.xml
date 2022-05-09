@@ -16,6 +16,8 @@
     <string name="add_event_btn_save">Save Event</string>
     <string name="add_event_empty_name">Name required</string>
     <string name="add_event_empty_date">Date required</string>
+    <string name="add_event_turns">Turns: %d</string>
+    <string name="add_event_days_left">Days left: %d</string>
 
     <string name="event_item_turns">Turns %d</string>
     <string name="event_item_btn_edit">Edit Event</string>
