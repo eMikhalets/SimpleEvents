@@ -26,8 +26,8 @@ sealed class AppScreen(val route: String, val icon: ImageVector) {
     object Home : AppScreen("home", Icons.Default.Home)
     object AddEvent : AppScreen("add_event", Icons.Default.AddCircle)
     object Settings : AppScreen("settings", Icons.Default.Settings)
-    object Event : AppScreen("event/{$ARGS_EVENT_ID}", Icons.Default.Build)
-    object EditEvent : AppScreen("edit_event/{$ARGS_EVENT_ID}", Icons.Default.Edit)
+    object Event : AppScreen("event", Icons.Default.Build)
+    object EditEvent : AppScreen("edit_event", Icons.Default.Edit)
 }
 
 @Composable
@@ -53,7 +53,7 @@ fun SimpleEventsNavHost(
         composable(AppScreen.Settings.route) {
         }
         composable(
-            route = AppScreen.Event.route,
+            route = "${AppScreen.Event.route}/$ARGS_EVENT_ID",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->
@@ -66,7 +66,7 @@ fun SimpleEventsNavHost(
             }
         }
         composable(
-            route = AppScreen.EditEvent.route,
+            route = "${AppScreen.EditEvent.route}/$ARGS_EVENT_ID",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->

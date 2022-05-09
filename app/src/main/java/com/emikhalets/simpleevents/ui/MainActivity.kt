@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents
+package com.emikhalets.simpleevents.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

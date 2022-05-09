@@ -1,7 +1,6 @@
 package com.emikhalets.simpleevents.utils.di
 
 import android.content.Context
-import androidx.room.Room
 import com.emikhalets.simpleevents.data.database.AppDatabase
 import com.emikhalets.simpleevents.data.database.EventsDao
 import dagger.Module
@@ -18,11 +17,7 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "SimpleEvents"
-        ).build()
+        return AppDatabase.get(context)
     }
 
     @Singleton

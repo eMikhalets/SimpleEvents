@@ -97,9 +97,7 @@ private fun EditEventScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         SimpleEventsHeaderText(
-            text = stringResource(R.string.edit_event_header),
-            modifier = Modifier
-                .padding(end = 16.dp, start = 16.dp, bottom = 16.dp, top = 40.dp)
+            text = stringResource(R.string.edit_event_header)
         )
         SimpleEventsEventTypeSpinner(
             onTypeSelected = onTypeChange,

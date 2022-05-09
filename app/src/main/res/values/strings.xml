@@ -2,6 +2,8 @@
     <string name="app_name">SimpleEvents</string>
     <string name="app_event_type_birthday">Birthday</string>
 
+    <string name="notification_update_error">Error updating events</string>
+
     <string name="event_list_item_date">$</string>
     <string name="event_list_item_turns">Turns %d</string>
 

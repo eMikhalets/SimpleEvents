@@ -78,16 +78,15 @@ fun SimpleEventsTextField(
 }
 
 @Composable
-fun SimpleEventsHeaderText(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
+fun SimpleEventsHeaderText(text: String) {
     Text(
         text = text,
         color = MaterialTheme.colors.primary,
         fontSize = 28.sp,
         fontWeight = FontWeight.Bold,
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     )
 }
 

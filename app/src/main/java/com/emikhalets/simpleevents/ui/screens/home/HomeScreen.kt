@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsIcon
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTextField
 import com.emikhalets.simpleevents.ui.screens.common.navToEvent
@@ -91,20 +92,12 @@ private fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = stringResource(R.string.home_upcoming_events),
-            color = MaterialTheme.colors.primary,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+        SimpleEventsHeaderText(
+            text = stringResource(R.string.home_upcoming_events)
         )
-        Spacer(modifier = Modifier.height(16.dp))
         SimpleEventsTextField(
             value = searchQuery,
             onValueChange = onSearchQueryChange,
@@ -112,9 +105,8 @@ private fun HomeScreen(
             leadingIcon = { SimpleEventsIcon(imageVector = Icons.Default.Search) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
         eventsList.forEach { entity ->
             EventListItem(
                 event = entity,
@@ -137,7 +129,7 @@ private fun EventListItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(74.dp)
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable { onEventClick(event.id) }
     ) {
         SquareColumn(background = MaterialTheme.colors.background) {

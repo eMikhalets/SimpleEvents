@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.utils.enums.EventType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEventViewModel @Inject constructor(
+    private val userCase: AddEventUseCase,
 ) : ViewModel() {
 
     var state by mutableStateOf(AddEventState())
@@ -23,7 +26,22 @@ class AddEventViewModel @Inject constructor(
         type: EventType,
     ) {
         viewModelScope.launch {
-            // TODO: build db entity, insert and return id in state
+            val entity = EventEntityDB(
+                date = date,
+                name = name,
+                eventType = type
+            )
+            userCase.saveEvent(entity)
+                .onSuccess {
+                    state = state.copy(
+                        savedId = it
+                    )
+                }
+                .onFailure {
+                    state = state.copy(
+                        error = it.localizedMessage ?: ""
+                    )
+                }
         }
     }
 }
