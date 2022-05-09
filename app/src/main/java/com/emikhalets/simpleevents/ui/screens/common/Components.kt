@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
+import com.emikhalets.simpleevents.ui.theme.backgroundNegative
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
@@ -168,6 +169,33 @@ fun SimpleEventsButton(
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.background
+        ),
+        shape = RoundedCornerShape(12.dp),
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(
+            text = text,
+            color = MaterialTheme.colors.onBackground,
+            letterSpacing = 2.sp,
+            fontSize = 18.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(6.dp)
+        )
+    }
+}
+
+@Composable
+fun SimpleEventsNegativeButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.backgroundNegative
         ),
         shape = RoundedCornerShape(12.dp),
         onClick = onClick,

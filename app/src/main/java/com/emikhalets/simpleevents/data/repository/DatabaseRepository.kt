@@ -13,4 +13,6 @@ interface DatabaseRepository {
     suspend fun deleteEvent(entity: EventEntityDB): Result<Int>
 
     suspend fun getAllEvents(): Result<List<EventEntityDB>>
+
+    suspend fun getEntityById(eventId: Long): Result<EventEntityDB>
 }

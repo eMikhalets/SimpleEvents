@@ -21,7 +21,9 @@
 
     <string name="event_item_turns">Turns %d</string>
     <string name="event_item_btn_edit">Edit Event</string>
+    <string name="event_item_btn_delete">Delete Event</string>
     <string name="event_item_notes_title">Notes</string>
+    <string name="event_item_notes_empty">No data</string>
 
     <string name="edit_event_header">Editing event</string>
     <string name="edit_event_adding_new_event">Adding a new event</string>

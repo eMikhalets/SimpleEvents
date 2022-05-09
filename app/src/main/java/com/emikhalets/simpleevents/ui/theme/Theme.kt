@@ -14,6 +14,9 @@ val Colors.backgroundSecondary: Color
 val Colors.onBackgroundSecondary: Color
     get() = if (isLight) Color(0xFF7C7C7C) else Color(0xFF666666)
 
+val Colors.backgroundNegative: Color
+    get() = if (isLight) Color(0xFFD32F2F) else Color(0xFF666666)
+
 private val DarkColorPalette = darkColors(
     primary = Color(0xFF666666),
     primaryVariant = Color(0xFF666666),

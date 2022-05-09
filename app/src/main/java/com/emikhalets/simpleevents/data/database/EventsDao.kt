@@ -21,6 +21,9 @@ interface EventsDao {
     @Query("SELECT * FROM events")
     suspend fun getAllEntities(): List<EventEntityDB>
 
+    @Query("SELECT * FROM events WHERE id=:id")
+    suspend fun getEntityById(id: Long): EventEntityDB
+
     @Query("DELETE FROM events")
     suspend fun drop()
 }

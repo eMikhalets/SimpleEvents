@@ -23,4 +23,8 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getAllEvents(): Result<List<EventEntityDB>> {
         return runCatching { eventsDao.getAllEntities() }
     }
+
+    override suspend fun getEntityById(eventId: Long): Result<EventEntityDB> {
+        return runCatching { eventsDao.getEntityById(eventId) }
+    }
 }

@@ -3,7 +3,6 @@ package com.emikhalets.simpleevents.ui.screens.event_item
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -28,13 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsNegativeButton
 import com.emikhalets.simpleevents.ui.screens.common.navToEditEvent
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
@@ -69,6 +69,8 @@ fun EventItemScreen(
             },
             onEditClick = {
                 navController.navToEditEvent(eventId)
+            },
+            onDeleteClick = {
             }
         )
     } else {
@@ -81,11 +83,13 @@ fun EventItemScreen(
     event: EventEntity,
     onImageClick: () -> Unit,
     onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         EventItemHeader(
             event = event,
@@ -97,7 +101,8 @@ fun EventItemScreen(
         )
         EventItemContent(
             event = event,
-            onEditClick = onEditClick
+            onEditClick = onEditClick,
+            onDeleteClick = onDeleteClick
         )
     }
 }
@@ -116,7 +121,7 @@ fun EventItemHeader(
             imageVector = Icons.Default.Person,
             contentDescription = "",
             modifier = Modifier
-                .size(150.dp)
+                .size(120.dp)
                 .background(MaterialTheme.colors.backgroundSecondary)
                 .clickable { onImageClick() }
         )
@@ -141,9 +146,10 @@ fun EventItemHeader(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = event.ageTurns.toString(),
+            text = event.daysCount.toString(),
             color = MaterialTheme.colors.onBackgroundSecondary,
             fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colors.backgroundSecondary,
@@ -159,62 +165,56 @@ fun EventItemHeader(
 fun EventItemContent(
     event: EventEntity,
     onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(16.dp))
-        Column(
+        EventItemNoteBox(note = event.note)
+        Spacer(modifier = Modifier.height(32.dp))
+        SimpleEventsButton(
+            text = stringResource(R.string.event_item_btn_edit),
+            onClick = onEditClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.secondary,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.event_item_notes_title).uppercase(),
-                color = MaterialTheme.colors.secondary,
-                letterSpacing = 1.sp,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = event.note,
-                color = MaterialTheme.colors.primary,
-                fontSize = 16.sp
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(
-            contentAlignment = Alignment.BottomCenter,
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        SimpleEventsNegativeButton(
+            text = stringResource(R.string.event_item_btn_delete),
+            onClick = onDeleteClick,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Button(
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.background
-                ),
-                shape = RoundedCornerShape(12.dp),
-                onClick = onEditClick
-            ) {
-                Text(
-                    text = stringResource(R.string.event_item_btn_edit),
-                    color = MaterialTheme.colors.onBackground,
-                    letterSpacing = 2.sp,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp)
-                )
-            }
-        }
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun EventItemNoteBox(note: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colors.secondary,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(16.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.event_item_notes_title).uppercase(),
+            color = MaterialTheme.colors.secondary,
+            letterSpacing = 1.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = note.ifEmpty { stringResource(R.string.event_item_notes_empty) },
+            color = MaterialTheme.colors.primary,
+            fontSize = 16.sp
+        )
     }
 }
 
@@ -233,7 +233,8 @@ private fun PreviewEventItemScreen() {
                 note = "Some note text"
             ),
             onImageClick = {},
-            onEditClick = {}
+            onEditClick = {},
+            onDeleteClick = {}
         )
     }
 }
