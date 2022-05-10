@@ -5,4 +5,6 @@ import com.emikhalets.simpleevents.data.database.EventEntityDB
 interface EventItemUseCase {
 
     suspend fun loadEvent(eventId: Long): Result<EventEntityDB>
+
+    suspend fun deleteEvent(entity: EventEntityDB): Result<Int>
 }

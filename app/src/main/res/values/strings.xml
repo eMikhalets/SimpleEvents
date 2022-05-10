@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">SimpleEvents</string>
-    <string name="app_event_type_birthday">Birthday</string>
+
+    <string name="event_type_birthday">Birthday</string>
+
+    <string name="dialog_delete_event">Delete this event?</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_delete">Delete</string>
 
     <string name="notification_update_error">Error updating events</string>
 

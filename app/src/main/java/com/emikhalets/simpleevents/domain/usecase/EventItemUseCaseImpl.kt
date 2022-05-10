@@ -11,4 +11,8 @@ class EventItemUseCaseImpl @Inject constructor(
     override suspend fun loadEvent(eventId: Long): Result<EventEntityDB> {
         return databaseRepo.getEntityById(eventId)
     }
+
+    override suspend fun deleteEvent(entity: EventEntityDB): Result<Int> {
+        return databaseRepo.deleteEvent(entity)
+    }
 }

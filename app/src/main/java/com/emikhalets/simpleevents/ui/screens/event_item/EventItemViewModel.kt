@@ -36,8 +36,38 @@ class EventItemViewModel @Inject constructor(
         }
     }
 
+    fun deleteEvent(entity: EventEntity?) {
+        entity?.let {
+            viewModelScope.launch {
+                useCase.deleteEvent(mapToEventEntityDB(entity))
+                    .onSuccess {
+                        state = state.copy(
+                            deleted = true
+                        )
+                    }
+                    .onFailure {
+                        state = state.copy(
+                            error = it.localizedMessage ?: ""
+                        )
+                    }
+            }
+        }
+    }
+
     private fun mapToEventEntity(entity: EventEntityDB): EventEntity {
         return EventEntity(
+            id = entity.id,
+            date = entity.date,
+            name = entity.name,
+            ageTurns = entity.ageTurns,
+            daysCount = entity.daysCount,
+            eventType = entity.eventType,
+            note = entity.note,
+        )
+    }
+
+    private fun mapToEventEntityDB(entity: EventEntity): EventEntityDB {
+        return EventEntityDB(
             id = entity.id,
             date = entity.date,
             name = entity.name,

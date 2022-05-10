@@ -4,5 +4,6 @@ import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 data class EventItemState(
     val event: EventEntity? = null,
+    val deleted: Boolean = false,
     val error: String = "",
 )

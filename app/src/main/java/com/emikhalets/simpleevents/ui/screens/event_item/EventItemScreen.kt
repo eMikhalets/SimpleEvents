@@ -22,6 +22,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.ui.screens.common.DeletingEventDialog
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsNegativeButton
 import com.emikhalets.simpleevents.ui.screens.common.navToEditEvent
@@ -53,8 +58,14 @@ fun EventItemScreen(
     val context = LocalContext.current
     val state = viewModel.state
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect("") {
         viewModel.loadEvent(eventId)
+    }
+
+    LaunchedEffect(state.deleted) {
+        if (state.deleted) navController.popBackStack()
     }
 
     LaunchedEffect(state.error) {
@@ -71,10 +82,21 @@ fun EventItemScreen(
                 navController.navToEditEvent(eventId)
             },
             onDeleteClick = {
+                showDeleteDialog = true
             }
         )
-    } else {
-        // TODO: loader or placeholders
+    }
+
+    if (showDeleteDialog) {
+        DeletingEventDialog(
+            onConfirmClick = {
+                viewModel.deleteEvent(state.event)
+                showDeleteDialog = false
+            },
+            onDismissClick = {
+                showDeleteDialog = false
+            }
+        )
     }
 }
 
