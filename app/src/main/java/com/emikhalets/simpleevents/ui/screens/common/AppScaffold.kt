@@ -9,6 +9,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,10 +23,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 @Composable
 fun SimpleEventsScaffold(
     navController: NavHostController,
+    scaffoldState: ScaffoldState,
     content: @Composable () -> Unit,
 ) {
     Scaffold(
         bottomBar = { SimpleEventsBottomBar(navController) },
+        scaffoldState = scaffoldState,
         content = {
             Box(
                 modifier = Modifier

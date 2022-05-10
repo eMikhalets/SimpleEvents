@@ -11,6 +11,11 @@ import java.util.*
 fun Long.formatDate(pattern: String): String =
     SimpleDateFormat(pattern, Locale.getDefault()).format(this)
 
+fun Long.formatDateThisYear(pattern: String): String {
+    val date = this.localDate.withYear(LocalDate.now().year).milliseconds
+    return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
+}
+
 val LocalDate.milliseconds: Long
     get() = this.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 

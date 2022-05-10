@@ -4,6 +4,6 @@ import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 data class EditEventState(
     val event: EventEntity? = null,
-    val updatedCount: Int = 0,
+    val updated: Int = -1,
     val error: String = "",
 )

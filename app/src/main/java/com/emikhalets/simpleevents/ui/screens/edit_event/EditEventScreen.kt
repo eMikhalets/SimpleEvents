@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsDatePicker
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsEventTypeSpinner
@@ -52,9 +51,19 @@ fun EditEventScreen(
         viewModel.loadEvent(eventId)
     }
 
-    LaunchedEffect(state.updatedCount) {
-        if (state.updatedCount > 0) navController.popBackStack()
-        else scaffoldState.showSnackBar(context, R.string.edit_event_update_error)
+    LaunchedEffect(state.event) {
+        if (name.isEmpty() && state.event != null) {
+            type = state.event.eventType
+            name = state.event.name
+            date = state.event.date
+            note = state.event.note
+        }
+    }
+
+    LaunchedEffect(state.updated) {
+        if (state.updated > 0) scaffoldState.showSnackBar(context, R.string.edit_event_updated)
+        else if (state.updated == 0) scaffoldState.showSnackBar(context,
+            R.string.edit_event_update_error)
     }
 
     LaunchedEffect(state.error) {
@@ -63,7 +72,10 @@ fun EditEventScreen(
 
     if (state.event != null) {
         EditEventScreen(
-            event = state.event,
+            type = type,
+            name = name,
+            date = date,
+            note = note,
             onTypeChange = { newType -> type = newType },
             onNameChanged = { newName -> name = newName },
             onDateChange = { newDate -> date = newDate },
@@ -78,14 +90,15 @@ fun EditEventScreen(
                 }
             }
         )
-    } else {
-        // TODO: loading
     }
 }
 
 @Composable
 private fun EditEventScreen(
-    event: EventEntity,
+    type: EventType,
+    name: String,
+    date: Long,
+    note: String,
     onTypeChange: (EventType) -> Unit,
     onNameChanged: (String) -> Unit,
     onDateChange: (Long) -> Unit,
@@ -103,7 +116,7 @@ private fun EditEventScreen(
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
         SimpleEventsTextField(
-            value = event.name,
+            value = name,
             onValueChange = onNameChanged,
             placeholder = { Text(text = stringResource(R.string.edit_event_placeholder_name)) },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
@@ -112,14 +125,14 @@ private fun EditEventScreen(
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
         SimpleEventsDatePicker(
-            timestamp = event.date,
+            timestamp = date,
             onDateSelected = onDateChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
         SimpleEventsTextField(
-            value = event.note,
+            value = note,
             onValueChange = onNoteChange,
             placeholder = { Text(text = stringResource(R.string.edit_event_placeholder_note)) },
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
@@ -147,15 +160,10 @@ private fun EditEventScreen(
 private fun PreviewEditEventScreen() {
     SimpleEventsTheme {
         EditEventScreen(
-            event = EventEntity(
-                id = 0,
-                date = System.currentTimeMillis(),
-                name = "Some Test Name",
-                ageTurns = 12,
-                daysCount = 12,
-                eventType = EventType.BIRTHDAY,
-                note = "Some note Some note Some note Some note Some note Some note Some note"
-            ),
+            type = EventType.BIRTHDAY,
+            name = "Some Test Name",
+            date = System.currentTimeMillis(),
+            note = "Some note Some note Some note Some note Some note Some note Some note",
             onTypeChange = {},
             onNameChanged = {},
             onDateChange = {},

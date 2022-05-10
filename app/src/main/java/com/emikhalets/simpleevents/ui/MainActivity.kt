@@ -26,7 +26,10 @@ fun Application() {
     val scaffoldState = rememberScaffoldState()
 
     SimpleEventsTheme {
-        SimpleEventsScaffold(navHost) {
+        SimpleEventsScaffold(
+            navController = navHost,
+            scaffoldState = scaffoldState
+        ) {
             SimpleEventsNavHost(
                 navController = navHost,
                 scaffoldState = scaffoldState

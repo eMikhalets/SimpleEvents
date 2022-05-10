@@ -39,6 +39,7 @@
     <string name="edit_event_empty_name">Name required</string>
     <string name="edit_event_empty_date">Date required</string>
     <string name="edit_event_update_error">Updating error</string>
+    <string name="edit_event_updated">Event updated</string>
 
     <plurals name="event_list_item_days">
         <item quantity="one">DAY</item>

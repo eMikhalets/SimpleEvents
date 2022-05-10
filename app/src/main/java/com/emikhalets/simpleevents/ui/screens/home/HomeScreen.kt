@@ -48,7 +48,7 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.formatDate
+import com.emikhalets.simpleevents.utils.extensions.formatDateThisYear
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 
@@ -122,7 +122,7 @@ private fun EventListItem(
     event: EventEntity,
     onEventClick: (Long) -> Unit,
 ) {
-    val date = event.date.formatDate("EE, MM/dd")
+    val date = event.date.formatDateThisYear("EE, MM/dd")
     val type = stringResource(event.eventType.nameRes)
     val turns = stringResource(R.string.event_list_item_turns, event.ageTurns)
 

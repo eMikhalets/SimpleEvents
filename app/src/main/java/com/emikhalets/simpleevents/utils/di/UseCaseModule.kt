@@ -3,6 +3,8 @@ package com.emikhalets.simpleevents.utils.di
 import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCaseImpl
+import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
+import com.emikhalets.simpleevents.domain.usecase.EditEventUseCaseImpl
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCaseImpl
 import com.emikhalets.simpleevents.domain.usecase.HomeUseCase
@@ -33,5 +35,11 @@ object UseCaseModule {
     @Provides
     fun provideEventItemUseCase(databaseRepo: DatabaseRepository): EventItemUseCase {
         return EventItemUseCaseImpl(databaseRepo)
+    }
+
+    @Singleton
+    @Provides
+    fun provideEditEventUseCase(databaseRepo: DatabaseRepository): EditEventUseCase {
+        return EditEventUseCaseImpl(databaseRepo)
     }
 }
