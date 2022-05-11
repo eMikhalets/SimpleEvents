@@ -14,8 +14,13 @@ import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,8 +29,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.data.database.NotificationGlobal
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTimePicker
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
+import com.emikhalets.simpleevents.utils.Prefs
 import com.emikhalets.simpleevents.utils.extensions.getDefaultNotificationsGlobal
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 
@@ -36,6 +43,10 @@ fun SettingsScreen(
     scaffoldState: ScaffoldState,
 ) {
     val state = viewModel.state
+    val prefs = Prefs(LocalContext.current)
+
+    var hourInit by remember { mutableStateOf(prefs.getEventsHour()) }
+    var minuteInit by remember { mutableStateOf(prefs.getEventsMinute()) }
 
     LaunchedEffect("") {
         viewModel.loadAllNotificationsGlobal()
@@ -46,14 +57,27 @@ fun SettingsScreen(
     }
 
     SettingsScreen(
+        hour = hourInit,
+        minute = minuteInit,
         notificationsGlobal = state.notificationsGlobal,
-        onSwitchNotification = { viewModel.updateNotificationGlobal(it) }
+        onTimeChange = { hour, minute ->
+            prefs.setEventsHour(hour)
+            hourInit = hour
+            prefs.setEventsMinute(minute)
+            minuteInit = minute
+        },
+        onSwitchNotification = {
+            viewModel.updateNotificationGlobal(it)
+        }
     )
 }
 
 @Composable
 private fun SettingsScreen(
+    hour: Int,
+    minute: Int,
     notificationsGlobal: List<NotificationGlobal>,
+    onTimeChange: (Int, Int) -> Unit,
     onSwitchNotification: (NotificationGlobal) -> Unit,
 ) {
     Column(
@@ -65,12 +89,25 @@ private fun SettingsScreen(
             text = stringResource(R.string.settings_notifications),
             modifier = Modifier.padding(top = 16.dp)
         )
+        SimpleEventsTimePicker(
+            hourInit = hour,
+            minuteInit = minute,
+            title = stringResource(R.string.settings_notifications_time),
+            onTimeSelected = onTimeChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
         SettingsNotifications(
             notificationsGlobal = notificationsGlobal,
             onSwitchNotification = onSwitchNotification,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+        )
+        SettingsSectionHeader(
+            text = stringResource(R.string.settings_backup),
+            modifier = Modifier.padding(top = 16.dp)
         )
     }
 }
@@ -128,6 +165,9 @@ private fun SettingsNotifications(
 private fun PreviewSettingsScreen() {
     SimpleEventsTheme {
         SettingsScreen(
+            hour = 7,
+            minute = 9,
+            onTimeChange = { _, _ -> },
             notificationsGlobal = getDefaultNotificationsGlobal(),
             onSwitchNotification = {}
         )

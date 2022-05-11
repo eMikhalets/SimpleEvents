@@ -42,6 +42,8 @@
     <string name="edit_event_updated">Event updated</string>
 
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_time">Notifications time</string>
+    <string name="settings_backup">Backup</string>
 
     <string name="notifications_time_month">Month</string>
     <string name="notifications_time_week">Week</string>

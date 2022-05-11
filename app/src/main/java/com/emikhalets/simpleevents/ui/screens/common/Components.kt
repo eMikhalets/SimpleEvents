@@ -1,6 +1,7 @@
 package com.emikhalets.simpleevents.ui.screens.common
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -256,6 +257,48 @@ fun SimpleEventsDatePicker(
             .clickable { datePicker.show() }
             .padding(16.dp)
     )
+}
+
+@Composable
+fun SimpleEventsTimePicker(
+    hourInit: Int,
+    minuteInit: Int,
+    title: String,
+    onTimeSelected: (Int, Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val listener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+        onTimeSelected(hourOfDay, minute)
+    }
+
+    val timePicker = TimePickerDialog(
+        LocalContext.current, listener, hourInit, minuteInit, true
+    )
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable { timePicker.show() }
+    ) {
+        Text(
+            text = title,
+            color = MaterialTheme.colors.primary,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .weight(1f)
+        )
+        Text(
+            text = if (minuteInit < 10) {
+                "$hourInit:0$minuteInit"
+            } else {
+                "$hourInit:$minuteInit"
+            },
+            color = MaterialTheme.colors.primary,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(16.dp)
+        )
+    }
 }
 
 @Composable
