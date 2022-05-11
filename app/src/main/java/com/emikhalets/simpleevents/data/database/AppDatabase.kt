@@ -6,13 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [EventEntityDB::class],
+    entities = [
+        EventEntityDB::class,
+        NotificationGlobal::class,
+    ],
     version = 1,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val eventsDao: EventsDao
+    abstract val notificationsGlobalDao: NotificationsGlobalDao
 
     companion object {
         fun get(context: Context): AppDatabase {

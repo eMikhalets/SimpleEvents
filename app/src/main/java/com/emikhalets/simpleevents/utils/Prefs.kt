@@ -32,9 +32,18 @@ class Prefs(context: Context) {
         sp.edit().putLong(LAST_UPDATE, value).apply()
     }
 
+    fun getFirstLaunch(): Boolean {
+        return sp.getBoolean(FIRST_LAUNCH, true)
+    }
+
+    fun setFirstLaunch(value: Boolean) {
+        sp.edit().putBoolean(FIRST_LAUNCH, value).apply()
+    }
+
     private companion object {
         const val EVENT_HOUR = "sp_event_hour"
         const val EVENT_MINUTE = "sp_event_minute"
         const val LAST_UPDATE = "sp_last_update"
+        const val FIRST_LAUNCH = "sp_first_launch"
     }
 }

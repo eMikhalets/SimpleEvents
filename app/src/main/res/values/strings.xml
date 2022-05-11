@@ -41,6 +41,14 @@
     <string name="edit_event_update_error">Updating error</string>
     <string name="edit_event_updated">Event updated</string>
 
+    <string name="settings_notifications">Notifications</string>
+
+    <string name="notifications_time_month">Month</string>
+    <string name="notifications_time_week">Week</string>
+    <string name="notifications_time_two_days">Two days</string>
+    <string name="notifications_time_day">Day</string>
+    <string name="notifications_time_today">Today</string>
+
     <plurals name="event_list_item_days">
         <item quantity="one">DAY</item>
         <item quantity="other">DAYS</item>

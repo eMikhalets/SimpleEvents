@@ -1,6 +1,7 @@
 package com.emikhalets.simpleevents.data.repository
 
 import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.data.database.NotificationGlobal
 
 interface DatabaseRepository {
 
@@ -15,4 +16,14 @@ interface DatabaseRepository {
     suspend fun getAllEvents(): Result<List<EventEntityDB>>
 
     suspend fun getEntityById(eventId: Long): Result<EventEntityDB>
+
+    /** Notifications Global Dao */
+
+    suspend fun insertNotifGlobal(entity: NotificationGlobal): Result<Long>
+
+    suspend fun insertNotifGlobal(list: List<NotificationGlobal>): Result<List<Long>>
+
+    suspend fun updateNotifGlobal(entity: NotificationGlobal): Result<Int>
+
+    suspend fun getAllNotifGlobal(): Result<List<NotificationGlobal>>
 }

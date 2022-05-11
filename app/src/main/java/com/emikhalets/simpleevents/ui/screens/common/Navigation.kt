@@ -19,6 +19,7 @@ import com.emikhalets.simpleevents.ui.screens.add_event.AddEventScreen
 import com.emikhalets.simpleevents.ui.screens.edit_event.EditEventScreen
 import com.emikhalets.simpleevents.ui.screens.event_item.EventItemScreen
 import com.emikhalets.simpleevents.ui.screens.home.HomeScreen
+import com.emikhalets.simpleevents.ui.screens.settings.SettingsScreen
 
 private const val ARGS_EVENT_ID = "app_args_event_id"
 
@@ -51,6 +52,11 @@ fun SimpleEventsNavHost(
             )
         }
         composable(AppScreen.Settings.route) {
+            SettingsScreen(
+                viewModel = hiltViewModel(),
+                navController = navController,
+                scaffoldState = scaffoldState
+            )
         }
         composable(
             route = "${AppScreen.Event.route}/{$ARGS_EVENT_ID}",

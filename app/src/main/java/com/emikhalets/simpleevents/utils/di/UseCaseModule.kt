@@ -9,6 +9,8 @@ import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCaseImpl
 import com.emikhalets.simpleevents.domain.usecase.HomeUseCase
 import com.emikhalets.simpleevents.domain.usecase.HomeUseCaseImpl
+import com.emikhalets.simpleevents.domain.usecase.SettingsUseCase
+import com.emikhalets.simpleevents.domain.usecase.SettingsUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +43,11 @@ object UseCaseModule {
     @Provides
     fun provideEditEventUseCase(databaseRepo: DatabaseRepository): EditEventUseCase {
         return EditEventUseCaseImpl(databaseRepo)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSettingsUseCase(databaseRepo: DatabaseRepository): SettingsUseCase {
+        return SettingsUseCaseImpl(databaseRepo)
     }
 }
