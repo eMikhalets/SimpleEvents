@@ -29,9 +29,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.data.database.NotificationGlobal
+import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTimePicker
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
+import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.Prefs
 import com.emikhalets.simpleevents.utils.extensions.getDefaultNotificationsGlobal
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
@@ -43,10 +45,12 @@ fun SettingsScreen(
     scaffoldState: ScaffoldState,
 ) {
     val state = viewModel.state
-    val prefs = Prefs(LocalContext.current)
+    val context = LocalContext.current
+    val prefs = Prefs(context)
 
     var hourInit by remember { mutableStateOf(prefs.getEventsHour()) }
     var minuteInit by remember { mutableStateOf(prefs.getEventsMinute()) }
+    var notificationsAll by remember { mutableStateOf(prefs.getNotificationsEnabled()) }
 
     LaunchedEffect("") {
         viewModel.loadAllNotificationsGlobal()
@@ -59,6 +63,7 @@ fun SettingsScreen(
     SettingsScreen(
         hour = hourInit,
         minute = minuteInit,
+        enabled = notificationsAll,
         notificationsGlobal = state.notificationsGlobal,
         onTimeChange = { hour, minute ->
             prefs.setEventsHour(hour)
@@ -66,8 +71,16 @@ fun SettingsScreen(
             prefs.setEventsMinute(minute)
             minuteInit = minute
         },
-        onSwitchNotification = {
-            viewModel.updateNotificationGlobal(it)
+        onSwitchNotification = { notification, enabled ->
+            viewModel.updateNotificationGlobal(notification, enabled)
+        },
+        onSwitchAllNotification = { enabled ->
+            notificationsAll = enabled
+            prefs.setNotificationsEnabled(enabled)
+        },
+        onRestartNotifications = {
+            AppAlarmManager.startAllAlarms(context)
+            scaffoldState.showSnackBar(context, R.string.settings_alarms_restarted)
         }
     )
 }
@@ -76,9 +89,12 @@ fun SettingsScreen(
 private fun SettingsScreen(
     hour: Int,
     minute: Int,
+    enabled: Boolean,
     notificationsGlobal: List<NotificationGlobal>,
     onTimeChange: (Int, Int) -> Unit,
-    onSwitchNotification: (NotificationGlobal) -> Unit,
+    onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
+    onSwitchAllNotification: (Boolean) -> Unit,
+    onRestartNotifications: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -98,12 +114,27 @@ private fun SettingsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         )
+        SettingsAllNotifications(
+            enabled = enabled,
+            onSwitchAllNotification = onSwitchAllNotification,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        )
         SettingsNotifications(
+            enabled = enabled,
             notificationsGlobal = notificationsGlobal,
             onSwitchNotification = onSwitchNotification,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+        )
+        SimpleEventsButton(
+            text = stringResource(R.string.settings_restart_alarms),
+            onClick = onRestartNotifications,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 8.dp)
         )
         SettingsSectionHeader(
             text = stringResource(R.string.settings_backup),
@@ -130,9 +161,36 @@ private fun SettingsSectionHeader(
 }
 
 @Composable
+private fun SettingsAllNotifications(
+    enabled: Boolean,
+    onSwitchAllNotification: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.settings_notifications_enable),
+            color = MaterialTheme.colors.primary,
+            fontSize = 16.sp,
+            modifier = modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(end = 16.dp)
+        )
+        Switch(
+            checked = enabled,
+            onCheckedChange = { onSwitchAllNotification(it) }
+        )
+    }
+}
+
+@Composable
 private fun SettingsNotifications(
+    enabled: Boolean,
     notificationsGlobal: List<NotificationGlobal>,
-    onSwitchNotification: (NotificationGlobal) -> Unit,
+    onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -150,10 +208,10 @@ private fun SettingsNotifications(
                         .weight(1f)
                         .padding(end = 16.dp)
                 )
-
                 Switch(
                     checked = notification.enabled,
-                    onCheckedChange = { onSwitchNotification(notification) }
+                    enabled = enabled,
+                    onCheckedChange = { onSwitchNotification(notification, it) }
                 )
             }
         }
@@ -167,9 +225,12 @@ private fun PreviewSettingsScreen() {
         SettingsScreen(
             hour = 7,
             minute = 9,
-            onTimeChange = { _, _ -> },
+            enabled = true,
             notificationsGlobal = getDefaultNotificationsGlobal(),
-            onSwitchNotification = {}
+            onTimeChange = { _, _ -> },
+            onSwitchNotification = { _, _ -> },
+            onSwitchAllNotification = {},
+            onRestartNotifications = {}
         )
     }
 }

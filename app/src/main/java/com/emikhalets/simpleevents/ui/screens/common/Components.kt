@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -277,7 +279,10 @@ fun SimpleEventsTimePicker(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable { timePicker.show() }
+        modifier = modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = rememberRipple(color = Color.Black),
+        ) { timePicker.show() }
     ) {
         Text(
             text = title,

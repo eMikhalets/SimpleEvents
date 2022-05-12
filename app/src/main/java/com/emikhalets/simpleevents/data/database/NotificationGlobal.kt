@@ -10,4 +10,5 @@ data class NotificationGlobal(
     @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "name_res") val nameRes: Int,
     @ColumnInfo(name = "enabled") val enabled: Boolean,
+    @ColumnInfo(name = "days_left") val daysLeft: Int,
 )

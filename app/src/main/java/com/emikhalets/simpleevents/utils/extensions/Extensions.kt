@@ -18,10 +18,15 @@ fun EventEntityDB.calculateEventData(): EventEntityDB {
 
 fun getDefaultNotificationsGlobal(): List<NotificationGlobal> {
     return listOf(
-        NotificationGlobal(nameRes = R.string.notifications_time_month, enabled = true),
-        NotificationGlobal(nameRes = R.string.notifications_time_week, enabled = true),
-        NotificationGlobal(nameRes = R.string.notifications_time_two_days, enabled = true),
-        NotificationGlobal(nameRes = R.string.notifications_time_day, enabled = true),
-        NotificationGlobal(nameRes = R.string.notifications_time_today, enabled = true)
+        NotificationGlobal(nameRes = R.string.notifications_time_month,
+            enabled = true, daysLeft = 30),
+        NotificationGlobal(nameRes = R.string.notifications_time_week,
+            enabled = true, daysLeft = 7),
+        NotificationGlobal(nameRes = R.string.notifications_time_two_days,
+            enabled = true, daysLeft = 2),
+        NotificationGlobal(nameRes = R.string.notifications_time_day,
+            enabled = true, daysLeft = 1),
+        NotificationGlobal(nameRes = R.string.notifications_time_today,
+            enabled = true, daysLeft = 0)
     )
 }

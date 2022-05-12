@@ -10,19 +10,14 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emikhalets.simpleevents.R
+import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.entity.NotificationEvent
 import com.emikhalets.simpleevents.ui.MainActivity
 
 object AppNotificationManager {
-
-    const val DATA_NOTIFICATION_MONTH = "worker_notif_month"
-    const val DATA_NOTIFICATION_WEEK = "worker_notif_week"
-    const val DATA_NOTIFICATION_TWO_DAY = "worker_notif_two_day"
-    const val DATA_NOTIFICATION_DAY = "worker_notif_day"
-    const val DATA_NOTIFICATION_TODAY = "worker_notif_today"
 
     private const val NOTIFICATION_ID_EVENTS = "simple_events.notification.id.events"
     private const val NOTIFICATION_ID_UPDATE_ERROR = "simple_events.notification.id.update_error"
@@ -40,87 +35,46 @@ object AppNotificationManager {
             .setAutoCancel(true)
             .setContentIntent(getPendingIntent(context))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            nm.createNotificationChannel(getEventsChannel())
+        nm.createNotificationChannel(getEventsChannel())
 
         NotificationManagerCompat.from(context).notify(0, builder.build())
     }
 
-//    fun sendEvents(context: Context, events: HashMap<String, List<Event>>) {
-//        val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//
-//        val notification = NotificationCompat.Builder(context, ID_EVENTS)
-//            .setSmallIcon(R.drawable.ic_calendar)
-//            .setContentTitle(context.getString(R.string.notification_title))
-//            .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .setAutoCancel(true)
-//
-//        notification.setPendingIntent(context, 1)
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-//            notificationManager.setNotificationChannel(notification, ID_EVENTS, NAME_EVENTS)
-//
-//        val style = NotificationCompat.InboxStyle()
-//        events[DATA_NOTIFICATION_TODAY]?.let { list ->
-//            if (list.isNotEmpty()) {
-//                style.addLine(context.getString(R.string.notification_text_today))
-//                list.forEach { style.addLine(setEvent(context, it)) }
-//            }
-//        }
-//        events[DATA_NOTIFICATION_DAY]?.let { list ->
-//            if (list.isNotEmpty()) {
-//                style.addLine(context.getString(R.string.notification_text_day))
-//                list.forEach { style.addLine(setEvent(context, it)) }
-//            }
-//        }
-//        events[DATA_NOTIFICATION_TWO_DAY]?.let { list ->
-//            if (list.isNotEmpty()) {
-//                style.addLine(context.getString(R.string.notification_text_two_day))
-//                list.forEach { style.addLine(setEvent(context, it)) }
-//            }
-//        }
-//        events[DATA_NOTIFICATION_WEEK]?.let { list ->
-//            if (list.isNotEmpty()) {
-//                style.addLine(context.getString(R.string.notification_text_week))
-//                list.forEach { style.addLine(setEvent(context, it)) }
-//            }
-//        }
-//        events[DATA_NOTIFICATION_MONTH]?.let { list ->
-//            if (list.isNotEmpty()) {
-//                style.addLine(context.getString(R.string.notification_text_month))
-//                list.forEach { style.addLine(setEvent(context, it)) }
-//            }
-//        }
-//        notification.setStyle(style)
-//
-//        NotificationManagerCompat.from(context).notify(1, notification.build())
-//    }
-//
-//    private fun setEvent(context: Context, event: Event): String {
-//        var string = context.getString(
-//            when (event.eventType) {
-//                EventType.ANNIVERSARY.value -> R.string.anniversary
-//                EventType.BIRTHDAY.value -> R.string.birthday
-//                else -> 0
-//            }
-//        )
-//        string += "  "
-//        string += event.fullName()
-//        if (!event.withoutYear) {
-//            string += "  "
-//            string += context.resources.getQuantityString(R.plurals.age, event.age, event.age)
-//        }
-//        return string
-//    }
+    fun sendEventsNotification(context: Context, events: List<NotificationEvent>) {
+        val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-    fun createNotificationChannels(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            nm.createNotificationChannel(getEventsChannel())
+        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID_EVENTS)
+            .setSmallIcon(R.drawable.ic_event_available)
+            .setContentTitle(context.getString(R.string.notification_upcoming_events))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(getPendingIntent(context))
+            .setAutoCancel(true)
+
+        nm.createNotificationChannel(getEventsChannel())
+
+        val style = NotificationCompat.InboxStyle()
+        events.forEach { notificationEvent ->
+            style.addLine(context.getString(notificationEvent.notificationTime.nameRes))
+            notificationEvent.events.forEach { style.addLine(setEvent(context, it)) }
         }
+
+        builder.setStyle(style)
+
+        NotificationManagerCompat.from(context).notify(1, builder.build())
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setEvent(context: Context, event: EventEntityDB): String {
+        val type = event.eventType.nameRes
+        val name = event.name
+        val turns = context.getString(R.string.notification_turns, event.ageTurns)
+        return "$type • $name • $turns"
+    }
+
+    fun createNotificationChannels(context: Context) {
+        val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        nm.createNotificationChannel(getEventsChannel())
+    }
+
     private fun getEventsChannel(): NotificationChannel {
         return NotificationChannel(
             NOTIFICATION_CHANNEL_ID_EVENTS,

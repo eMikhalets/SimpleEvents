@@ -48,9 +48,13 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
+import com.emikhalets.simpleevents.utils.extensions.formatDate
 import com.emikhalets.simpleevents.utils.extensions.formatDateThisYear
+import com.emikhalets.simpleevents.utils.extensions.localDate
+import com.emikhalets.simpleevents.utils.extensions.milliseconds
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
+import java.time.LocalDate
 
 // TODO: загружать события в порядке возрастания daysLeft, с разделителем по месяцам
 @Composable
@@ -108,9 +112,13 @@ private fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         )
+        var lastMonth by remember { mutableStateOf(-1) }
         eventsList.forEach { entity ->
+            val monthChanged = lastMonth != entity.date.localDate.monthValue
+            if (monthChanged) lastMonth = entity.date.localDate.monthValue
             EventListItem(
                 event = entity,
+                header = monthChanged,
                 onEventClick = onEventClick
             )
         }
@@ -120,60 +128,77 @@ private fun HomeScreen(
 @Composable
 private fun EventListItem(
     event: EventEntity,
+    header: Boolean,
     onEventClick: (Long) -> Unit,
 ) {
     val date = event.date.formatDateThisYear("EE, MM/dd")
     val type = stringResource(event.eventType.nameRes)
     val turns = stringResource(R.string.event_list_item_turns, event.ageTurns)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(74.dp)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onEventClick(event.id) }
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        SquareColumn(background = MaterialTheme.colors.background) {
+        if (header) {
             Text(
-                text = event.daysCount.toString(),
-                color = MaterialTheme.colors.onBackground,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = pluralsResource(R.plurals.event_list_item_days, event.daysCount),
-                color = MaterialTheme.colors.onBackground,
-                fontSize = 14.sp,
-                letterSpacing = 2.sp
-            )
-        }
-        SquareColumn(background = MaterialTheme.colors.backgroundSecondary) {
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = "",
-                tint = MaterialTheme.colors.onBackgroundSecondary
-            )
-        }
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Text(
-                text = event.name,
+                text = event.date.formatDate("MMMM"),
                 color = MaterialTheme.colors.primary,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.backgroundSecondary)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             )
-            Text(
-                text = if (event.ageTurns == 0) "$date • $type" else "$date • $type • $turns",
-                color = MaterialTheme.colors.secondary,
-                fontSize = 16.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(74.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .clickable { onEventClick(event.id) }
+        ) {
+            SquareColumn(background = MaterialTheme.colors.background) {
+                Text(
+                    text = event.daysCount.toString(),
+                    color = MaterialTheme.colors.onBackground,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = pluralsResource(R.plurals.event_list_item_days, event.daysCount),
+                    color = MaterialTheme.colors.onBackground,
+                    fontSize = 14.sp,
+                    letterSpacing = 2.sp
+                )
+            }
+            SquareColumn(background = MaterialTheme.colors.backgroundSecondary) {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "",
+                    tint = MaterialTheme.colors.onBackgroundSecondary
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    text = event.name,
+                    color = MaterialTheme.colors.primary,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = if (event.ageTurns == 0) "$date • $type" else "$date • $type • $turns",
+                    color = MaterialTheme.colors.secondary,
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }
@@ -206,7 +231,7 @@ private fun PreviewHomeScreen() {
                     daysCount = 6,
                     ageTurns = 42,
                     name = "Test Full Name",
-                    date = System.currentTimeMillis(),
+                    date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
                     note = "Some note text"
                 ),
@@ -215,7 +240,7 @@ private fun PreviewHomeScreen() {
                     daysCount = 6,
                     ageTurns = 42,
                     name = "Test Full Name",
-                    date = System.currentTimeMillis(),
+                    date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
                     note = "Some note text"
                 ),
@@ -224,7 +249,7 @@ private fun PreviewHomeScreen() {
                     daysCount = 6,
                     ageTurns = 42,
                     name = "Test Full Name",
-                    date = System.currentTimeMillis(),
+                    date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
                     note = "Some note text"
                 )

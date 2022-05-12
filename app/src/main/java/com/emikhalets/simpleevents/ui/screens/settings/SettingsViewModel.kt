@@ -35,9 +35,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateNotificationGlobal(notification: NotificationGlobal) {
+    fun updateNotificationGlobal(notification: NotificationGlobal, enabled: Boolean) {
         viewModelScope.launch {
-            val entity = notification.copy(enabled = !notification.enabled)
+            val entity = notification.copy(enabled = enabled)
             useCase.updateNotificationsGlobal(entity)
                 .onSuccess {
                     loadAllNotificationsGlobal()

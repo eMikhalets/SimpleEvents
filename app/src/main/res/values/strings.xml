@@ -8,6 +8,8 @@
     <string name="dialog_delete">Delete</string>
 
     <string name="notification_update_error">Error updating events</string>
+    <string name="notification_upcoming_events">Upcoming events</string>
+    <string name="notification_turns">Turns %d</string>
 
     <string name="event_list_item_date">$</string>
     <string name="event_list_item_turns">Turns %d</string>
@@ -42,7 +44,10 @@
     <string name="edit_event_updated">Event updated</string>
 
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_enable">Enable notifications</string>
     <string name="settings_notifications_time">Notifications time</string>
+    <string name="settings_restart_alarms">Restart everyday notifications</string>
+    <string name="settings_alarms_restarted">Notifications have been restarted</string>
     <string name="settings_backup">Backup</string>
 
     <string name="notifications_time_month">Month</string>

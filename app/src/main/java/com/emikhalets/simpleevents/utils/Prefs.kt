@@ -24,12 +24,12 @@ class Prefs(context: Context) {
         sp.edit().putInt(EVENT_MINUTE, value).apply()
     }
 
-    fun getLastUpdate(): Long {
-        return sp.getLong(LAST_UPDATE, 0)
+    fun getNotificationsEnabled(): Boolean {
+        return sp.getBoolean(NOTIFICATIONS_ENABLED, true)
     }
 
-    fun setLastUpdate(value: Long) {
-        sp.edit().putLong(LAST_UPDATE, value).apply()
+    fun setNotificationsEnabled(value: Boolean) {
+        sp.edit().putBoolean(NOTIFICATIONS_ENABLED, value).apply()
     }
 
     fun getFirstLaunch(): Boolean {
@@ -43,7 +43,7 @@ class Prefs(context: Context) {
     private companion object {
         const val EVENT_HOUR = "sp_event_hour"
         const val EVENT_MINUTE = "sp_event_minute"
-        const val LAST_UPDATE = "sp_last_update"
+        const val NOTIFICATIONS_ENABLED = "sp_notifications_enabled"
         const val FIRST_LAUNCH = "sp_first_launch"
     }
 }

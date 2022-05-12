@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0fe03e91c1c4df342cc8a5b23b5f3a72",
+    "identityHash": "94ebfddcbdbe414160f8bb9f485bad92",
     "entities": [
       {
         "tableName": "events",
@@ -62,7 +62,7 @@
       },
       {
         "tableName": "notifications_global",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name_res` INTEGER NOT NULL, `enabled` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name_res` INTEGER NOT NULL, `enabled` INTEGER NOT NULL, `days_left` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -81,6 +81,12 @@
             "columnName": "enabled",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "daysLeft",
+            "columnName": "days_left",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -96,7 +102,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0fe03e91c1c4df342cc8a5b23b5f3a72')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '94ebfddcbdbe414160f8bb9f485bad92')"
     ]
   }
 }
