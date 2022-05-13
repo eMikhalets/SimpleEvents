@@ -1,5 +1,6 @@
 package com.emikhalets.simpleevents.ui.screens.settings
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -41,6 +42,22 @@ class SettingsViewModel @Inject constructor(
             useCase.updateNotificationsGlobal(entity)
                 .onSuccess {
                     loadAllNotificationsGlobal()
+                }
+                .onFailure {
+                    state = state.copy(
+                        error = it.localizedMessage ?: ""
+                    )
+                }
+        }
+    }
+
+    fun importEvents(uri: Uri, isOld: Boolean = false) {
+        viewModelScope.launch {
+            useCase.importEvents(uri, isOld)
+                .onSuccess {
+                    state = state.copy(
+                        imported = it.isNotEmpty()
+                    )
                 }
                 .onFailure {
                     state = state.copy(

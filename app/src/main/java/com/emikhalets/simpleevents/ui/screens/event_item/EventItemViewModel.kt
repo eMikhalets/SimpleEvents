@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.simpleevents.data.database.EventEntityDB
 import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
+import com.emikhalets.simpleevents.utils.Mappers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class EventItemViewModel @Inject constructor(
             useCase.loadEvent(id)
                 .onSuccess {
                     state = state.copy(
-                        event = mapToEventEntity(it)
+                        event = Mappers.mapFromEventDbToEvent(it)
                     )
                 }
                 .onFailure {
@@ -39,7 +39,7 @@ class EventItemViewModel @Inject constructor(
     fun deleteEvent(entity: EventEntity?) {
         entity?.let {
             viewModelScope.launch {
-                useCase.deleteEvent(mapToEventEntityDB(entity))
+                useCase.deleteEvent(Mappers.mapFromEventToEventDb(entity))
                     .onSuccess {
                         state = state.copy(
                             deleted = true
@@ -52,29 +52,5 @@ class EventItemViewModel @Inject constructor(
                     }
             }
         }
-    }
-
-    private fun mapToEventEntity(entity: EventEntityDB): EventEntity {
-        return EventEntity(
-            id = entity.id,
-            date = entity.date,
-            name = entity.name,
-            ageTurns = entity.ageTurns,
-            daysCount = entity.daysCount,
-            eventType = entity.eventType,
-            note = entity.note,
-        )
-    }
-
-    private fun mapToEventEntityDB(entity: EventEntity): EventEntityDB {
-        return EventEntityDB(
-            id = entity.id,
-            date = entity.date,
-            name = entity.name,
-            ageTurns = entity.ageTurns,
-            daysCount = entity.daysCount,
-            eventType = entity.eventType,
-            note = entity.note,
-        )
     }
 }

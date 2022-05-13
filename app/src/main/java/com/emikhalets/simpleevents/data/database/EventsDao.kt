@@ -12,6 +12,9 @@ interface EventsDao {
     @Insert
     suspend fun insert(entity: EventEntityDB): Long
 
+    @Insert
+    suspend fun insert(entities: List<EventEntityDB>): List<Long>
+
     @Update
     suspend fun update(entity: EventEntityDB): Int
 

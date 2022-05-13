@@ -1,5 +1,6 @@
 package com.emikhalets.simpleevents.domain.usecase
 
+import android.net.Uri
 import com.emikhalets.simpleevents.data.database.NotificationGlobal
 import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import javax.inject.Inject
@@ -14,5 +15,9 @@ class SettingsUseCaseImpl @Inject constructor(
 
     override suspend fun updateNotificationsGlobal(entity: NotificationGlobal): Result<Int> {
         return databaseRepo.updateNotifGlobal(entity)
+    }
+
+    override suspend fun importEvents(uri: Uri, isOld: Boolean): Result<List<Long>> {
+        return databaseRepo.importEvents(uri, isOld)
     }
 }

@@ -4,5 +4,6 @@ import com.emikhalets.simpleevents.data.database.NotificationGlobal
 
 data class SettingsState(
     val notificationsGlobal: List<NotificationGlobal> = emptyList(),
+    val imported: Boolean = false,
     val error: String = "",
 )

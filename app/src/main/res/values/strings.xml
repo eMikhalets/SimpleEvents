@@ -49,6 +49,10 @@
     <string name="settings_restart_alarms">Restart everyday notifications</string>
     <string name="settings_alarms_restarted">Notifications have been restarted</string>
     <string name="settings_backup">Backup</string>
+    <string name="settings_backup_export">Export events</string>
+    <string name="settings_backup_import">Import events</string>
+    <string name="settings_backup_import_old">Import events old</string>
+    <string name="settings_backup_import_error">Import events error</string>
 
     <string name="notifications_time_month">Month</string>
     <string name="notifications_time_week">Week</string>

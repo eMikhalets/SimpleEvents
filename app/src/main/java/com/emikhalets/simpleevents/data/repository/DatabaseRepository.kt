@@ -1,5 +1,6 @@
 package com.emikhalets.simpleevents.data.repository
 
+import android.net.Uri
 import com.emikhalets.simpleevents.data.database.EventEntityDB
 import com.emikhalets.simpleevents.data.database.NotificationGlobal
 
@@ -16,6 +17,8 @@ interface DatabaseRepository {
     suspend fun getAllEvents(): Result<List<EventEntityDB>>
 
     suspend fun getEntityById(eventId: Long): Result<EventEntityDB>
+
+    suspend fun importEvents(uri: Uri, isOld: Boolean): Result<List<Long>>
 
     /** Notifications Global Dao */
 

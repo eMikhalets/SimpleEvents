@@ -1,6 +1,5 @@
 package com.emikhalets.simpleevents.utils.di
 
-import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCaseImpl
 import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
@@ -11,43 +10,33 @@ import com.emikhalets.simpleevents.domain.usecase.HomeUseCase
 import com.emikhalets.simpleevents.domain.usecase.HomeUseCaseImpl
 import com.emikhalets.simpleevents.domain.usecase.SettingsUseCase
 import com.emikhalets.simpleevents.domain.usecase.SettingsUseCaseImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UseCaseModule {
+abstract class UseCaseModule {
 
     @Singleton
-    @Provides
-    fun provideHomeUseCase(databaseRepo: DatabaseRepository): HomeUseCase {
-        return HomeUseCaseImpl(databaseRepo)
-    }
+    @Binds
+    abstract fun bindsHomeUseCase(impl: HomeUseCaseImpl): HomeUseCase
 
     @Singleton
-    @Provides
-    fun provideAddEventUseCase(databaseRepo: DatabaseRepository): AddEventUseCase {
-        return AddEventUseCaseImpl(databaseRepo)
-    }
+    @Binds
+    abstract fun bindsAddEventUseCase(impl: AddEventUseCaseImpl): AddEventUseCase
 
     @Singleton
-    @Provides
-    fun provideEventItemUseCase(databaseRepo: DatabaseRepository): EventItemUseCase {
-        return EventItemUseCaseImpl(databaseRepo)
-    }
+    @Binds
+    abstract fun bindsEventItemUseCase(impl: EventItemUseCaseImpl): EventItemUseCase
 
     @Singleton
-    @Provides
-    fun provideEditEventUseCase(databaseRepo: DatabaseRepository): EditEventUseCase {
-        return EditEventUseCaseImpl(databaseRepo)
-    }
+    @Binds
+    abstract fun bindsEditEventUseCase(impl: EditEventUseCaseImpl): EditEventUseCase
 
     @Singleton
-    @Provides
-    fun provideSettingsUseCase(databaseRepo: DatabaseRepository): SettingsUseCase {
-        return SettingsUseCaseImpl(databaseRepo)
-    }
+    @Binds
+    abstract fun bindsSettingsUseCase(impl: SettingsUseCaseImpl): SettingsUseCase
 }

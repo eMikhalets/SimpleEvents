@@ -35,8 +35,12 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.Prefs
+import com.emikhalets.simpleevents.utils.createFile
+import com.emikhalets.simpleevents.utils.documentCreator
+import com.emikhalets.simpleevents.utils.documentPicker
 import com.emikhalets.simpleevents.utils.extensions.getDefaultNotificationsGlobal
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
+import com.emikhalets.simpleevents.utils.openFile
 
 @Composable
 fun SettingsScreen(
@@ -51,6 +55,14 @@ fun SettingsScreen(
     var hourInit by remember { mutableStateOf(prefs.getEventsHour()) }
     var minuteInit by remember { mutableStateOf(prefs.getEventsMinute()) }
     var notificationsAll by remember { mutableStateOf(prefs.getNotificationsEnabled()) }
+    var importOld by remember { mutableStateOf(false) }
+
+    val documentCreator = documentCreator { uri ->
+    }
+
+    val documentPicker = documentPicker { uri ->
+        viewModel.importEvents(uri, importOld)
+    }
 
     LaunchedEffect("") {
         viewModel.loadAllNotificationsGlobal()
@@ -58,6 +70,11 @@ fun SettingsScreen(
 
     LaunchedEffect(state.error) {
         if (state.error.isNotEmpty()) scaffoldState.showSnackBar(state.error)
+    }
+
+    LaunchedEffect(state.imported) {
+        if (state.imported) scaffoldState
+            .showSnackBar(context, R.string.settings_backup_import_error)
     }
 
     SettingsScreen(
@@ -81,6 +98,17 @@ fun SettingsScreen(
         onRestartNotifications = {
             AppAlarmManager.startAllAlarms(context)
             scaffoldState.showSnackBar(context, R.string.settings_alarms_restarted)
+        },
+        onExportClick = {
+            documentCreator.createFile()
+        },
+        onImportClick = {
+            importOld = false
+            documentPicker.openFile()
+        },
+        onImportOldClick = {
+            importOld = true
+            documentPicker.openFile()
         }
     )
 }
@@ -95,6 +123,9 @@ private fun SettingsScreen(
     onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
     onSwitchAllNotification: (Boolean) -> Unit,
     onRestartNotifications: () -> Unit,
+    onExportClick: () -> Unit,
+    onImportClick: () -> Unit,
+    onImportOldClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -139,6 +170,14 @@ private fun SettingsScreen(
         SettingsSectionHeader(
             text = stringResource(R.string.settings_backup),
             modifier = Modifier.padding(top = 16.dp)
+        )
+        SettingsBackupButtons(
+            onExportClick = onExportClick,
+            onImportClick = onImportClick,
+            onImportOldClick = onImportOldClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 8.dp)
         )
     }
 }
@@ -218,6 +257,38 @@ private fun SettingsNotifications(
     }
 }
 
+@Composable
+private fun SettingsBackupButtons(
+    onExportClick: () -> Unit,
+    onImportClick: () -> Unit,
+    onImportOldClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        SimpleEventsButton(
+            text = stringResource(R.string.settings_backup_export),
+            onClick = onExportClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
+        SimpleEventsButton(
+            text = stringResource(R.string.settings_backup_import),
+            onClick = onImportClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+        SimpleEventsButton(
+            text = stringResource(R.string.settings_backup_import_old),
+            onClick = onImportOldClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun PreviewSettingsScreen() {
@@ -230,7 +301,10 @@ private fun PreviewSettingsScreen() {
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },
             onSwitchAllNotification = {},
-            onRestartNotifications = {}
+            onRestartNotifications = {},
+            onExportClick = {},
+            onImportClick = {},
+            onImportOldClick = {}
         )
     }
 }
