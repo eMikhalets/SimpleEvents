@@ -9,11 +9,11 @@ import java.time.temporal.ChronoUnit
 import java.util.*
 
 fun Long.formatDate(pattern: String): String =
-    SimpleDateFormat(pattern, Locale.getDefault()).format(this)
+    SimpleDateFormat(pattern, Locale.ENGLISH).format(this)
 
 fun Long.formatDateThisYear(pattern: String): String {
     val date = this.localDate.withYear(LocalDate.now().year).milliseconds
-    return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
+    return SimpleDateFormat(pattern, Locale.ENGLISH).format(date)
 }
 
 val LocalDate.milliseconds: Long

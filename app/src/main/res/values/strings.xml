@@ -53,6 +53,7 @@
     <string name="settings_backup_import">Import events</string>
     <string name="settings_backup_import_old">Import events old</string>
     <string name="settings_backup_import_error">Import events error</string>
+    <string name="settings_backup_imported_success">Events imported</string>
 
     <string name="notifications_time_month">Month</string>
     <string name="notifications_time_week">Week</string>

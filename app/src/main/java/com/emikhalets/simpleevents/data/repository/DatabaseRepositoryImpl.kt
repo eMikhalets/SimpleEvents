@@ -7,6 +7,7 @@ import com.emikhalets.simpleevents.data.database.NotificationGlobal
 import com.emikhalets.simpleevents.data.database.NotificationsGlobalDao
 import com.emikhalets.simpleevents.utils.AppBackupManager
 import com.emikhalets.simpleevents.utils.Mappers
+import timber.log.Timber
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
@@ -39,11 +40,15 @@ class DatabaseRepositoryImpl @Inject constructor(
         return runCatching {
             val listDb = if (isOld) {
                 val list = backupManager.importOld(uri)
+                Timber.d("Converted old list = $list")
                 Mappers.mapFromOldEventsListToEventsDbList(list)
             } else {
                 val list = backupManager.import(uri)
+                Timber.d("Converted list = $list")
                 Mappers.mapFromEventsListToEventsDbList(list)
             }
+
+            Timber.d("Mapped list = $listDb")
 
             eventsDao.run {
                 drop()

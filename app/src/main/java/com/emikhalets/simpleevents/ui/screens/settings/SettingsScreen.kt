@@ -74,7 +74,7 @@ fun SettingsScreen(
 
     LaunchedEffect(state.imported) {
         if (state.imported) scaffoldState
-            .showSnackBar(context, R.string.settings_backup_import_error)
+            .showSnackBar(context, R.string.settings_backup_imported_success)
     }
 
     SettingsScreen(
@@ -284,7 +284,7 @@ private fun SettingsBackupButtons(
             onClick = onImportOldClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
+                .padding(top = 16.dp, bottom = 16.dp)
         )
     }
 }

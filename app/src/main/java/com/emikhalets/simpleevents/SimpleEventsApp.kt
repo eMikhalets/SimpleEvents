@@ -10,6 +10,7 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltAndroidApp
 class SimpleEventsApp : Application() {
@@ -18,6 +19,8 @@ class SimpleEventsApp : Application() {
         super.onCreate()
 
         AppNotificationManager.createNotificationChannels(applicationContext)
+
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
         if (Prefs(applicationContext).getFirstLaunch()) {
             CoroutineScope(Dispatchers.IO).launch {

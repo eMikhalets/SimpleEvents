@@ -44,6 +44,7 @@ class SettingsViewModel @Inject constructor(
                     loadAllNotificationsGlobal()
                 }
                 .onFailure {
+                    it.printStackTrace()
                     state = state.copy(
                         error = it.localizedMessage ?: ""
                     )
@@ -55,11 +56,18 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             useCase.importEvents(uri, isOld)
                 .onSuccess {
-                    state = state.copy(
-                        imported = it.isNotEmpty()
-                    )
+                    state = if (it.isEmpty()) {
+                        state.copy(
+                            error = ""
+                        )
+                    } else {
+                        state.copy(
+                            imported = it.isNotEmpty()
+                        )
+                    }
                 }
                 .onFailure {
+                    it.printStackTrace()
                     state = state.copy(
                         error = it.localizedMessage ?: ""
                     )

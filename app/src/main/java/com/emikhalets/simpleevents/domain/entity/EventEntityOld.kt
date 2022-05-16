@@ -7,16 +7,16 @@ import kotlinx.serialization.Serializable
 data class EventEntityOld(
     @SerialName("id") var id: Long,
     @SerialName("name") var name: String,
-    @SerialName("lastname") var lastName: String,
-    @SerialName("middle_name") var middleName: String,
-    @SerialName("date_ts") var date: Long,
+    @SerialName("lastName") var lastName: String,
+    @SerialName("middleName") var middleName: String,
+    @SerialName("date") var date: Long,
     @SerialName("daysLeft") var daysLeft: Int,
     @SerialName("age") var age: Int,
-    @SerialName("event_type") var eventType: Int,
+    @SerialName("eventType") var eventType: Int,
     @SerialName("group") var group: String,
     @SerialName("notes") var notes: String,
-    @SerialName("without_year") var withoutYear: Boolean,
-    @SerialName("image_uri") var imageUri: String,
+    @SerialName("withoutYear") var withoutYear: Boolean,
+    @SerialName("imageUri") var imageUri: String,
     @SerialName("contacts") var contacts: List<String>,
 ) {
 
