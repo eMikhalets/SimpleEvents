@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +24,7 @@ class EditEventViewModel @Inject constructor(
             useCase.loadEvent(id)
                 .onSuccess {
                     state = state.copy(
-                        event = it.calculateEventData()
+                        event = it
                     )
                 }
                 .onFailure {
