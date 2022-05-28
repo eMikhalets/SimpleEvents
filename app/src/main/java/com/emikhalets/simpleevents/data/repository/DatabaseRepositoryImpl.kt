@@ -1,10 +1,10 @@
 package com.emikhalets.simpleevents.data.repository
 
 import android.net.Uri
-import com.emikhalets.simpleevents.data.database.EventEntityDB
 import com.emikhalets.simpleevents.data.database.EventsDao
-import com.emikhalets.simpleevents.data.database.NotificationGlobal
 import com.emikhalets.simpleevents.data.database.NotificationsGlobalDao
+import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
 import com.emikhalets.simpleevents.utils.AppBackupManager
 import com.emikhalets.simpleevents.utils.Mappers
 import timber.log.Timber
@@ -16,23 +16,25 @@ class DatabaseRepositoryImpl @Inject constructor(
     private val backupManager: AppBackupManager,
 ) : DatabaseRepository {
 
-    override suspend fun insertEvent(entity: EventEntityDB): Result<Long> {
+    /** Events Dao */
+
+    override suspend fun insertEvent(entity: EventEntity): Result<Long> {
         return runCatching { eventsDao.insert(entity) }
     }
 
-    override suspend fun updateEvent(entity: EventEntityDB): Result<Int> {
+    override suspend fun updateEvent(entity: EventEntity): Result<Int> {
         return runCatching { eventsDao.update(entity) }
     }
 
-    override suspend fun deleteEvent(entity: EventEntityDB): Result<Int> {
+    override suspend fun deleteEvent(entity: EventEntity): Result<Int> {
         return runCatching { eventsDao.delete(entity) }
     }
 
-    override suspend fun getAllEvents(): Result<List<EventEntityDB>> {
+    override suspend fun getAllEvents(): Result<List<EventEntity>> {
         return runCatching { eventsDao.getAllEntities() }
     }
 
-    override suspend fun getEntityById(eventId: Long): Result<EventEntityDB> {
+    override suspend fun getEntityById(eventId: Long): Result<EventEntity> {
         return runCatching { eventsDao.getEntityById(eventId) }
     }
 
@@ -45,7 +47,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             } else {
                 val list = backupManager.import(uri)
                 Timber.d("Converted list = $list")
-                Mappers.mapFromEventsListToEventsDbList(list)
+                list
             }
 
             Timber.d("Mapped list = $listDb")
@@ -56,6 +58,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    /** Notifications Global Dao */
 
     override suspend fun insertNotifGlobal(entity: NotificationGlobal): Result<Long> {
         return runCatching { notifGlobalDao.insert(entity) }

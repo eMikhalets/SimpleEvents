@@ -2,7 +2,6 @@ package com.emikhalets.simpleevents
 
 import android.app.Application
 import com.emikhalets.simpleevents.data.database.AppDatabase
-import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.AppNotificationManager
 import com.emikhalets.simpleevents.utils.Prefs
 import com.emikhalets.simpleevents.utils.extensions.getDefaultNotificationsGlobal
@@ -28,10 +27,6 @@ class SimpleEventsApp : Application() {
                 AppDatabase.get(applicationContext).notificationsGlobalDao.insert(list)
                 Prefs(applicationContext).setFirstLaunch(false)
             }
-        }
-
-        if (!AppAlarmManager.isAlarmsRunning(applicationContext)) {
-            AppAlarmManager.startAllAlarms(applicationContext)
         }
     }
 }

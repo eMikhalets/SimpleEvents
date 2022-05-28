@@ -1,8 +1,8 @@
 package com.emikhalets.simpleevents.domain.usecase
 
-import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 interface AddEventUseCase {
 
-    suspend fun saveEvent(entity: EventEntityDB): Result<Long>
+    suspend fun saveEvent(entity: EventEntity): Result<Long>
 }

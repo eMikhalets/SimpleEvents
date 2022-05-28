@@ -30,8 +30,6 @@
 
         <receiver android:name=".utils.background.EventsReceiver" />
 
-        <receiver android:name=".utils.background.UpdateEventsReceiver" />
-
         <receiver
             android:name=".utils.background.RebootReceiver"
             android:enabled="true"

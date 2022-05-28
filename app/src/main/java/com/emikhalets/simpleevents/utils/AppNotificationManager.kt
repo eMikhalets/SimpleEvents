@@ -13,32 +13,16 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.entity.NotificationEvent
 import com.emikhalets.simpleevents.ui.MainActivity
 
 object AppNotificationManager {
 
     private const val NOTIFICATION_ID_EVENTS = "simple_events.notification.id.events"
-    private const val NOTIFICATION_ID_UPDATE_ERROR = "simple_events.notification.id.update_error"
 
     private const val NOTIFICATION_CHANNEL_ID_EVENTS = "simple_events.notification.channel.events"
     private const val NOTIFICATION_CHANNEL_NAME_EVENTS = "Events notifications"
-
-    fun sendUpdateError(context: Context) {
-        val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID_UPDATE_ERROR)
-            .setSmallIcon(R.drawable.ic_event_available)
-            .setContentTitle(context.getString(R.string.notification_update_error))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setContentIntent(getPendingIntent(context))
-
-        nm.createNotificationChannel(getEventsChannel())
-
-        NotificationManagerCompat.from(context).notify(0, builder.build())
-    }
 
     fun sendEventsNotification(context: Context, events: List<NotificationEvent>) {
         val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -63,10 +47,10 @@ object AppNotificationManager {
         NotificationManagerCompat.from(context).notify(1, builder.build())
     }
 
-    private fun setEvent(context: Context, event: EventEntityDB): String {
+    private fun setEvent(context: Context, event: EventEntity): String {
         val type = event.eventType.nameRes
         val name = event.name
-        val turns = context.getString(R.string.notification_turns, event.ageTurns)
+        val turns = context.getString(R.string.notification_turns, event.age)
         return "$type • $name • $turns"
     }
 

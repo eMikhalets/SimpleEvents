@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.domain.usecase.HomeUseCase
-import com.emikhalets.simpleevents.utils.Mappers
+import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,8 +23,11 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             useCase.loadAllEvents()
                 .onSuccess {
+                    val events = it
+                        .map { event -> event.calculateEventData() }
+                        .sortedBy { event -> event.days }
                     state = state.copy(
-                        events = Mappers.mapFromEventsDbListToEventsList(it)
+                        events = events
                     )
                 }
                 .onFailure {

@@ -162,13 +162,13 @@ fun EventItemHeader(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = stringResource(R.string.event_item_turns, event.ageTurns),
+            text = stringResource(R.string.event_item_turns, event.age),
             color = MaterialTheme.colors.primary,
             fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = event.daysCount.toString(),
+            text = event.days.toString(),
             color = MaterialTheme.colors.onBackgroundSecondary,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
@@ -246,9 +246,8 @@ private fun PreviewEventItemScreen() {
     SimpleEventsTheme {
         EventItemScreen(
             event = EventEntity(
-                id = 0,
-                daysCount = 6,
-                ageTurns = 42,
+                days = 6,
+                age = 42,
                 name = "Test Full Name",
                 date = System.currentTimeMillis(),
                 eventType = EventType.BIRTHDAY,

@@ -23,12 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.data.database.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTimePicker
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
@@ -56,6 +57,7 @@ fun SettingsScreen(
     var minuteInit by remember { mutableStateOf(prefs.getEventsMinute()) }
     var notificationsAll by remember { mutableStateOf(prefs.getNotificationsEnabled()) }
     var importOld by remember { mutableStateOf(false) }
+    var alarmsEnabled by remember { mutableStateOf(AppAlarmManager.isAlarmsRunning(context)) }
 
     val documentCreator = documentCreator { uri ->
     }
@@ -82,6 +84,7 @@ fun SettingsScreen(
         minute = minuteInit,
         enabled = notificationsAll,
         notificationsGlobal = state.notificationsGlobal,
+        alarmsEnabled = alarmsEnabled,
         onTimeChange = { hour, minute ->
             prefs.setEventsHour(hour)
             hourInit = hour
@@ -97,6 +100,7 @@ fun SettingsScreen(
         },
         onRestartNotifications = {
             AppAlarmManager.startAllAlarms(context)
+            alarmsEnabled = AppAlarmManager.isAlarmsRunning(context)
             scaffoldState.showSnackBar(context, R.string.settings_alarms_restarted)
         },
         onExportClick = {
@@ -119,6 +123,7 @@ private fun SettingsScreen(
     minute: Int,
     enabled: Boolean,
     notificationsGlobal: List<NotificationGlobal>,
+    alarmsEnabled: Boolean,
     onTimeChange: (Int, Int) -> Unit,
     onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
     onSwitchAllNotification: (Boolean) -> Unit,
@@ -159,6 +164,15 @@ private fun SettingsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
+        )
+        Text(
+            text = stringResource(R.string.settings_alarms_is_enabled, alarmsEnabled),
+            color = MaterialTheme.colors.primary,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         )
         SimpleEventsButton(
             text = stringResource(R.string.settings_restart_alarms),
@@ -298,6 +312,7 @@ private fun PreviewSettingsScreen() {
             minute = 9,
             enabled = true,
             notificationsGlobal = getDefaultNotificationsGlobal(),
+            alarmsEnabled = true,
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },
             onSwitchAllNotification = {},

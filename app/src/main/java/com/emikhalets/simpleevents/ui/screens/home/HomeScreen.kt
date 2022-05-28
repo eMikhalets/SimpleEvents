@@ -133,7 +133,7 @@ private fun EventListItem(
 ) {
     val date = event.date.formatDateThisYear("EE, MM/dd")
     val type = stringResource(event.eventType.nameRes)
-    val turns = stringResource(R.string.event_list_item_turns, event.ageTurns)
+    val turns = stringResource(R.string.event_list_item_turns, event.age)
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -159,13 +159,13 @@ private fun EventListItem(
         ) {
             SquareColumn(background = MaterialTheme.colors.background) {
                 Text(
-                    text = event.daysCount.toString(),
+                    text = event.days.toString(),
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = pluralsResource(R.plurals.event_list_item_days, event.daysCount),
+                    text = pluralsResource(R.plurals.event_list_item_days, event.days),
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 14.sp,
                     letterSpacing = 2.sp
@@ -192,7 +192,7 @@ private fun EventListItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = if (event.ageTurns == 0) "$date • $type" else "$date • $type • $turns",
+                    text = if (event.age == 0) "$date • $type" else "$date • $type • $turns",
                     color = MaterialTheme.colors.secondary,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -227,27 +227,24 @@ private fun PreviewHomeScreen() {
         HomeScreen(
             eventsList = listOf(
                 EventEntity(
-                    id = 0,
-                    daysCount = 6,
-                    ageTurns = 42,
+                    days = 6,
+                    age = 42,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
                     note = "Some note text"
                 ),
                 EventEntity(
-                    id = 0,
-                    daysCount = 6,
-                    ageTurns = 42,
+                    days = 6,
+                    age = 42,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
                     note = "Some note text"
                 ),
                 EventEntity(
-                    id = 0,
-                    daysCount = 6,
-                    ageTurns = 42,
+                    days = 6,
+                    age = 42,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,

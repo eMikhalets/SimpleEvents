@@ -5,6 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.emikhalets.simpleevents.data.database.Db.TableNotifications.COL_DAYS
+import com.emikhalets.simpleevents.data.database.Db.TableNotifications.NAME
+import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
 
 @Dao
 interface NotificationsGlobalDao {
@@ -21,9 +24,9 @@ interface NotificationsGlobalDao {
     @Delete
     suspend fun delete(entity: NotificationGlobal): Int
 
-    @Query("SELECT * FROM notifications_global")
+    @Query("SELECT * FROM $NAME ORDER BY $COL_DAYS ASC")
     suspend fun getAllEntities(): List<NotificationGlobal>
 
-    @Query("DELETE FROM notifications_global")
+    @Query("DELETE FROM $NAME")
     suspend fun drop()
 }

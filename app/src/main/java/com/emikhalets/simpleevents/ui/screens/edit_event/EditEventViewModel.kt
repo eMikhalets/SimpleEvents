@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
-import com.emikhalets.simpleevents.utils.Mappers
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +25,7 @@ class EditEventViewModel @Inject constructor(
             useCase.loadEvent(id)
                 .onSuccess {
                     state = state.copy(
-                        event = Mappers.mapFromEventDbToEvent(it)
+                        event = it.calculateEventData()
                     )
                 }
                 .onFailure {
@@ -51,8 +50,7 @@ class EditEventViewModel @Inject constructor(
                     eventType = type,
                     note = note
                 )
-                val entityDB = Mappers.mapFromEventToEventDb(entity).calculateEventData()
-                useCase.updateEvent(entityDB)
+                useCase.updateEvent(entity)
                     .onSuccess {
                         state = state.copy(
                             updated = it

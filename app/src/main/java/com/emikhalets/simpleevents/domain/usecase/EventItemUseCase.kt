@@ -1,10 +1,10 @@
 package com.emikhalets.simpleevents.domain.usecase
 
-import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 interface EventItemUseCase {
 
-    suspend fun loadEvent(eventId: Long): Result<EventEntityDB>
+    suspend fun loadEvent(eventId: Long): Result<EventEntity>
 
-    suspend fun deleteEvent(entity: EventEntityDB): Result<Int>
+    suspend fun deleteEvent(entity: EventEntity): Result<Int>
 }

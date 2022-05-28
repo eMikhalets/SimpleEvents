@@ -5,10 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.simpleevents.data.database.EventEntityDB
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,12 +26,7 @@ class AddEventViewModel @Inject constructor(
         type: EventType,
     ) {
         viewModelScope.launch {
-            val entity = EventEntityDB(
-                date = date,
-                name = name,
-                eventType = type
-            )
-            userCase.saveEvent(entity.calculateEventData())
+            userCase.saveEvent(EventEntity(date, name, type))
                 .onSuccess {
                     state = state.copy(
                         savedId = it

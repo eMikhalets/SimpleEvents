@@ -1,22 +1,22 @@
 package com.emikhalets.simpleevents.data.repository
 
 import android.net.Uri
-import com.emikhalets.simpleevents.data.database.EventEntityDB
-import com.emikhalets.simpleevents.data.database.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
 
 interface DatabaseRepository {
 
     /** Events Dao */
 
-    suspend fun insertEvent(entity: EventEntityDB): Result<Long>
+    suspend fun insertEvent(entity: EventEntity): Result<Long>
 
-    suspend fun updateEvent(entity: EventEntityDB): Result<Int>
+    suspend fun updateEvent(entity: EventEntity): Result<Int>
 
-    suspend fun deleteEvent(entity: EventEntityDB): Result<Int>
+    suspend fun deleteEvent(entity: EventEntity): Result<Int>
 
-    suspend fun getAllEvents(): Result<List<EventEntityDB>>
+    suspend fun getAllEvents(): Result<List<EventEntity>>
 
-    suspend fun getEntityById(eventId: Long): Result<EventEntityDB>
+    suspend fun getEntityById(eventId: Long): Result<EventEntity>
 
     suspend fun importEvents(uri: Uri, isOld: Boolean): Result<List<Long>>
 

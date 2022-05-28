@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
-import com.emikhalets.simpleevents.utils.Mappers
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,7 +24,7 @@ class EventItemViewModel @Inject constructor(
             useCase.loadEvent(id)
                 .onSuccess {
                     state = state.copy(
-                        event = Mappers.mapFromEventDbToEvent(it)
+                        event = it
                     )
                 }
                 .onFailure {
@@ -37,20 +36,20 @@ class EventItemViewModel @Inject constructor(
     }
 
     fun deleteEvent(entity: EventEntity?) {
-        entity?.let {
-            viewModelScope.launch {
-                useCase.deleteEvent(Mappers.mapFromEventToEventDb(entity))
-                    .onSuccess {
-                        state = state.copy(
-                            deleted = true
-                        )
-                    }
-                    .onFailure {
-                        state = state.copy(
-                            error = it.localizedMessage ?: ""
-                        )
-                    }
-            }
+        entity ?: return
+
+        viewModelScope.launch {
+            useCase.deleteEvent(entity)
+                .onSuccess {
+                    state = state.copy(
+                        deleted = true
+                    )
+                }
+                .onFailure {
+                    state = state.copy(
+                        error = it.localizedMessage ?: ""
+                    )
+                }
         }
     }
 }

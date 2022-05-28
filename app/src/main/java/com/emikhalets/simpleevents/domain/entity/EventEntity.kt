@@ -1,16 +1,35 @@
 package com.emikhalets.simpleevents.domain.entity
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_DATE
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_ID
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_NAME
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_NOTE
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_TYPE
+import com.emikhalets.simpleevents.data.database.Db.TableEvents.NAME
 import com.emikhalets.simpleevents.utils.enums.EventType
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Entity(tableName = NAME)
 @Serializable
 data class EventEntity(
-    @SerialName("id") val id: Long,
-    @SerialName("date") val date: Long,
-    @SerialName("name") val name: String,
-    @SerialName("age") val ageTurns: Int,
-    @SerialName("days_left") val daysCount: Int,
-    @SerialName("type") val eventType: EventType,
-    @SerialName("note") val note: String,
-)
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = COL_ID) val id: Long = 0,
+    @ColumnInfo(name = COL_DATE) val date: Long,
+    @ColumnInfo(name = COL_NAME) val name: String,
+    @ColumnInfo(name = COL_TYPE) val eventType: EventType,
+    @ColumnInfo(name = COL_NOTE) val note: String = "",
+    @Ignore val days: Int = 0,
+    @Ignore val age: Int = 0,
+) {
+
+    constructor(id: Long, date: Long, name: String, eventType: EventType, note: String)
+            : this(id, date, name, eventType, note, 0, 0)
+
+    @Ignore
+    constructor(date: Long, name: String, eventType: EventType)
+            : this(0, date, name, eventType, "", 0, 0)
+}
