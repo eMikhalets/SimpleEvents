@@ -45,7 +45,7 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.formatDate
+import com.emikhalets.simpleevents.utils.extensions.formatDateFull
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 
 @Composable
@@ -75,15 +75,9 @@ fun EventItemScreen(
     if (state.event != null) {
         EventItemScreen(
             event = state.event,
-            onImageClick = {
-                scaffoldState.showSnackBar(context, R.string.add_event_empty_name)
-            },
-            onEditClick = {
-                navController.navToEditEvent(eventId)
-            },
-            onDeleteClick = {
-                showDeleteDialog = true
-            }
+            onImageClick = { scaffoldState.showSnackBar(context, R.string.add_event_empty_name) },
+            onEditClick = { navController.navToEditEvent(eventId) },
+            onDeleteClick = { showDeleteDialog = true }
         )
     }
 
@@ -93,9 +87,7 @@ fun EventItemScreen(
                 viewModel.deleteEvent(state.event)
                 showDeleteDialog = false
             },
-            onDismissClick = {
-                showDeleteDialog = false
-            }
+            onDismissClick = { showDeleteDialog = false }
         )
     }
 }
@@ -156,16 +148,18 @@ fun EventItemHeader(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = event.date.formatDate("EEEE, MMMM d, yyyy"),
+            text = event.date.formatDateFull(event.withoutYear),
             color = MaterialTheme.colors.primary,
             fontSize = 16.sp
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.event_item_turns, event.age),
-            color = MaterialTheme.colors.primary,
-            fontSize = 16.sp
-        )
+        if (!event.withoutYear) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.event_item_turns, event.age),
+                color = MaterialTheme.colors.primary,
+                fontSize = 16.sp
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = event.days.toString(),
@@ -251,7 +245,8 @@ private fun PreviewEventItemScreen() {
                 name = "Test Full Name",
                 date = System.currentTimeMillis(),
                 eventType = EventType.BIRTHDAY,
-                note = "Some note text"
+                note = "Some note text",
+                withoutYear = false
             ),
             onImageClick = {},
             onEditClick = {},

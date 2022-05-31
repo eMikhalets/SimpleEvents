@@ -48,15 +48,14 @@ import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.formatDate
-import com.emikhalets.simpleevents.utils.extensions.formatDateThisYear
+import com.emikhalets.simpleevents.utils.extensions.formatDateMonth
+import com.emikhalets.simpleevents.utils.extensions.formatHomeInfo
 import com.emikhalets.simpleevents.utils.extensions.localDate
 import com.emikhalets.simpleevents.utils.extensions.milliseconds
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 import java.time.LocalDate
 
-// TODO: загружать события в порядке возрастания daysLeft, с разделителем по месяцам
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
@@ -131,16 +130,12 @@ private fun EventListItem(
     header: Boolean,
     onEventClick: (Long) -> Unit,
 ) {
-    val date = event.date.formatDateThisYear("EE, MM/dd")
-    val type = stringResource(event.eventType.nameRes)
-    val turns = stringResource(R.string.event_list_item_turns, event.age)
-
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
         if (header) {
             Text(
-                text = event.date.formatDate("MMMM"),
+                text = event.date.formatDateMonth(),
                 color = MaterialTheme.colors.primary,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -192,7 +187,7 @@ private fun EventListItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = if (event.age == 0) "$date • $type" else "$date • $type • $turns",
+                    text = event.formatHomeInfo(),
                     color = MaterialTheme.colors.secondary,
                     fontSize = 16.sp,
                     maxLines = 1,
@@ -240,11 +235,12 @@ private fun PreviewHomeScreen() {
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
+                    note = "Some note text",
+                    withoutYear = false
                 ),
                 EventEntity(
                     days = 6,
-                    age = 42,
+                    age = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 2, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,

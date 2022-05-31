@@ -24,9 +24,10 @@ class AddEventViewModel @Inject constructor(
         name: String,
         date: Long,
         type: EventType,
+        withoutYear: Boolean,
     ) {
         viewModelScope.launch {
-            userCase.saveEvent(EventEntity(date, name, type))
+            userCase.saveEvent(EventEntity(date, name, type, withoutYear))
                 .onSuccess {
                     state = state.copy(
                         savedId = it

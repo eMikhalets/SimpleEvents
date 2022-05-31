@@ -48,7 +48,7 @@ import com.emikhalets.simpleevents.ui.theme.backgroundNegative
 import com.emikhalets.simpleevents.ui.theme.backgroundSecondary
 import com.emikhalets.simpleevents.ui.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.formatDate
+import com.emikhalets.simpleevents.utils.extensions.formatDateFull
 import com.emikhalets.simpleevents.utils.extensions.localDate
 import com.emikhalets.simpleevents.utils.extensions.milliseconds
 import java.time.LocalDate
@@ -220,6 +220,7 @@ fun SimpleEventsNegativeButton(
 @Composable
 fun SimpleEventsDatePicker(
     timestamp: Long,
+    withoutYear: Boolean,
     onDateSelected: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -240,7 +241,7 @@ fun SimpleEventsDatePicker(
 
     Text(
         text = if (timestamp != 0L) {
-            timestamp.formatDate("EEEE, dd MMM, yyyy")
+            timestamp.formatDateFull(withoutYear)
         } else {
             stringResource(R.string.add_event_choose_date)
         },

@@ -8,8 +8,13 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-fun Long.formatDate(pattern: String): String =
-    SimpleDateFormat(pattern, Locale.ENGLISH).format(this)
+fun Long.formatDateFull(withoutYear: Boolean): String {
+    val pattern = if (withoutYear) "EEEE, d MMM" else "EEEE, d MMM, yyyy"
+    return SimpleDateFormat(pattern, Locale.ENGLISH).format(this)
+}
+
+fun Long.formatDateMonth(): String =
+    SimpleDateFormat("MMMM", Locale.ENGLISH).format(this)
 
 fun Long.formatDateThisYear(pattern: String): String {
     val date = this.localDate.withYear(LocalDate.now().year).milliseconds

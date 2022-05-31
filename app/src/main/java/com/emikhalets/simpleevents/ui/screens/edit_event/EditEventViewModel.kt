@@ -40,6 +40,7 @@ class EditEventViewModel @Inject constructor(
         date: Long,
         type: EventType,
         note: String,
+        withoutYear: Boolean,
     ) {
         state.event?.let { event ->
             viewModelScope.launch {
@@ -47,7 +48,8 @@ class EditEventViewModel @Inject constructor(
                     name = name,
                     date = date,
                     eventType = type,
-                    note = note
+                    note = note,
+                    withoutYear = withoutYear
                 )
                 useCase.updateEvent(entity)
                     .onSuccess {

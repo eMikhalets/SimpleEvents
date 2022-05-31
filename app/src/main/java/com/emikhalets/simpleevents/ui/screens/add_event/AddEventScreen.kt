@@ -2,10 +2,12 @@ package com.emikhalets.simpleevents.ui.screens.add_event
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -49,6 +51,7 @@ fun AddEventScreen(
     var type by remember { mutableStateOf(EventType.BIRTHDAY) }
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(0L) }
+    var withoutYear by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.savedId) {
         if (state.savedId > 0) navController.navToEventAfterAdding(state.savedId)
@@ -57,15 +60,17 @@ fun AddEventScreen(
     AddEventScreen(
         name = name,
         date = date,
+        withoutYear = withoutYear,
         onTypeChange = { newType -> type = newType },
         onNameChanged = { newName -> name = newName },
         onDateChange = { newDate -> date = newDate },
+        onWithoutYearCheck = { newWithoutYear -> withoutYear = newWithoutYear },
         onSaveClick = {
             when {
                 name.isEmpty() -> scaffoldState.showSnackBar(context,
                     R.string.add_event_empty_name)
                 date == 0L -> scaffoldState.showSnackBar(context, R.string.add_event_empty_date)
-                else -> viewModel.saveNewEvent(name, date, type)
+                else -> viewModel.saveNewEvent(name, date, type, withoutYear)
             }
         }
     )
@@ -75,9 +80,11 @@ fun AddEventScreen(
 fun AddEventScreen(
     name: String,
     date: Long,
+    withoutYear: Boolean,
     onTypeChange: (EventType) -> Unit,
     onNameChanged: (String) -> Unit,
     onDateChange: (Long) -> Unit,
+    onWithoutYearCheck: (Boolean) -> Unit,
     onSaveClick: () -> Unit,
 ) {
     var turns by remember { mutableStateOf(0) }
@@ -104,6 +111,7 @@ fun AddEventScreen(
         )
         SimpleEventsDatePicker(
             timestamp = date,
+            withoutYear = withoutYear,
             onDateSelected = {
                 onDateChange(it)
                 turns = it.turns
@@ -113,14 +121,31 @@ fun AddEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        Text(
-            text = stringResource(R.string.add_event_turns, turns),
-            fontSize = 18.sp,
-            color = MaterialTheme.colors.primary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp, vertical = 16.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
+        ) {
+            Checkbox(
+                checked = withoutYear,
+                onCheckedChange = { onWithoutYearCheck(it) }
+            )
+            Text(
+                text = stringResource(R.string.add_event_without_year),
+                fontSize = 18.sp,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+        if (!withoutYear) {
+            Text(
+                text = stringResource(R.string.add_event_turns, turns),
+                fontSize = 18.sp,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 16.dp)
+            )
+        }
         Text(
             text = stringResource(R.string.add_event_days_left, left),
             fontSize = 18.sp,
@@ -151,9 +176,11 @@ private fun PreviewAddEventScreen() {
         AddEventScreen(
             name = "Some Test Name",
             date = System.currentTimeMillis(),
+            withoutYear = true,
             onTypeChange = {},
             onNameChanged = {},
             onDateChange = {},
+            onWithoutYearCheck = {},
             onSaveClick = {}
         )
     }

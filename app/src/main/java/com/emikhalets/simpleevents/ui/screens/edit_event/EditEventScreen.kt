@@ -2,10 +2,13 @@ package com.emikhalets.simpleevents.ui.screens.edit_event
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Checkbox
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
@@ -46,6 +50,7 @@ fun EditEventScreen(
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(0L) }
     var note by remember { mutableStateOf("") }
+    var withoutYear by remember { mutableStateOf(false) }
 
     LaunchedEffect("") {
         viewModel.loadEvent(eventId)
@@ -57,6 +62,7 @@ fun EditEventScreen(
             name = state.event.name
             date = state.event.date
             note = state.event.note
+            withoutYear = state.event.withoutYear
         }
     }
 
@@ -76,17 +82,19 @@ fun EditEventScreen(
             name = name,
             date = date,
             note = note,
+            withoutYear = withoutYear,
             onTypeChange = { newType -> type = newType },
             onNameChanged = { newName -> name = newName },
             onDateChange = { newDate -> date = newDate },
             onNoteChange = { newNote -> note = newNote },
+            onWithoutYearCheck = { newWithoutYear -> withoutYear = newWithoutYear },
             onSaveClick = {
                 when {
                     name.isEmpty() -> scaffoldState.showSnackBar(context,
                         R.string.edit_event_empty_name)
                     date == 0L -> scaffoldState.showSnackBar(context,
                         R.string.edit_event_empty_date)
-                    else -> viewModel.updateEvent(name, date, type, note)
+                    else -> viewModel.updateEvent(name, date, type, note, withoutYear)
                 }
             }
         )
@@ -99,10 +107,12 @@ private fun EditEventScreen(
     name: String,
     date: Long,
     note: String,
+    withoutYear: Boolean,
     onTypeChange: (EventType) -> Unit,
     onNameChanged: (String) -> Unit,
     onDateChange: (Long) -> Unit,
     onNoteChange: (String) -> Unit,
+    onWithoutYearCheck: (Boolean) -> Unit,
     onSaveClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -126,6 +136,7 @@ private fun EditEventScreen(
         )
         SimpleEventsDatePicker(
             timestamp = date,
+            withoutYear = withoutYear,
             onDateSelected = onDateChange,
             modifier = Modifier
                 .fillMaxWidth()
@@ -140,6 +151,21 @@ private fun EditEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
+        ) {
+            Checkbox(
+                checked = withoutYear,
+                onCheckedChange = { onWithoutYearCheck(it) }
+            )
+            Text(
+                text = stringResource(R.string.add_event_without_year),
+                fontSize = 18.sp,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
         Box(
             contentAlignment = Alignment.BottomCenter,
             modifier = Modifier
@@ -164,10 +190,12 @@ private fun PreviewEditEventScreen() {
             name = "Some Test Name",
             date = System.currentTimeMillis(),
             note = "Some note Some note Some note Some note Some note Some note Some note",
+            withoutYear = true,
             onTypeChange = {},
             onNameChanged = {},
             onDateChange = {},
             onNoteChange = {},
+            onWithoutYearCheck = {},
             onSaveClick = {}
         )
     }

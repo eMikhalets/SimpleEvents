@@ -25,6 +25,7 @@
     <string name="add_event_empty_date">Date required</string>
     <string name="add_event_turns">Turns: %d</string>
     <string name="add_event_days_left">Days left: %d</string>
+    <string name="add_event_without_year">Without year</string>
 
     <string name="event_item_turns">Turns %d</string>
     <string name="event_item_btn_edit">Edit Event</string>
@@ -42,6 +43,7 @@
     <string name="edit_event_empty_date">Date required</string>
     <string name="edit_event_update_error">Updating error</string>
     <string name="edit_event_updated">Event updated</string>
+    <string name="edit_event_without_year">Without year</string>
 
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notifications_enable">Enable notifications</string>

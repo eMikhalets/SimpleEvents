@@ -18,7 +18,8 @@ object Mappers {
             age = eventOld.age,
             days = eventOld.daysLeft,
             eventType = EventType.BIRTHDAY,
-            note = eventOld.notes
+            note = eventOld.notes,
+            withoutYear = eventOld.withoutYear
         )
     }
 }

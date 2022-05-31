@@ -13,21 +13,21 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.entity.NotificationEvent
 import com.emikhalets.simpleevents.ui.MainActivity
+import com.emikhalets.simpleevents.utils.extensions.formatNotificationInfo
 
 object AppNotificationManager {
 
-    private const val NOTIFICATION_ID_EVENTS = "simple_events.notification.id.events"
+    private const val NOTIFICATION_ID_EVENTS = 123
 
-    private const val NOTIFICATION_CHANNEL_ID_EVENTS = "simple_events.notification.channel.events"
-    private const val NOTIFICATION_CHANNEL_NAME_EVENTS = "Events notifications"
+    private const val CHANNEL_ID_EVENTS = "simple_events.notification.channel.events"
+    private const val CHANNEL_NAME_EVENTS = "Events notifications"
 
     fun sendEventsNotification(context: Context, events: List<NotificationEvent>) {
         val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID_EVENTS)
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID_EVENTS)
             .setSmallIcon(R.drawable.ic_event_available)
             .setContentTitle(context.getString(R.string.notification_upcoming_events))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -39,19 +39,12 @@ object AppNotificationManager {
         val style = NotificationCompat.InboxStyle()
         events.forEach { notificationEvent ->
             style.addLine(context.getString(notificationEvent.notificationTime.nameRes))
-            notificationEvent.events.forEach { style.addLine(setEvent(context, it)) }
+            notificationEvent.events.forEach { style.addLine(it.formatNotificationInfo(context)) }
         }
 
         builder.setStyle(style)
 
-        NotificationManagerCompat.from(context).notify(1, builder.build())
-    }
-
-    private fun setEvent(context: Context, event: EventEntity): String {
-        val type = event.eventType.nameRes
-        val name = event.name
-        val turns = context.getString(R.string.notification_turns, event.age)
-        return "$type • $name • $turns"
+        NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_EVENTS, builder.build())
     }
 
     fun createNotificationChannels(context: Context) {
@@ -61,8 +54,8 @@ object AppNotificationManager {
 
     private fun getEventsChannel(): NotificationChannel {
         return NotificationChannel(
-            NOTIFICATION_CHANNEL_ID_EVENTS,
-            NOTIFICATION_CHANNEL_NAME_EVENTS,
+            CHANNEL_ID_EVENTS,
+            CHANNEL_NAME_EVENTS,
             NotificationManager.IMPORTANCE_DEFAULT
         )
     }
