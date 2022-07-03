@@ -23,7 +23,7 @@ class SimpleEventsApp : Application() {
 
         if (Prefs(applicationContext).getFirstLaunch()) {
             CoroutineScope(Dispatchers.IO).launch {
-                val list = getDefaultNotificationsGlobal()
+                val list = getDefaultNotificationsGlobal(applicationContext)
                 AppDatabase.get(applicationContext).notificationsGlobalDao.insert(list)
                 Prefs(applicationContext).setFirstLaunch(false)
             }

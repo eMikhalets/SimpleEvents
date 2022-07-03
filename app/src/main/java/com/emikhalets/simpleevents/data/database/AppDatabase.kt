@@ -15,10 +15,11 @@ import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
         EventEntity::class,
         NotificationGlobal::class,
     ],
-    version = 3,
+    version = 4,
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = Migration1To2::class),
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
     ],
     exportSchema = true
 )
@@ -57,6 +58,7 @@ object Db {
         const val NAME = "notifications_global"
         const val COL_ID = "id"
         const val COL_NAME = "name_res"
+        const val COL_NAME_EN = "name_en"
         const val COL_ENABLED = "enabled"
         const val COL_DAYS = "days_left"
     }

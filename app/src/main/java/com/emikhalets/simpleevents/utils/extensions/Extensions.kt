@@ -31,17 +31,32 @@ fun EventEntity.formatNotificationInfo(context: Context): String {
     return if (age == 0 || withoutYear) "$type • $name" else "$type • $name • $turns"
 }
 
-fun getDefaultNotificationsGlobal(): List<NotificationGlobal> {
+fun getDefaultNotificationsGlobal(context: Context): List<NotificationGlobal> {
     return listOf(
-        NotificationGlobal(nameRes = R.string.notifications_time_month,
-            enabled = true, daysLeft = 30),
-        NotificationGlobal(nameRes = R.string.notifications_time_week,
-            enabled = true, daysLeft = 7),
-        NotificationGlobal(nameRes = R.string.notifications_time_two_days,
-            enabled = true, daysLeft = 2),
-        NotificationGlobal(nameRes = R.string.notifications_time_day,
-            enabled = true, daysLeft = 1),
-        NotificationGlobal(nameRes = R.string.notifications_time_today,
-            enabled = true, daysLeft = 0)
+        NotificationGlobal(
+            nameEn = context.getString(R.string.notifications_time_month),
+            enabled = true,
+            daysLeft = 30
+        ),
+        NotificationGlobal(
+            nameEn = context.getString(R.string.notifications_time_week),
+            enabled = true,
+            daysLeft = 7
+        ),
+        NotificationGlobal(
+            nameEn = context.getString(R.string.notifications_time_two_days),
+            enabled = true,
+            daysLeft = 2
+        ),
+        NotificationGlobal(
+            nameEn = context.getString(R.string.notifications_time_day),
+            enabled = true,
+            daysLeft = 1
+        ),
+        NotificationGlobal(
+            nameEn = context.getString(R.string.notifications_time_today),
+            enabled = true,
+            daysLeft = 0
+        )
     )
 }

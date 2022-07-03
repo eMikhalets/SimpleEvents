@@ -253,7 +253,7 @@ private fun SettingsNotifications(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = stringResource(notification.nameRes),
+                    text = notification.nameEn,
                     color = MaterialTheme.colors.primary,
                     fontSize = 16.sp,
                     modifier = modifier
@@ -311,7 +311,7 @@ private fun PreviewSettingsScreen() {
             hour = 7,
             minute = 9,
             enabled = true,
-            notificationsGlobal = getDefaultNotificationsGlobal(),
+            notificationsGlobal = getDefaultNotificationsGlobal(LocalContext.current),
             alarmsEnabled = true,
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },

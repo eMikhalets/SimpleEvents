@@ -38,7 +38,7 @@ object AppNotificationManager {
 
         val style = NotificationCompat.InboxStyle()
         events.forEach { notificationEvent ->
-            style.addLine(context.getString(notificationEvent.notificationTime.nameRes))
+            style.addLine(notificationEvent.notificationTime.nameEn)
             notificationEvent.events.forEach { style.addLine(it.formatNotificationInfo(context)) }
         }
 
