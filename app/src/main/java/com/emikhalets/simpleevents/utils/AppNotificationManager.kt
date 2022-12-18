@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventAlarmWrapper
-import com.emikhalets.simpleevents.ui.MainActivity
+import com.emikhalets.simpleevents.presentation.MainActivity
 import com.emikhalets.simpleevents.utils.extensions.formatNotificationInfo
 
 object AppNotificationManager {
