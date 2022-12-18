@@ -34,13 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.presentation.screens.common.DeletingEventDialog
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsNegativeButton
-import com.emikhalets.simpleevents.presentation.screens.common.navToEditEvent
 import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
@@ -52,8 +50,9 @@ import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 fun EventItemScreen(
     eventId: Long,
     viewModel: EventItemViewModel,
-    navController: NavHostController,
     scaffoldState: ScaffoldState,
+    onEventDeleted: () -> Unit,
+    onEventEditClick: (Long) -> Unit,
 ) {
     val context = LocalContext.current
     val state = viewModel.state
@@ -65,7 +64,7 @@ fun EventItemScreen(
     }
 
     LaunchedEffect(state.deleted) {
-        if (state.deleted) navController.popBackStack()
+        if (state.deleted) onEventDeleted()
     }
 
     LaunchedEffect(state.error) {
@@ -76,7 +75,7 @@ fun EventItemScreen(
         EventItemScreen(
             event = state.event,
             onImageClick = { scaffoldState.showSnackBar(context, R.string.add_event_empty_name) },
-            onEditClick = { navController.navToEditEvent(eventId) },
+            onEditClick = { onEventEditClick(eventId) },
             onDeleteClick = { showDeleteDialog = true }
         )
     }

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsDatePicker
@@ -40,7 +39,6 @@ import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 fun EditEventScreen(
     eventId: Long,
     viewModel: EditEventViewModel,
-    navController: NavHostController,
     scaffoldState: ScaffoldState,
 ) {
     val context = LocalContext.current

@@ -25,14 +25,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsDatePicker
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsEventTypeSpinner
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.presentation.screens.common.navToEventAfterAdding
 import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.daysLeft
@@ -42,8 +40,8 @@ import com.emikhalets.simpleevents.utils.extensions.turns
 @Composable
 fun AddEventScreen(
     viewModel: AddEventViewModel,
-    navController: NavHostController,
     scaffoldState: ScaffoldState,
+    onEventAdded: (Long) -> Unit,
 ) {
     val context = LocalContext.current
     val state = viewModel.state
@@ -54,7 +52,7 @@ fun AddEventScreen(
     var withoutYear by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.savedId) {
-        if (state.savedId > 0) navController.navToEventAfterAdding(state.savedId)
+        if (state.savedId > 0) onEventAdded(state.savedId)
     }
 
     AddEventScreen(

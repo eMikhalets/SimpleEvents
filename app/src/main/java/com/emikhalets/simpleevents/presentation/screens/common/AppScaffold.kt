@@ -12,12 +12,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.emikhalets.simpleevents.presentation.navigation.AppScreen
 
 
 @Composable
@@ -44,11 +46,12 @@ fun SimpleEventsScaffold(
 private fun SimpleEventsBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val screens = remember { listOf(AppScreen.Home, AppScreen.AddEvent, AppScreen.Settings) }
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.background,
     ) {
-        getBottomScreens().forEach { screen ->
+        screens.forEach { screen ->
             BottomNavigationItem(
                 icon = {
                     if (screen.route == AppScreen.AddEvent.route) {

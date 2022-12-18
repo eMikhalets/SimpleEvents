@@ -37,13 +37,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsIcon
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.presentation.screens.common.navToEvent
 import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
@@ -59,8 +57,8 @@ import java.time.LocalDate
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    navController: NavHostController,
     scaffoldState: ScaffoldState,
+    onEventClick: (Long) -> Unit,
 ) {
     val state = viewModel.state
 
@@ -80,9 +78,7 @@ fun HomeScreen(
         onSearchQueryChange = { newQuery ->
             searchQuery = newQuery
         },
-        onEventClick = { eventId ->
-            navController.navToEvent(eventId)
-        }
+        onEventClick = onEventClick
     )
 }
 

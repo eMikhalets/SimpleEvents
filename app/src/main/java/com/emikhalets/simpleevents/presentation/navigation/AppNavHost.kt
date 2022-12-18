@@ -14,6 +14,8 @@ import com.emikhalets.simpleevents.presentation.screens.event_item.EventItemScre
 import com.emikhalets.simpleevents.presentation.screens.home.HomeScreen
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
 
+private const val ARGS_EVENT_ID = "event_id"
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -23,24 +25,32 @@ fun AppNavHost(
         composable(AppScreen.Home.route) {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                onEventClick = { eventId ->
+                    navController.navigate("${AppScreen.Event.route}/$eventId")
+                }
             )
         }
+
         composable(AppScreen.AddEvent.route) {
             AddEventScreen(
                 viewModel = hiltViewModel(),
-                navController = navController,
-                scaffoldState = scaffoldState
+                scaffoldState = scaffoldState,
+                onEventAdded = { eventId ->
+                    navController.navigate("${AppScreen.Event.route}/$eventId") {
+                        popUpTo(AppScreen.Home.route)
+                    }
+                }
             )
         }
+
         composable(AppScreen.Settings.route) {
             SettingsScreen(
                 viewModel = hiltViewModel(),
-                navController = navController,
                 scaffoldState = scaffoldState
             )
         }
+
         composable(
             route = "${AppScreen.Event.route}/{$ARGS_EVENT_ID}",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
@@ -49,11 +59,17 @@ fun AppNavHost(
                 EventItemScreen(
                     eventId = id,
                     viewModel = hiltViewModel(),
-                    navController = navController,
-                    scaffoldState = scaffoldState
+                    scaffoldState = scaffoldState,
+                    onEventDeleted = {
+                        navController.popBackStack()
+                    },
+                    onEventEditClick = { eventId ->
+                        navController.navigate("${AppScreen.EditEvent.route}/$eventId")
+                    }
                 )
             }
         }
+
         composable(
             route = "${AppScreen.EditEvent.route}/{$ARGS_EVENT_ID}",
             arguments = listOf(navArgument(ARGS_EVENT_ID) { type = NavType.LongType })
@@ -62,7 +78,6 @@ fun AppNavHost(
                 EditEventScreen(
                     eventId = id,
                     viewModel = hiltViewModel(),
-                    navController = navController,
                     scaffoldState = scaffoldState
                 )
             }
