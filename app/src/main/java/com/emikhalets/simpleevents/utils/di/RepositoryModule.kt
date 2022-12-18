@@ -1,5 +1,7 @@
 package com.emikhalets.simpleevents.utils.di
 
+import com.emikhalets.simpleevents.data.repository.AppRepository
+import com.emikhalets.simpleevents.data.repository.AppRepositoryImpl
 import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import com.emikhalets.simpleevents.data.repository.DatabaseRepositoryImpl
 import dagger.Binds
@@ -11,6 +13,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Singleton
+    @Binds
+    abstract fun bindsAppRepository(impl: AppRepositoryImpl): AppRepository
 
     @Singleton
     @Binds

@@ -1,9 +1,9 @@
 package com.emikhalets.simpleevents.domain.entity
 
+import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 
-data class NotificationEvent(
-    val notificationTime: NotificationGlobal,
+data class EventAlarmWrapper(
+    val alarm: EventAlarm,
     val events: List<EventEntity>,
 )

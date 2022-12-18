@@ -1,19 +1,14 @@
 package com.emikhalets.simpleevents.data.repository
 
-import android.net.Uri
+import com.emikhalets.simpleevents.data.database.EventAlarmsDao
 import com.emikhalets.simpleevents.data.database.EventsDao
-import com.emikhalets.simpleevents.data.database.NotificationsGlobalDao
+import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
-import com.emikhalets.simpleevents.utils.AppBackupManager
-import com.emikhalets.simpleevents.utils.Mappers
-import timber.log.Timber
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val eventsDao: EventsDao,
-    private val notifGlobalDao: NotificationsGlobalDao,
-    private val backupManager: AppBackupManager,
+    private val eventAlarmsDao: EventAlarmsDao,
 ) : DatabaseRepository {
 
     /** Events Dao */
@@ -38,42 +33,21 @@ class DatabaseRepositoryImpl @Inject constructor(
         return runCatching { eventsDao.getEntityById(eventId) }
     }
 
-    override suspend fun importEvents(uri: Uri, isOld: Boolean): Result<List<Long>> {
-        return runCatching {
-            val listDb = if (isOld) {
-                val list = backupManager.importOld(uri)
-                Timber.d("Converted old list = $list")
-                Mappers.mapFromOldEventsListToEventsDbList(list)
-            } else {
-                val list = backupManager.import(uri)
-                Timber.d("Converted list = $list")
-                list
-            }
-
-            Timber.d("Mapped list = $listDb")
-
-            eventsDao.run {
-                drop()
-                insert(listDb)
-            }
-        }
-    }
-
     /** Notifications Global Dao */
 
-    override suspend fun insertNotifGlobal(entity: NotificationGlobal): Result<Long> {
-        return runCatching { notifGlobalDao.insert(entity) }
+    override suspend fun insertNotifGlobal(entity: EventAlarm): Result<Long> {
+        return runCatching { eventAlarmsDao.insert(entity) }
     }
 
-    override suspend fun insertNotifGlobal(list: List<NotificationGlobal>): Result<List<Long>> {
-        return runCatching { notifGlobalDao.insert(list) }
+    override suspend fun insertNotifGlobal(list: List<EventAlarm>): Result<List<Long>> {
+        return runCatching { eventAlarmsDao.insert(list) }
     }
 
-    override suspend fun updateNotifGlobal(entity: NotificationGlobal): Result<Int> {
-        return runCatching { notifGlobalDao.update(entity) }
+    override suspend fun updateNotifGlobal(entity: EventAlarm): Result<Int> {
+        return runCatching { eventAlarmsDao.update(entity) }
     }
 
-    override suspend fun getAllNotifGlobal(): Result<List<NotificationGlobal>> {
-        return runCatching { notifGlobalDao.getAllEntities() }
+    override suspend fun getAllNotifGlobal(): Result<List<EventAlarm>> {
+        return runCatching { eventAlarmsDao.getAll() }
     }
 }

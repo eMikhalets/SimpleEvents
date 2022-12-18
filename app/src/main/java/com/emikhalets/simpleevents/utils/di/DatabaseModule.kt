@@ -2,8 +2,8 @@ package com.emikhalets.simpleevents.utils.di
 
 import android.content.Context
 import com.emikhalets.simpleevents.data.database.AppDatabase
+import com.emikhalets.simpleevents.data.database.EventAlarmsDao
 import com.emikhalets.simpleevents.data.database.EventsDao
-import com.emikhalets.simpleevents.data.database.NotificationsGlobalDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +29,7 @@ object DatabaseModule {
 
     @Singleton
     @Provides
-    fun providesNotifGlobalDao(database: AppDatabase): NotificationsGlobalDao {
-        return database.notificationsGlobalDao
+    fun providesEventAlarmsDao(database: AppDatabase): EventAlarmsDao {
+        return database.eventAlarmsDao
     }
 }

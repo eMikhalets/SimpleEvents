@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 
 const val DEFAULT_EVENTS_HOUR = 9
 const val DEFAULT_EVENTS_MINUTE = 0

@@ -5,8 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_ID
-import com.emikhalets.simpleevents.data.database.Db.TableEvents.NAME
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 
 @Dao
@@ -27,12 +25,12 @@ interface EventsDao {
     @Delete
     suspend fun delete(entity: EventEntity): Int
 
-    @Query("SELECT * FROM $NAME")
+    @Query("SELECT * FROM events")
     suspend fun getAllEntities(): List<EventEntity>
 
-    @Query("SELECT * FROM $NAME WHERE $COL_ID = :id")
+    @Query("SELECT * FROM events WHERE id = :id")
     suspend fun getEntityById(id: Long): EventEntity
 
-    @Query("DELETE FROM $NAME")
+    @Query("DELETE FROM events")
     suspend fun drop()
 }

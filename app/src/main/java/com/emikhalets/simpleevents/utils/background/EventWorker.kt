@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.emikhalets.simpleevents.data.database.AppDatabase
-import com.emikhalets.simpleevents.domain.entity.NotificationEvent
+import com.emikhalets.simpleevents.domain.entity.EventAlarmWrapper
 import com.emikhalets.simpleevents.utils.AppNotificationManager
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 
@@ -20,13 +20,13 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
                 .map { it.calculateEventData() }
                 .sortedBy { it.days }
 
-            val eventsList = mutableListOf<NotificationEvent>()
+            val eventsList = mutableListOf<EventAlarmWrapper>()
 
             notificationsDao.getAllEntities().forEach { notificationTime ->
                 if (notificationTime.enabled) {
                     val list = sourceEvents.filter { it.days == notificationTime.daysLeft }
                     if (list.isNotEmpty()) {
-                        eventsList.add(NotificationEvent(notificationTime, list))
+                        eventsList.add(EventAlarmWrapper(notificationTime, list))
                     }
                 }
             }
