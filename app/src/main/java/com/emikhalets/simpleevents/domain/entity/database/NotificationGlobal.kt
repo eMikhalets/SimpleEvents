@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.domain.entity
+package com.emikhalets.simpleevents.domain.entity.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

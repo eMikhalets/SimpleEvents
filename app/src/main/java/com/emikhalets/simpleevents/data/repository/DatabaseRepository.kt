@@ -1,8 +1,8 @@
 package com.emikhalets.simpleevents.data.repository
 
 import android.net.Uri
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 
 interface DatabaseRepository {
 

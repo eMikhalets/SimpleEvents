@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.domain.usecase
 
 import android.net.Uri
-import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import javax.inject.Inject
 

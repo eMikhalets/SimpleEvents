@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.utils.enums.EventType
 import dagger.hilt.android.lifecycle.HiltViewModel

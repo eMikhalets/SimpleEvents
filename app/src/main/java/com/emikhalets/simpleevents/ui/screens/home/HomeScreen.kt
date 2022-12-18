@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsIcon
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTextField

@@ -7,8 +7,8 @@ import androidx.room.DeleteColumn
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 
 @Database(
     entities = [

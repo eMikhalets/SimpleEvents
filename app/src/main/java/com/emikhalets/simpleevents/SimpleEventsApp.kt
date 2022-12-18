@@ -29,4 +29,8 @@ class SimpleEventsApp : Application() {
             }
         }
     }
+
+    private fun createDefaultEventAlarms() {
+
+    }
 }

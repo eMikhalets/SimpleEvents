@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.emikhalets.simpleevents.data.database.Db.TableEvents.COL_ID
 import com.emikhalets.simpleevents.data.database.Db.TableEvents.NAME
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 
 @Dao
 interface EventsDao {

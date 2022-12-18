@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsTimePicker
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme

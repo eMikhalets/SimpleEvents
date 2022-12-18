@@ -7,7 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.emikhalets.simpleevents.data.database.Db.TableNotifications.COL_DAYS
 import com.emikhalets.simpleevents.data.database.Db.TableNotifications.NAME
-import com.emikhalets.simpleevents.domain.entity.NotificationGlobal
+import com.emikhalets.simpleevents.domain.entity.database.NotificationGlobal
 
 @Dao
 interface NotificationsGlobalDao {

@@ -1,6 +1,6 @@
 package com.emikhalets.simpleevents.utils
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.domain.entity.EventEntityOld
 import com.emikhalets.simpleevents.utils.enums.EventType
 

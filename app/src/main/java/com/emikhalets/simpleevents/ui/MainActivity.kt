@@ -7,7 +7,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsNavHost
+import com.emikhalets.simpleevents.ui.navigation.AppNavHost
 import com.emikhalets.simpleevents.ui.screens.common.SimpleEventsScaffold
 import com.emikhalets.simpleevents.ui.theme.SimpleEventsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +30,7 @@ fun Application() {
             navController = navHost,
             scaffoldState = scaffoldState
         ) {
-            SimpleEventsNavHost(
+            AppNavHost(
                 navController = navHost,
                 scaffoldState = scaffoldState
             )
