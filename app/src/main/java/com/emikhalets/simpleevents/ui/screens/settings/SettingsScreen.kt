@@ -53,9 +53,9 @@ fun SettingsScreen(
     val context = LocalContext.current
     val prefs = Prefs(context)
 
-    var hourInit by remember { mutableStateOf(prefs.getEventsHour()) }
-    var minuteInit by remember { mutableStateOf(prefs.getEventsMinute()) }
-    var notificationsAll by remember { mutableStateOf(prefs.getNotificationsEnabled()) }
+    var hourInit by remember { mutableStateOf(prefs.eventAlarmHour) }
+    var minuteInit by remember { mutableStateOf(prefs.eventAlarmMinute) }
+    var notificationsAll by remember { mutableStateOf(prefs.eventAlarmsEnabled) }
     var importOld by remember { mutableStateOf(false) }
     var alarmsEnabled by remember { mutableStateOf(AppAlarmManager.isAlarmsRunning(context)) }
 
@@ -86,9 +86,9 @@ fun SettingsScreen(
         notificationsGlobal = state.notificationsGlobal,
         alarmsEnabled = alarmsEnabled,
         onTimeChange = { hour, minute ->
-            prefs.setEventsHour(hour)
+            prefs.eventAlarmHour = hour
             hourInit = hour
-            prefs.setEventsMinute(minute)
+            prefs.eventAlarmMinute = minute
             minuteInit = minute
         },
         onSwitchNotification = { notification, enabled ->
@@ -96,7 +96,7 @@ fun SettingsScreen(
         },
         onSwitchAllNotification = { enabled ->
             notificationsAll = enabled
-            prefs.setNotificationsEnabled(enabled)
+            prefs.eventAlarmsEnabled = enabled
         },
         onRestartNotifications = {
             AppAlarmManager.startAllAlarms(context)

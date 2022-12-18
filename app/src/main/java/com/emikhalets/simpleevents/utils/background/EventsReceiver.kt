@@ -12,7 +12,7 @@ class EventsReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         AppAlarmManager.startEventsAlarm(context)
-        if (Prefs(context).getNotificationsEnabled()) {
+        if (Prefs(context).eventAlarmsEnabled) {
             val work = OneTimeWorkRequestBuilder<EventWorker>().build()
             WorkManager.getInstance(context).enqueue(work)
         }

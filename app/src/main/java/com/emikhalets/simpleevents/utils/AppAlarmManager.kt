@@ -27,7 +27,7 @@ object AppAlarmManager {
             )
             alarmManager.setAlarmClock(
                 AlarmManager.AlarmClockInfo(
-                    getAlarmTimestamp(prefs.getEventsHour(), prefs.getEventsMinute()),
+                    getAlarmTimestamp(prefs.eventAlarmHour, prefs.eventAlarmMinute),
                     pendingIntent
                 ),
                 pendingIntent
