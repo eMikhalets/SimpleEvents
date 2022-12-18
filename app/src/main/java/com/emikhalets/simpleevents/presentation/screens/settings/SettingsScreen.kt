@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTimePicker
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.components.TimePicker
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.Prefs
@@ -138,7 +138,7 @@ private fun SettingsScreen(
             text = stringResource(R.string.settings_notifications),
             modifier = Modifier.padding(top = 16.dp)
         )
-        SimpleEventsTimePicker(
+        TimePicker(
             hourInit = hour,
             minuteInit = minute,
             title = stringResource(R.string.settings_notifications_time),
@@ -303,7 +303,7 @@ private fun SettingsBackupButtons(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewSettingsScreen() {
-    SimpleEventsTheme {
+    AppTheme {
         SettingsScreen(
             hour = 7,
             minute = 9,

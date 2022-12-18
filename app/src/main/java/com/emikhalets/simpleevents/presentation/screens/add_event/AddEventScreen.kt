@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsDatePicker
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsEventTypeSpinner
+import com.emikhalets.simpleevents.presentation.components.DatePicker
+import com.emikhalets.simpleevents.presentation.components.EventTypeSpinner
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.daysLeft
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
@@ -92,7 +92,7 @@ fun AddEventScreen(
         SimpleEventsHeaderText(
             text = stringResource(R.string.add_event_adding_new_event)
         )
-        SimpleEventsEventTypeSpinner(
+        EventTypeSpinner(
             onTypeSelected = onTypeChange,
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,7 +107,7 @@ fun AddEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        SimpleEventsDatePicker(
+        DatePicker(
             timestamp = date,
             withoutYear = withoutYear,
             onDateSelected = {
@@ -170,7 +170,7 @@ fun AddEventScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewAddEventScreen() {
-    SimpleEventsTheme {
+    AppTheme {
         AddEventScreen(
             name = "Some Test Name",
             date = System.currentTimeMillis(),

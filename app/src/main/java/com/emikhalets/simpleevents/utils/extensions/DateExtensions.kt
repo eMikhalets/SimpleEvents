@@ -8,6 +8,11 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.*
 
+fun formatTime(hour: Int, minute: Int): String {
+    val minuteString = if (minute < 10) "0$minute" else "$minute"
+    return "$hour:$minuteString"
+}
+
 fun Long.formatDateFull(withoutYear: Boolean): String {
     val pattern = if (withoutYear) "EEEE, d MMM" else "EEEE, d MMM, yyyy"
     return SimpleDateFormat(pattern, Locale.ENGLISH).format(this)

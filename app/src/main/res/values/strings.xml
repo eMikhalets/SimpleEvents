@@ -46,8 +46,8 @@
     <string name="edit_event_without_year">Without year</string>
 
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_time">Notification time: %s</string>
     <string name="settings_notifications_enable">Enable notifications</string>
-    <string name="settings_notifications_time">Notifications time</string>
     <string name="settings_restart_alarms">Restart everyday notifications</string>
     <string name="settings_alarms_restarted">Notifications have been restarted</string>
     <string name="settings_alarms_is_enabled">Application alarms enabled: %s</string>

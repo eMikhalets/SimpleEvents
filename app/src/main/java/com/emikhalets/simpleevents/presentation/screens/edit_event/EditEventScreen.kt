@@ -27,11 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsDatePicker
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsEventTypeSpinner
+import com.emikhalets.simpleevents.presentation.components.DatePicker
+import com.emikhalets.simpleevents.presentation.components.EventTypeSpinner
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 
@@ -117,7 +117,7 @@ private fun EditEventScreen(
         SimpleEventsHeaderText(
             text = stringResource(R.string.edit_event_header)
         )
-        SimpleEventsEventTypeSpinner(
+        EventTypeSpinner(
             onTypeSelected = onTypeChange,
             modifier = Modifier
                 .fillMaxWidth()
@@ -132,7 +132,7 @@ private fun EditEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        SimpleEventsDatePicker(
+        DatePicker(
             timestamp = date,
             withoutYear = withoutYear,
             onDateSelected = onDateChange,
@@ -182,7 +182,7 @@ private fun EditEventScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewEditEventScreen() {
-    SimpleEventsTheme {
+    AppTheme {
         EditEventScreen(
             type = EventType.BIRTHDAY,
             name = "Some Test Name",

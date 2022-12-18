@@ -1,71 +1,57 @@
-package com.emikhalets.simpleevents.presentation.screens.common
+package com.emikhalets.simpleevents.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.emikhalets.simpleevents.presentation.navigation.AppScreen
-
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 
 @Composable
-fun SimpleEventsScaffold(
+fun AppScaffold(
     navController: NavHostController,
     scaffoldState: ScaffoldState,
     content: @Composable () -> Unit,
 ) {
-    Scaffold(
-        bottomBar = { SimpleEventsBottomBar(navController) },
-        scaffoldState = scaffoldState,
-        content = {
-            Box(
-                modifier = Modifier
-                    .background(MaterialTheme.colors.surface)
-                    .padding(it),
-                content = { content() }
-            )
-        }
-    )
+    Surface(color = MaterialTheme.colors.surface) {
+        Scaffold(
+            scaffoldState = scaffoldState,
+            bottomBar = { AppBottomBar(navController) },
+            content = { Box(modifier = Modifier.padding(it), content = { content() }) }
+        )
+    }
 }
 
 @Composable
-private fun SimpleEventsBottomBar(navController: NavHostController) {
+private fun AppBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val screens = remember { listOf(AppScreen.Home, AppScreen.AddEvent, AppScreen.Settings) }
 
-    BottomNavigation(
-        backgroundColor = MaterialTheme.colors.background,
-    ) {
+    BottomNavigation {
         screens.forEach { screen ->
             BottomNavigationItem(
                 icon = {
                     if (screen.route == AppScreen.AddEvent.route) {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground,
-                            modifier = Modifier.size(48.dp)
-                        )
+                        AppIcon(drawableRes = screen.iconRes, modifier = Modifier.size(48.dp))
                     } else {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = null
-                        )
+                        AppIcon(drawableRes = screen.iconRes)
                     }
                 },
                 selectedContentColor = MaterialTheme.colors.primary,
@@ -80,5 +66,13 @@ private fun SimpleEventsBottomBar(navController: NavHostController) {
                 }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    AppTheme {
+        AppBottomBar(rememberNavController())
     }
 }

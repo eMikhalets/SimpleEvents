@@ -1,59 +1,26 @@
 package com.emikhalets.simpleevents.presentation.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-val Colors.backgroundSecondary: Color
-    get() = if (isLight) Color(0xFFEEEEEE) else Color(0xFF666666)
-
-val Colors.onBackgroundSecondary: Color
-    get() = if (isLight) Color(0xFF7C7C7C) else Color(0xFF666666)
-
-val Colors.backgroundNegative: Color
-    get() = if (isLight) Color(0xFFD32F2F) else Color(0xFF666666)
-
-private val DarkColorPalette = darkColors(
-    primary = Color(0xFF666666),
-    primaryVariant = Color(0xFF666666),
-    secondary = Color(0xFF818181),
-    background = Color(0xFF666666),
-    surface = Color(0xFFFFFFFF)
-)
-
 private val LightColorPalette = lightColors(
-    primary = Color(0xFF000000),
-    primaryVariant = Color(0xFF000000),
-    secondary = Color(0xFF666666),
-    background = Color(0xFF6EBEB1),
-    onBackground = Color(0xFFFFFFFF),
-    surface = Color(0xFFFFFFFF)
-
-    /* Other default colors to override
+    primary = Blue_300,
+    primaryVariant = Blue_300,
+    secondary = Grey_500,
+    background = Color.White,
     surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onSurface = Color.Black,
-    */
+    error = Red_600,
+    onPrimary = Grey_900,
+    onBackground = Grey_900,
+    onSurface = Grey_900
 )
 
 @Composable
-fun SimpleEventsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
-
+fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content

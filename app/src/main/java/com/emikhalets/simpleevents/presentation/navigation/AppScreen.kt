@@ -1,17 +1,12 @@
 package com.emikhalets.simpleevents.presentation.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import com.emikhalets.simpleevents.R
 
-sealed class AppScreen(val route: String, val icon: ImageVector) {
-    object Home : AppScreen("home", Icons.Default.Home)
-    object AddEvent : AppScreen("add_event", Icons.Default.AddCircle)
-    object Settings : AppScreen("settings", Icons.Default.Settings)
-    object Event : AppScreen("event", Icons.Default.Build)
-    object EditEvent : AppScreen("edit_event", Icons.Default.Edit)
+sealed class AppScreen(val route: String, @DrawableRes val iconRes: Int) {
+    object Home : AppScreen("home", R.drawable.ic_round_home_24)
+    object AddEvent : AppScreen("add_event", R.drawable.ic_round_add_circle_24_white)
+    object Settings : AppScreen("settings", R.drawable.ic_round_settings_24)
+    object Event : AppScreen("event", 0)
+    object EditEvent : AppScreen("edit_event", 0)
 }

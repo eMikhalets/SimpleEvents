@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundNegative
 
 @Composable
@@ -65,7 +65,7 @@ fun DeletingEventDialog(
 @Preview(showBackground = true)
 @Composable
 fun PreviewDeleteDialog() {
-    SimpleEventsTheme {
+    AppTheme {
         DeletingEventDialog(
             onConfirmClick = {},
             onDismissClick = {}

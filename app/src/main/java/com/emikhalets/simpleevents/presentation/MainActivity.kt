@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.emikhalets.simpleevents.presentation.navigation.AppNavHost
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsScaffold
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.components.AppScaffold
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,8 +25,8 @@ fun Application() {
     val navHost = rememberNavController()
     val scaffoldState = rememberScaffoldState()
 
-    SimpleEventsTheme {
-        SimpleEventsScaffold(
+    AppTheme {
+        AppScaffold(
             navController = navHost,
             scaffoldState = scaffoldState
         ) {

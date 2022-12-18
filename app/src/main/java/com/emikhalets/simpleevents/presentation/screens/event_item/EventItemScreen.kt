@@ -39,7 +39,7 @@ import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.presentation.screens.common.DeletingEventDialog
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsNegativeButton
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
@@ -236,7 +236,7 @@ private fun EventItemNoteBox(note: String) {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewEventItemScreen() {
-    SimpleEventsTheme {
+    AppTheme {
         EventItemScreen(
             event = EventEntity(
                 days = 6,

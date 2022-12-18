@@ -42,7 +42,7 @@ import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsIcon
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
-import com.emikhalets.simpleevents.presentation.theme.SimpleEventsTheme
+import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
@@ -214,7 +214,7 @@ private fun SquareColumn(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewHomeScreen() {
-    SimpleEventsTheme {
+    AppTheme {
         HomeScreen(
             eventsList = listOf(
                 EventEntity(
