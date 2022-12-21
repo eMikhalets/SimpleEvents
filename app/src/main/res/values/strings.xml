@@ -15,6 +15,10 @@
     <string name="home_upcoming_events">Upcoming events</string>
     <string name="home_search_placeholder">Search for a event\'s name</string>
     <string name="home_empty_events">Events list is empty</string>
+    <plurals name="home_event_days">
+        <item quantity="one">DAY</item>
+        <item quantity="other">DAYS</item>
+    </plurals>
 
     <!--  Event item screen  -->
     <string name="event_item_turns">Turns %d</string>
@@ -23,27 +27,7 @@
     <string name="event_item_notes_title">Notes</string>
     <string name="event_item_notes_empty">No data</string>
 
-
-    <string name="event_type_birthday">Birthday</string>
-
-    <string name="notification_update_error">Error updating events</string>
-    <string name="notification_upcoming_events">Upcoming events</string>
-    <string name="notification_turns">Turns %d</string>
-
-    <string name="event_list_item_date">$</string>
-    <string name="event_list_item_turns">Turns %d</string>
-
-
-    <string name="add_event_adding_new_event">Adding a new event</string>
-    <string name="add_event_placeholder_name">Name</string>
-    <string name="add_event_choose_date">Choose date</string>
-    <string name="add_event_btn_save">Save Event</string>
-    <string name="add_event_empty_name">Name required</string>
-    <string name="add_event_empty_date">Date required</string>
-    <string name="add_event_turns">Turns: %d</string>
-    <string name="add_event_days_left">Days left: %d</string>
-    <string name="add_event_without_year">Without year</string>
-
+    <!--  Edit event screen  -->
     <string name="edit_event_header">Editing event</string>
     <string name="edit_event_adding_new_event">Adding a new event</string>
     <string name="edit_event_placeholder_name">Name</string>
@@ -56,6 +40,18 @@
     <string name="edit_event_updated">Event updated</string>
     <string name="edit_event_without_year">Without year</string>
 
+    <!--  Add event screen  -->
+    <string name="add_event_adding_new_event">Adding a new event</string>
+    <string name="add_event_placeholder_name">Name</string>
+    <string name="add_event_choose_date">Choose date</string>
+    <string name="add_event_btn_save">Save Event</string>
+    <string name="add_event_empty_name">Name required</string>
+    <string name="add_event_empty_date">Date required</string>
+    <string name="add_event_turns">Turns: %d</string>
+    <string name="add_event_days_left">Days left: %d</string>
+    <string name="add_event_without_year">Without year</string>
+
+    <!--  Settings screen  -->
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notifications_time">Notification time: %s</string>
     <string name="settings_notifications_enable">Enable notifications</string>
@@ -69,14 +65,16 @@
     <string name="settings_backup_import_error">Import events error</string>
     <string name="settings_backup_imported_success">Events imported</string>
 
+
+    <string name="event_type_birthday">Birthday</string>
+    <string name="notification_update_error">Error updating events</string>
+    <string name="notification_upcoming_events">Upcoming events</string>
+    <string name="notification_turns">Turns %d</string>
+    <string name="event_list_item_date">$</string>
+    <string name="event_list_item_turns">Turns %d</string>
     <string name="notifications_time_month">Month</string>
     <string name="notifications_time_week">Week</string>
     <string name="notifications_time_two_days">Two days</string>
     <string name="notifications_time_day">Day</string>
     <string name="notifications_time_today">Today</string>
-
-    <plurals name="event_list_item_days">
-        <item quantity="one">DAY</item>
-        <item quantity="other">DAYS</item>
-    </plurals>
 </resources>

@@ -1,10 +1,16 @@
 package com.emikhalets.simpleevents.utils.extensions
 
 import android.content.Context
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+
+fun toast(context: Context, @StringRes messageRes: Int) {
+    Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show()
+}
 
 fun EventEntity.calculateEventData(): EventEntity {
     return this.apply {

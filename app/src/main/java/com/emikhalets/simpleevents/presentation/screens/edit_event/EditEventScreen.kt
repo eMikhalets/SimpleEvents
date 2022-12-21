@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,60 +18,70 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
+import com.emikhalets.simpleevents.presentation.components.AppButton
+import com.emikhalets.simpleevents.presentation.components.AppText
+import com.emikhalets.simpleevents.presentation.components.AppTextField
+import com.emikhalets.simpleevents.presentation.components.AppTextScreenHeader
 import com.emikhalets.simpleevents.presentation.components.DatePicker
 import com.emikhalets.simpleevents.presentation.components.EventTypeSpinner
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
+import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
-import com.emikhalets.simpleevents.utils.extensions.showSnackBar
+import com.emikhalets.simpleevents.utils.extensions.toast
 
 @Composable
 fun EditEventScreen(
     eventId: Long,
     viewModel: EditEventViewModel,
-    scaffoldState: ScaffoldState,
 ) {
     val context = LocalContext.current
-    val state = viewModel.state
+    val state by viewModel.state.collectAsState()
 
     var type by remember { mutableStateOf(EventType.BIRTHDAY) }
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(0L) }
     var note by remember { mutableStateOf("") }
     var withoutYear by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
-    LaunchedEffect("") {
+    LaunchedEffect(Unit) {
         viewModel.loadEvent(eventId)
     }
 
-    LaunchedEffect(state.event) {
-        if (name.isEmpty() && state.event != null) {
-            type = state.event.eventType
-            name = state.event.name
-            date = state.event.date
-            note = state.event.note
-            withoutYear = state.event.withoutYear
+    LaunchedEffect(state.error) {
+        if (state.error != null) {
+            errorMessage = state.error!!.asString(context)
+            viewModel.resetError()
         }
     }
 
     LaunchedEffect(state.updated) {
-        if (state.updated > 0) scaffoldState.showSnackBar(context, R.string.edit_event_updated)
-        else if (state.updated == 0) scaffoldState.showSnackBar(context,
-            R.string.edit_event_update_error)
+        if (state.updated) {
+            toast(context, R.string.edit_event_updated)
+            viewModel.resetUpdated()
+        }
     }
 
-    LaunchedEffect(state.error) {
-        if (state.error.isNotEmpty()) scaffoldState.showSnackBar(state.error)
+    LaunchedEffect(state.event) {
+        val event = state.event
+        if (name.isEmpty() && event != null) {
+            type = event.eventType
+            name = event.name
+            date = event.date
+            note = event.note
+            withoutYear = state.event!!.withoutYear
+        }
     }
 
-    if (state.event != null) {
+    val event = state.event
+    if (event != null) {
         EditEventScreen(
             type = type,
             name = name,
@@ -88,13 +95,46 @@ fun EditEventScreen(
             onWithoutYearCheck = { newWithoutYear -> withoutYear = newWithoutYear },
             onSaveClick = {
                 when {
-                    name.isEmpty() -> scaffoldState.showSnackBar(context,
-                        R.string.edit_event_empty_name)
-                    date == 0L -> scaffoldState.showSnackBar(context,
-                        R.string.edit_event_empty_date)
-                    else -> viewModel.updateEvent(name, date, type, note, withoutYear)
+                    name.isEmpty() -> {
+                        toast(context, R.string.edit_event_empty_name)
+                    }
+                    date == 0L -> {
+                        toast(context, R.string.edit_event_empty_date)
+                    }
+                    else -> {
+                        val newEvent = event.copy(
+                            name = name,
+                            date = date,
+                            eventType = type,
+                            note = note,
+                            withoutYear = withoutYear
+                        )
+                        viewModel.updateEvent(newEvent)
+                    }
                 }
             }
+        )
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            AppText(
+                text = stringResource(R.string.error_internal),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+
+            )
+        }
+    }
+
+    if (errorMessage.isNotEmpty()) {
+        ErrorDialog(
+            message = errorMessage,
+            onOkClick = { errorMessage = "" }
         )
     }
 }
@@ -114,20 +154,21 @@ private fun EditEventScreen(
     onSaveClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        SimpleEventsHeaderText(
+        AppTextScreenHeader(
             text = stringResource(R.string.edit_event_header)
         )
         EventTypeSpinner(
+            initItem = type,
             onTypeSelected = onTypeChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        SimpleEventsTextField(
+        AppTextField(
             value = name,
             onValueChange = onNameChanged,
-            placeholder = { Text(text = stringResource(R.string.edit_event_placeholder_name)) },
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+            placeholder = stringResource(R.string.edit_event_placeholder_name),
+            capitalization = KeyboardCapitalization.Words,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
@@ -140,11 +181,11 @@ private fun EditEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        SimpleEventsTextField(
+        AppTextField(
             value = note,
             onValueChange = onNoteChange,
-            placeholder = { Text(text = stringResource(R.string.edit_event_placeholder_note)) },
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+            placeholder = stringResource(R.string.edit_event_placeholder_note),
+            capitalization = KeyboardCapitalization.Sentences,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
@@ -157,10 +198,9 @@ private fun EditEventScreen(
                 checked = withoutYear,
                 onCheckedChange = { onWithoutYearCheck(it) }
             )
-            Text(
+            AppText(
                 text = stringResource(R.string.add_event_without_year),
                 fontSize = 18.sp,
-                color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
@@ -170,7 +210,7 @@ private fun EditEventScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            SimpleEventsButton(
+            AppButton(
                 text = stringResource(R.string.edit_event_btn_save),
                 onClick = onSaveClick,
                 modifier = Modifier.fillMaxWidth()
@@ -181,7 +221,7 @@ private fun EditEventScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewEditEventScreen() {
+private fun Preview() {
     AppTheme {
         EditEventScreen(
             type = EventType.BIRTHDAY,

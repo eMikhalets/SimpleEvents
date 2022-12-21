@@ -1,68 +1,49 @@
 package com.emikhalets.simpleevents.presentation.screens.edit_event
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
-import com.emikhalets.simpleevents.utils.enums.EventType
+import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.simpleevents.utils.UiString
+import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EditEventViewModel @Inject constructor(
     private val useCase: EditEventUseCase,
-) : ViewModel() {
+) : BaseViewModel<EditEventState>() {
 
-    var state by mutableStateOf(EditEventState())
-        private set
+    override fun createInitialState(): EditEventState = EditEventState()
+
+    fun resetError() = setState { it.copy(error = null) }
+    fun resetUpdated() = setState { it.copy(updated = false) }
 
     fun loadEvent(id: Long) {
-        viewModelScope.launch {
+        launchIO {
+            setState { it.copy(loading = true) }
             useCase.loadEvent(id)
-                .onSuccess {
-                    state = state.copy(
-                        event = it
-                    )
+                .onSuccess { result ->
+                    val event = result.calculateEventData()
+                    setState { it.copy(loading = false, event = event) }
                 }
-                .onFailure {
-                    state = state.copy(
-                        error = it.localizedMessage ?: ""
-                    )
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
                 }
         }
     }
 
-    fun updateEvent(
-        name: String,
-        date: Long,
-        type: EventType,
-        note: String,
-        withoutYear: Boolean,
-    ) {
-        state.event?.let { event ->
-            viewModelScope.launch {
-                val entity = event.copy(
-                    name = name,
-                    date = date,
-                    eventType = type,
-                    note = note,
-                    withoutYear = withoutYear
-                )
-                useCase.updateEvent(entity)
-                    .onSuccess {
-                        state = state.copy(
-                            updated = it
-                        )
-                    }
-                    .onFailure {
-                        state = state.copy(
-                            error = it.localizedMessage ?: ""
-                        )
-                    }
-            }
+    fun updateEvent(event: EventEntity) {
+        launchIO {
+            setState { it.copy(loading = true) }
+            useCase.updateEvent(event)
+                .onSuccess {
+                    setState { it.copy(loading = false, updated = true) }
+                }
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
+                }
         }
     }
 }

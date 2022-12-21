@@ -75,8 +75,7 @@ fun AppNavHost(
             backStackEntry.arguments?.getLong(ARGS_EVENT_ID)?.let { id ->
                 EditEventScreen(
                     eventId = id,
-                    viewModel = hiltViewModel(),
-                    scaffoldState = scaffoldState
+                    viewModel = hiltViewModel()
                 )
             }
         }

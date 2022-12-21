@@ -34,6 +34,7 @@ import com.emikhalets.simpleevents.utils.enums.EventType
 fun EventTypeSpinner(
     onTypeSelected: (EventType) -> Unit,
     modifier: Modifier = Modifier,
+    initItem: EventType? = null,
 ) {
     val items = remember {
         val list = EventType.values()
@@ -42,7 +43,7 @@ fun EventTypeSpinner(
     }
 
     var expanded by remember { mutableStateOf(false) }
-    var itemTextRes by remember { mutableStateOf(items.first().nameRes) }
+    var itemTextRes by remember { mutableStateOf(initItem?.nameRes ?: items.first().nameRes) }
 
     Box(
         contentAlignment = Alignment.Center,

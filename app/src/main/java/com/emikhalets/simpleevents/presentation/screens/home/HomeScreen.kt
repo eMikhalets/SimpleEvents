@@ -174,7 +174,7 @@ private fun EventListItem(
                         fontWeight = FontWeight.Medium
                     )
                     AppText(
-                        text = pluralsResource(R.plurals.event_list_item_days, event.days),
+                        text = pluralsResource(R.plurals.home_event_days, event.days),
                         color = MaterialTheme.colors.onPrimary,
                         fontSize = 14.sp,
                         letterSpacing = 2.sp
