@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.presentation.screens.common.DeletingEventDialog
+import com.emikhalets.simpleevents.presentation.components.dialogs.DeletingEventDialog
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
 import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsNegativeButton
 import com.emikhalets.simpleevents.presentation.theme.AppTheme

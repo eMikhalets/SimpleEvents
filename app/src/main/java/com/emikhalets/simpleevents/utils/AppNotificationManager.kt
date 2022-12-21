@@ -28,7 +28,7 @@ object AppNotificationManager {
         val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID_EVENTS)
-            .setSmallIcon(R.drawable.ic_event_available)
+            .setSmallIcon(R.drawable.ic_round_event_available_24)
             .setContentTitle(context.getString(R.string.notification_upcoming_events))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(getPendingIntent(context))
