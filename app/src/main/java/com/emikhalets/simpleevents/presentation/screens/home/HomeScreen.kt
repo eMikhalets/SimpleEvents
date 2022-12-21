@@ -3,6 +3,7 @@ package com.emikhalets.simpleevents.presentation.screens.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -72,9 +74,12 @@ fun HomeScreen(
     }
 
     HomeScreen(
-        eventsList = state.homeEvents,
+        eventsList = state.searchedEvents,
         searchQuery = searchQuery,
-        onSearchQueryChange = { newQuery -> searchQuery = newQuery },
+        onSearchQueryChange = { newQuery ->
+            searchQuery = newQuery
+            viewModel.searchEvents(searchQuery)
+        },
         onEventClick = onEventClick
     )
 
@@ -117,11 +122,28 @@ private fun HomeScreen(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         )
-        eventsList.forEach { homeEvent ->
-            EventListItem(
-                homeEvent = homeEvent,
-                onEventClick = onEventClick
-            )
+        if (eventsList.isNotEmpty()) {
+            eventsList.forEach { homeEvent ->
+                EventListItem(
+                    homeEvent = homeEvent,
+                    onEventClick = onEventClick
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                AppText(
+                    text = stringResource(R.string.home_empty_events),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+            }
         }
     }
 }

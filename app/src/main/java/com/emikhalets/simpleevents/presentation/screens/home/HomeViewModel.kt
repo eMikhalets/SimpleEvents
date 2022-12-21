@@ -8,12 +8,16 @@ import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import com.emikhalets.simpleevents.utils.extensions.formatDateMonth
 import com.emikhalets.simpleevents.utils.extensions.localDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val useCase: HomeUseCase,
 ) : BaseViewModel<HomeState>() {
+
+    private var searchJob: Job? = null
 
     override fun createInitialState(): HomeState = HomeState()
 
@@ -24,8 +28,13 @@ class HomeViewModel @Inject constructor(
             setState { it.copy(loading = true) }
             useCase.loadAllEvents()
                 .onSuccess { result ->
-                    val homeEvents = mapEvents(result)
-                    setState { it.copy(loading = false, homeEvents = homeEvents) }
+                    val sortedEvents = computeAndSortEvents(result)
+                    val homeEvents = mapEventsHeaders(sortedEvents)
+                    setState {
+                        it.copy(loading = false,
+                            homeEvents = homeEvents,
+                            searchedEvents = homeEvents)
+                    }
                 }
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)
@@ -34,15 +43,34 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun mapEvents(events: List<EventEntity>): List<HomeEvent> {
-        val sortedEvents = events
+    fun searchEvents(query: String) {
+        if (searchJob != null && searchJob?.isActive == true) searchJob?.cancel()
+        searchJob = launchIO {
+            delay(500)
+            val homeEvents = currentState.homeEvents
+            if (query.isEmpty()) {
+                setState { it.copy(searchedEvents = homeEvents) }
+            } else {
+                val eventsList = homeEvents
+                    .mapNotNull { if (it is HomeEventEntity) it.event else null }
+                    .filter { it.name.lowercase().contains(query) }
+                val mappedEvents = mapEventsHeaders(eventsList)
+                setState { it.copy(searchedEvents = mappedEvents) }
+            }
+        }
+    }
+
+    private fun computeAndSortEvents(events: List<EventEntity>): List<EventEntity> {
+        return events
             .map { event -> event.calculateEventData() }
             .sortedBy { event -> event.days }
+    }
 
+    private fun mapEventsHeaders(events: List<EventEntity>): List<HomeEvent> {
         var currentMonth = -1
         val homeEvents = mutableListOf<HomeEvent>()
 
-        sortedEvents.forEach { event ->
+        events.forEach { event ->
             val eventMonth = event.date.localDate.monthValue
             if (eventMonth != currentMonth) {
                 currentMonth = eventMonth
