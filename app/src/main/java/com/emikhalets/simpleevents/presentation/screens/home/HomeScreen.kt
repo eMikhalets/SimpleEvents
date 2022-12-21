@@ -14,11 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,8 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.AppTextField
+import com.emikhalets.simpleevents.presentation.components.AppTextScreenHeader
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
@@ -103,14 +101,8 @@ private fun HomeScreen(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        AppText(
-            text = stringResource(R.string.home_upcoming_events),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-
+        AppTextScreenHeader(
+            text = stringResource(R.string.home_upcoming_events)
         )
         AppTextField(
             value = searchQuery,
@@ -120,7 +112,7 @@ private fun HomeScreen(
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         )
         if (eventsList.isNotEmpty()) {
             eventsList.forEach { homeEvent ->
@@ -174,24 +166,23 @@ private fun EventListItem(
                     .padding(horizontal = 16.dp, vertical = 8.dp)
                     .clickable { onEventClick(event.id) }
             ) {
-                SquareColumn(background = MaterialTheme.colors.background) {
-                    Text(
+                SquareColumn(background = MaterialTheme.colors.primary) {
+                    AppText(
                         text = event.days.toString(),
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
-                    Text(
+                    AppText(
                         text = pluralsResource(R.plurals.event_list_item_days, event.days),
-                        color = MaterialTheme.colors.onBackground,
+                        color = MaterialTheme.colors.onPrimary,
                         fontSize = 14.sp,
                         letterSpacing = 2.sp
                     )
                 }
                 SquareColumn(background = MaterialTheme.colors.backgroundSecondary) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "",
+                    AppIcon(
+                        drawableRes = R.drawable.ic_round_person_24,
                         tint = MaterialTheme.colors.onBackgroundSecondary
                     )
                 }
@@ -201,18 +192,17 @@ private fun EventListItem(
                         .fillMaxSize()
                         .padding(start = 16.dp)
                 ) {
-                    Text(
+                    AppText(
                         text = event.name,
-                        color = MaterialTheme.colors.primary,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                    Text(
+                    AppText(
                         text = event.formatHomeInfo(),
                         color = MaterialTheme.colors.secondary,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -240,7 +230,7 @@ private fun SquareColumn(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewHomeScreen() {
+private fun Preview() {
     AppTheme {
         HomeScreen(
             eventsList = listOf(

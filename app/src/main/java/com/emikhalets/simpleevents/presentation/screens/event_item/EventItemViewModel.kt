@@ -1,55 +1,51 @@
 package com.emikhalets.simpleevents.presentation.screens.event_item
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
+import com.emikhalets.simpleevents.utils.BaseViewModel
+import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EventItemViewModel @Inject constructor(
     private val useCase: EventItemUseCase,
-) : ViewModel() {
+) : BaseViewModel<EventItemState>() {
 
-    var state by mutableStateOf(EventItemState())
-        private set
+    override fun createInitialState(): EventItemState = EventItemState()
+
+    fun resetError() = setState { it.copy(error = null) }
 
     fun loadEvent(id: Long) {
-        viewModelScope.launch {
+        launchIO {
+            setState { it.copy(loading = true) }
             useCase.loadEvent(id)
-                .onSuccess {
-                    state = state.copy(
-                        event = it.calculateEventData()
-                    )
+                .onSuccess { result ->
+                    val event = result.calculateEventData()
+                    setState { it.copy(loading = false, event = event) }
                 }
-                .onFailure {
-                    state = state.copy(
-                        error = it.localizedMessage ?: ""
-                    )
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
                 }
         }
     }
 
     fun deleteEvent(entity: EventEntity?) {
-        entity ?: return
+        if (entity == null) {
+            setState { it.copy(error = UiString.internal) }
+            return
+        }
 
-        viewModelScope.launch {
+        launchIO {
             useCase.deleteEvent(entity)
                 .onSuccess {
-                    state = state.copy(
-                        deleted = true
-                    )
+                    setState { it.copy(deleted = true) }
                 }
-                .onFailure {
-                    state = state.copy(
-                        error = it.localizedMessage ?: ""
-                    )
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(deleted = false, error = uiError) }
                 }
         }
     }

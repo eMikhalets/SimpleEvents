@@ -58,7 +58,6 @@ fun AppNavHost(
                 EventItemScreen(
                     eventId = id,
                     viewModel = hiltViewModel(),
-                    scaffoldState = scaffoldState,
                     onEventDeleted = {
                         navController.popBackStack()
                     },

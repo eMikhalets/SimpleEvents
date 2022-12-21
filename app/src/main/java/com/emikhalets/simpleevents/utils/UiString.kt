@@ -27,4 +27,9 @@ sealed class UiString {
         is Message -> value ?: context.getString(R.string.error_internal)
         is Resource -> context.getString(resId, *args)
     }
+
+    companion object {
+        val internal: UiString
+            get() = Resource(R.string.error_internal)
+    }
 }

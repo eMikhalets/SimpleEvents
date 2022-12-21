@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -21,6 +22,9 @@ fun AppText(
     fontSize: TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Start,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
 ) {
     Text(
         text = text,
@@ -28,6 +32,9 @@ fun AppText(
         fontSize = fontSize,
         fontWeight = fontWeight,
         textAlign = textAlign,
+        letterSpacing = letterSpacing,
+        maxLines = maxLines,
+        overflow = overflow,
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)

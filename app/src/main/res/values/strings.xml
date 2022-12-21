@@ -16,6 +16,13 @@
     <string name="home_search_placeholder">Search for a event\'s name</string>
     <string name="home_empty_events">Events list is empty</string>
 
+    <!--  Event item screen  -->
+    <string name="event_item_turns">Turns %d</string>
+    <string name="event_item_btn_edit">Edit Event</string>
+    <string name="event_item_btn_delete">Delete Event</string>
+    <string name="event_item_notes_title">Notes</string>
+    <string name="event_item_notes_empty">No data</string>
+
 
     <string name="event_type_birthday">Birthday</string>
 
@@ -36,12 +43,6 @@
     <string name="add_event_turns">Turns: %d</string>
     <string name="add_event_days_left">Days left: %d</string>
     <string name="add_event_without_year">Without year</string>
-
-    <string name="event_item_turns">Turns %d</string>
-    <string name="event_item_btn_edit">Edit Event</string>
-    <string name="event_item_btn_delete">Delete Event</string>
-    <string name="event_item_notes_title">Notes</string>
-    <string name="event_item_notes_empty">No data</string>
 
     <string name="edit_event_header">Editing event</string>
     <string name="edit_event_adding_new_event">Adding a new event</string>
