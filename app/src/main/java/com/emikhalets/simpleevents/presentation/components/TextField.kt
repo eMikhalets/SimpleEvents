@@ -25,6 +25,7 @@ fun AppTextField(
     placeholder: String? = null,
     @DrawableRes leadingIcon: Int? = null,
     type: KeyboardType = KeyboardType.Text,
+    maxLines: Int = Int.MAX_VALUE,
 ) {
     OutlinedTextField(
         value = value,
@@ -53,6 +54,7 @@ fun AppTextField(
             capitalization = KeyboardCapitalization.Sentences,
             keyboardType = type
         ),
+        maxLines = maxLines,
         modifier = modifier.fillMaxWidth()
     )
 }

@@ -6,14 +6,11 @@ import androidx.compose.ui.res.stringResource
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 
-const val DEFAULT_EVENTS_HOUR = 9
-const val DEFAULT_EVENTS_MINUTE = 0
-
 fun EventEntity.calculateEventData(): EventEntity {
-    return this.copy(
-        age = date.turns,
+    return this.apply {
+        age = date.turns
         days = date.daysLeft
-    )
+    }
 }
 
 @Composable

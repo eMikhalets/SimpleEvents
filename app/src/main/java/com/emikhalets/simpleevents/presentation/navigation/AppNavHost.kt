@@ -25,7 +25,6 @@ fun AppNavHost(
         composable(AppScreen.Home.route) {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                scaffoldState = scaffoldState,
                 onEventClick = { eventId ->
                     navController.navigate("${AppScreen.Event.route}/$eventId")
                 }

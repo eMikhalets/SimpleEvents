@@ -23,7 +23,7 @@ fun DeleteEventDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewDeleteDialog() {
+private fun Preview() {
     AppTheme {
         DeleteEventDialog(
             onCancelClick = {},

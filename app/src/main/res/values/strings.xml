@@ -1,11 +1,22 @@
 <resources>
     <string name="app_name">SimpleEvents</string>
 
-    <string name="event_type_birthday">Birthday</string>
+    <!--  Errors  -->
+    <string name="error_internal">Internal error</string>
 
+    <!--  Dialog  -->
     <string name="dialog_delete_event">Delete this event?</string>
+    <string name="dialog_error">Error</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_delete">Delete</string>
+    <string name="dialog_ok">OK</string>
+
+    <!--  Home screen  -->
+    <string name="home_upcoming_events">Upcoming events</string>
+    <string name="home_search_placeholder">Search for a event\'s name</string>
+
+
+    <string name="event_type_birthday">Birthday</string>
 
     <string name="notification_update_error">Error updating events</string>
     <string name="notification_upcoming_events">Upcoming events</string>
@@ -14,8 +25,6 @@
     <string name="event_list_item_date">$</string>
     <string name="event_list_item_turns">Turns %d</string>
 
-    <string name="home_upcoming_events">Upcoming events</string>
-    <string name="home_search_placeholder">Search for a event\'s name</string>
 
     <string name="add_event_adding_new_event">Adding a new event</string>
     <string name="add_event_placeholder_name">Name</string>

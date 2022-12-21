@@ -29,9 +29,10 @@ fun AppDialog(
     rightButton: String,
     onLeftClick: () -> Unit,
     onRightClick: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = {},
+        onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnClickOutside = false)
     ) {
         DialogLayout(
@@ -99,7 +100,7 @@ private fun DialogLayout(
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
+private fun Preview() {
     AppTheme {
         DialogLayout(
             title = "Dialog title",
