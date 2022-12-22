@@ -6,13 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,70 +23,98 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
+import com.emikhalets.simpleevents.presentation.components.AppButton
+import com.emikhalets.simpleevents.presentation.components.AppText
+import com.emikhalets.simpleevents.presentation.components.AppTextField
+import com.emikhalets.simpleevents.presentation.components.AppTextScreenHeader
 import com.emikhalets.simpleevents.presentation.components.DatePicker
 import com.emikhalets.simpleevents.presentation.components.EventTypeSpinner
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsHeaderText
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsTextField
+import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.daysLeft
-import com.emikhalets.simpleevents.utils.extensions.showSnackBar
+import com.emikhalets.simpleevents.utils.extensions.toast
 import com.emikhalets.simpleevents.utils.extensions.turns
 
 @Composable
 fun AddEventScreen(
     viewModel: AddEventViewModel,
-    scaffoldState: ScaffoldState,
     onEventAdded: (Long) -> Unit,
 ) {
     val context = LocalContext.current
-    val state = viewModel.state
+    val state by viewModel.state.collectAsState()
 
     var type by remember { mutableStateOf(EventType.BIRTHDAY) }
     var name by remember { mutableStateOf("") }
     var date by remember { mutableStateOf(0L) }
+    var turns by remember { mutableStateOf(0) }
+    var daysLeft by remember { mutableStateOf(0) }
     var withoutYear by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
     LaunchedEffect(state.savedId) {
         if (state.savedId > 0) onEventAdded(state.savedId)
     }
 
+    LaunchedEffect(state.error) {
+        if (state.error != null) {
+            errorMessage = state.error!!.asString(context)
+            viewModel.resetError()
+        }
+    }
+
     AddEventScreen(
         name = name,
         date = date,
+        turns = turns,
+        daysLeft = daysLeft,
         withoutYear = withoutYear,
         onTypeChange = { newType -> type = newType },
         onNameChanged = { newName -> name = newName },
         onDateChange = { newDate -> date = newDate },
+        onTurnsChange = { newTurns -> turns = newTurns },
+        onDaysLeftChange = { newDaysLeft -> daysLeft = newDaysLeft },
         onWithoutYearCheck = { newWithoutYear -> withoutYear = newWithoutYear },
         onSaveClick = {
             when {
-                name.isEmpty() -> scaffoldState.showSnackBar(context,
-                    R.string.add_event_empty_name)
-                date == 0L -> scaffoldState.showSnackBar(context, R.string.add_event_empty_date)
-                else -> viewModel.saveNewEvent(name, date, type, withoutYear)
+                name.isEmpty() -> {
+                    toast(context, R.string.add_event_empty_name)
+                }
+                date == 0L -> {
+                    toast(context, R.string.add_event_empty_date)
+                }
+                else -> {
+                    viewModel.saveNewEvent(name, date, type, withoutYear)
+                }
             }
         }
     )
+
+    if (errorMessage.isNotEmpty()) {
+        ErrorDialog(
+            message = errorMessage,
+            onOkClick = { errorMessage = "" }
+        )
+    }
 }
 
 @Composable
 fun AddEventScreen(
     name: String,
     date: Long,
+    turns: Int,
+    daysLeft: Int,
     withoutYear: Boolean,
     onTypeChange: (EventType) -> Unit,
     onNameChanged: (String) -> Unit,
     onDateChange: (Long) -> Unit,
+    onTurnsChange: (Int) -> Unit,
+    onDaysLeftChange: (Int) -> Unit,
     onWithoutYearCheck: (Boolean) -> Unit,
     onSaveClick: () -> Unit,
 ) {
-    var turns by remember { mutableStateOf(0) }
-    var left by remember { mutableStateOf(0) }
-
     Column(modifier = Modifier.fillMaxSize()) {
-        SimpleEventsHeaderText(
+        AppTextScreenHeader(
             text = stringResource(R.string.add_event_adding_new_event)
         )
         EventTypeSpinner(
@@ -98,11 +123,11 @@ fun AddEventScreen(
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
         )
-        SimpleEventsTextField(
+        AppTextField(
             value = name,
             onValueChange = onNameChanged,
-            placeholder = { Text(text = stringResource(R.string.add_event_placeholder_name)) },
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+            placeholder = stringResource(R.string.add_event_placeholder_name),
+            capitalization = KeyboardCapitalization.Words,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 16.dp, start = 16.dp, bottom = 16.dp)
@@ -112,8 +137,8 @@ fun AddEventScreen(
             withoutYear = withoutYear,
             onDateSelected = {
                 onDateChange(it)
-                turns = it.turns
-                left = it.daysLeft
+                onTurnsChange(it.turns)
+                onDaysLeftChange(it.daysLeft)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -127,27 +152,24 @@ fun AddEventScreen(
                 checked = withoutYear,
                 onCheckedChange = { onWithoutYearCheck(it) }
             )
-            Text(
+            AppText(
                 text = stringResource(R.string.add_event_without_year),
                 fontSize = 18.sp,
-                color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
         if (!withoutYear) {
-            Text(
+            AppText(
                 text = stringResource(R.string.add_event_turns, turns),
                 fontSize = 18.sp,
-                color = MaterialTheme.colors.primary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp, vertical = 16.dp)
             )
         }
-        Text(
-            text = stringResource(R.string.add_event_days_left, left),
+        AppText(
+            text = stringResource(R.string.add_event_days_left, daysLeft),
             fontSize = 18.sp,
-            color = MaterialTheme.colors.primary,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(end = 32.dp, start = 32.dp, bottom = 16.dp)
@@ -158,7 +180,7 @@ fun AddEventScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            SimpleEventsButton(
+            AppButton(
                 text = stringResource(R.string.add_event_btn_save),
                 onClick = onSaveClick,
                 modifier = Modifier.fillMaxWidth()
@@ -174,10 +196,14 @@ private fun PreviewAddEventScreen() {
         AddEventScreen(
             name = "Some Test Name",
             date = System.currentTimeMillis(),
+            turns = 13,
+            daysLeft = 24,
             withoutYear = true,
             onTypeChange = {},
             onNameChanged = {},
             onDateChange = {},
+            onTurnsChange = {},
+            onDaysLeftChange = {},
             onWithoutYearCheck = {},
             onSaveClick = {}
         )

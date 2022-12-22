@@ -34,7 +34,6 @@ fun AppNavHost(
         composable(AppScreen.AddEvent.route) {
             AddEventScreen(
                 viewModel = hiltViewModel(),
-                scaffoldState = scaffoldState,
                 onEventAdded = { eventId ->
                     navController.navigate("${AppScreen.Event.route}/$eventId") {
                         popUpTo(AppScreen.Home.route)
