@@ -99,7 +99,7 @@ fun AddEventScreen(
 }
 
 @Composable
-fun AddEventScreen(
+private fun AddEventScreen(
     name: String,
     date: Long,
     turns: Int,
@@ -191,7 +191,7 @@ fun AddEventScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewAddEventScreen() {
+private fun Preview() {
     AppTheme {
         AddEventScreen(
             name = "Some Test Name",

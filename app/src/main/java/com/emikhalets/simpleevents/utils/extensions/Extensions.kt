@@ -32,33 +32,3 @@ fun EventEntity.formatNotificationInfo(context: Context): String {
     val turns = context.getString(R.string.notification_turns, age)
     return if (age == 0 || withoutYear) "$type • $name" else "$type • $name • $turns"
 }
-
-fun getDefaultNotificationsGlobal(context: Context): List<NotificationGlobal> {
-    return listOf(
-        NotificationGlobal(
-            nameEn = context.getString(R.string.notifications_time_month),
-            enabled = true,
-            daysLeft = 30
-        ),
-        NotificationGlobal(
-            nameEn = context.getString(R.string.notifications_time_week),
-            enabled = true,
-            daysLeft = 7
-        ),
-        NotificationGlobal(
-            nameEn = context.getString(R.string.notifications_time_two_days),
-            enabled = true,
-            daysLeft = 2
-        ),
-        NotificationGlobal(
-            nameEn = context.getString(R.string.notifications_time_day),
-            enabled = true,
-            daysLeft = 1
-        ),
-        NotificationGlobal(
-            nameEn = context.getString(R.string.notifications_time_today),
-            enabled = true,
-            daysLeft = 0
-        )
-    )
-}

@@ -66,6 +66,7 @@ fun DatePicker(
 fun TimePicker(
     hour: Int,
     minute: Int,
+    text: String,
     onTimeSelected: (hour: Int, minute: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -78,7 +79,7 @@ fun TimePicker(
     )
 
     Picker(
-        text = stringResource(R.string.settings_notifications_time, formatTime(hour, minute)),
+        text = text,
         isActive = true,
         onClick = { timePicker.show() },
         modifier = modifier

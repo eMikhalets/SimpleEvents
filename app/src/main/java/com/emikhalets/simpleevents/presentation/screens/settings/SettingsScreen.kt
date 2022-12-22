@@ -11,9 +11,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Switch
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,22 +23,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.presentation.screens.common.SimpleEventsButton
+import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
+import com.emikhalets.simpleevents.presentation.components.AppButton
+import com.emikhalets.simpleevents.presentation.components.AppIcon
+import com.emikhalets.simpleevents.presentation.components.AppIconButton
+import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.TimePicker
+import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
+import com.emikhalets.simpleevents.presentation.theme.Green_600
 import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.Prefs
 import com.emikhalets.simpleevents.utils.createFile
 import com.emikhalets.simpleevents.utils.documentCreator
 import com.emikhalets.simpleevents.utils.documentPicker
-import com.emikhalets.simpleevents.utils.extensions.getDefaultNotificationsGlobal
+import com.emikhalets.simpleevents.utils.extensions.formatTime
 import com.emikhalets.simpleevents.utils.extensions.showSnackBar
+import com.emikhalets.simpleevents.utils.extensions.toast
 import com.emikhalets.simpleevents.utils.openFile
 
 @Composable
@@ -46,41 +52,39 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     scaffoldState: ScaffoldState,
 ) {
-    val state = viewModel.state
     val context = LocalContext.current
     val prefs = Prefs(context)
+    val state by viewModel.state.collectAsState()
 
     var hourInit by remember { mutableStateOf(prefs.eventAlarmHour) }
     var minuteInit by remember { mutableStateOf(prefs.eventAlarmMinute) }
     var notificationsAll by remember { mutableStateOf(prefs.eventAlarmsEnabled) }
-    var importOld by remember { mutableStateOf(false) }
     var alarmsEnabled by remember { mutableStateOf(AppAlarmManager.isAlarmsRunning(context)) }
+    var errorMessage by remember { mutableStateOf("") }
 
-    val documentCreator = documentCreator { uri ->
-    }
+    val documentCreator = documentCreator { uri -> viewModel.exportEvents(uri) }
+    val documentPicker = documentPicker { uri -> viewModel.importEvents(uri) }
 
-    val documentPicker = documentPicker { uri ->
-        viewModel.importEvents(uri, importOld)
-    }
-
-    LaunchedEffect("") {
+    LaunchedEffect(Unit) {
         viewModel.loadAllNotificationsGlobal()
     }
 
     LaunchedEffect(state.error) {
-        if (state.error.isNotEmpty()) scaffoldState.showSnackBar(state.error)
+        if (state.error != null) {
+            errorMessage = state.error!!.asString(context)
+            viewModel.resetError()
+        }
     }
 
     LaunchedEffect(state.imported) {
-        if (state.imported) scaffoldState
-            .showSnackBar(context, R.string.settings_backup_imported_success)
+        if (state.imported) toast(context, R.string.settings_backup_imported_success)
     }
 
     SettingsScreen(
         hour = hourInit,
         minute = minuteInit,
         enabled = notificationsAll,
-        notificationsGlobal = state.notificationsGlobal,
+        eventAlarms = state.eventAlarms,
         alarmsEnabled = alarmsEnabled,
         onTimeChange = { hour, minute ->
             prefs.eventAlarmHour = hour
@@ -100,18 +104,16 @@ fun SettingsScreen(
             alarmsEnabled = AppAlarmManager.isAlarmsRunning(context)
             scaffoldState.showSnackBar(context, R.string.settings_alarms_restarted)
         },
-        onExportClick = {
-            documentCreator.createFile()
-        },
-        onImportClick = {
-            importOld = false
-            documentPicker.openFile()
-        },
-        onImportOldClick = {
-            importOld = true
-            documentPicker.openFile()
-        }
+        onExportClick = { documentCreator.createFile() },
+        onImportClick = { documentPicker.openFile() }
     )
+
+    if (errorMessage.isNotEmpty()) {
+        ErrorDialog(
+            message = errorMessage,
+            onOkClick = { errorMessage = "" }
+        )
+    }
 }
 
 @Composable
@@ -119,95 +121,101 @@ private fun SettingsScreen(
     hour: Int,
     minute: Int,
     enabled: Boolean,
-    notificationsGlobal: List<NotificationGlobal>,
+    eventAlarms: List<EventAlarm>,
     alarmsEnabled: Boolean,
     onTimeChange: (Int, Int) -> Unit,
-    onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
+    onSwitchNotification: (EventAlarm, Boolean) -> Unit,
     onSwitchAllNotification: (Boolean) -> Unit,
     onRestartNotifications: () -> Unit,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
-    onImportOldClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {
-        SettingsSectionHeader(
-            text = stringResource(R.string.settings_notifications),
+        SettingsSection(
+            header = stringResource(R.string.settings_notifications),
             modifier = Modifier.padding(top = 16.dp)
-        )
-        TimePicker(
-            hourInit = hour,
-            minuteInit = minute,
-            title = stringResource(R.string.settings_notifications_time),
-            onTimeSelected = onTimeChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-        SettingsAllNotifications(
-            enabled = enabled,
-            onSwitchAllNotification = onSwitchAllNotification,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-        SettingsNotifications(
-            enabled = enabled,
-            notificationsGlobal = notificationsGlobal,
-            onSwitchNotification = onSwitchNotification,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        )
-        Text(
-            text = stringResource(R.string.settings_alarms_is_enabled, alarmsEnabled),
-            color = MaterialTheme.colors.primary,
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
-        SimpleEventsButton(
-            text = stringResource(R.string.settings_restart_alarms),
-            onClick = onRestartNotifications,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, top = 8.dp)
-        )
-        SettingsSectionHeader(
-            text = stringResource(R.string.settings_backup),
+        ) {
+            AlarmEnabledRow(
+                alarmsEnabled = alarmsEnabled,
+                onRestartNotifications = onRestartNotifications
+            )
+            TimePicker(
+                hour = hour,
+                minute = minute,
+                text = stringResource(R.string.settings_notifications_time,
+                    formatTime(hour, minute)),
+                onTimeSelected = onTimeChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            SettingsAllNotifications(
+                enabled = enabled,
+                onSwitchAllNotification = onSwitchAllNotification,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            SettingsNotifications(
+                enabled = enabled,
+                eventAlarms = eventAlarms,
+                onSwitchNotification = onSwitchNotification,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+        SettingsSection(
+            header = stringResource(R.string.settings_backup),
             modifier = Modifier.padding(top = 16.dp)
-        )
-        SettingsBackupButtons(
-            onExportClick = onExportClick,
-            onImportClick = onImportClick,
-            onImportOldClick = onImportOldClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, top = 8.dp)
-        )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 8.dp)
+            ) {
+                AppButton(
+                    text = stringResource(R.string.settings_backup_export),
+                    onClick = onExportClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
+                AppButton(
+                    text = stringResource(R.string.settings_backup_import),
+                    onClick = onImportClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun SettingsSectionHeader(
-    text: String,
+private fun SettingsSection(
+    header: String,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    Text(
-        text = text,
-        color = MaterialTheme.colors.primary,
-        fontSize = 18.sp,
-        fontWeight = FontWeight.SemiBold,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = MaterialTheme.colors.backgroundSecondary)
-            .padding(16.dp)
-    )
+    Column(modifier.fillMaxWidth()) {
+        AppText(
+            text = header,
+            color = MaterialTheme.colors.primary,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = MaterialTheme.colors.backgroundSecondary)
+                .padding(16.dp)
+        )
+        content()
+    }
 }
 
 @Composable
@@ -220,10 +228,8 @@ private fun SettingsAllNotifications(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
-        Text(
+        AppText(
             text = stringResource(R.string.settings_notifications_enable),
-            color = MaterialTheme.colors.primary,
-            fontSize = 16.sp,
             modifier = modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -239,20 +245,18 @@ private fun SettingsAllNotifications(
 @Composable
 private fun SettingsNotifications(
     enabled: Boolean,
-    notificationsGlobal: List<NotificationGlobal>,
-    onSwitchNotification: (NotificationGlobal, Boolean) -> Unit,
+    eventAlarms: List<EventAlarm>,
+    onSwitchNotification: (EventAlarm, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        notificationsGlobal.forEach { notification ->
+        eventAlarms.forEach { notification ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
+                AppText(
                     text = notification.nameEn,
-                    color = MaterialTheme.colors.primary,
-                    fontSize = 16.sp,
                     modifier = modifier
                         .fillMaxWidth()
                         .weight(1f)
@@ -269,33 +273,48 @@ private fun SettingsNotifications(
 }
 
 @Composable
-private fun SettingsBackupButtons(
-    onExportClick: () -> Unit,
-    onImportClick: () -> Unit,
-    onImportOldClick: () -> Unit,
+private fun AlarmEnabledRow(
+    alarmsEnabled: Boolean,
+    onRestartNotifications: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        SimpleEventsButton(
-            text = stringResource(R.string.settings_backup_export),
-            onClick = onExportClick,
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        if (alarmsEnabled) {
+            AppIcon(
+                drawableRes = R.drawable.ic_round_check_circle_24,
+                tint = Green_600
+            )
+        } else {
+            AppIcon(
+                drawableRes = R.drawable.ic_round_error_24,
+                tint = MaterialTheme.colors.error
+            )
+        }
+        AppText(
+            text = if (alarmsEnabled) {
+                stringResource(R.string.settings_alarms_enabled)
+            } else {
+                stringResource(R.string.settings_alarms_disabled)
+            },
+            color = if (alarmsEnabled) {
+                MaterialTheme.colors.onSurface
+            } else {
+                MaterialTheme.colors.error
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp)
+                .padding(16.dp)
+                .weight(1f)
         )
-        SimpleEventsButton(
-            text = stringResource(R.string.settings_backup_import),
-            onClick = onImportClick,
+        AppIconButton(
+            drawableRes = R.drawable.ic_round_refresh_24,
+            onClick = onRestartNotifications,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp)
-        )
-        SimpleEventsButton(
-            text = stringResource(R.string.settings_backup_import_old),
-            onClick = onImportOldClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 16.dp)
+                .padding(horizontal = 8.dp)
         )
     }
 }
@@ -308,15 +327,18 @@ private fun PreviewSettingsScreen() {
             hour = 7,
             minute = 9,
             enabled = true,
-            notificationsGlobal = getDefaultNotificationsGlobal(LocalContext.current),
+            eventAlarms = listOf(
+                EventAlarm("Event time", true, 12),
+                EventAlarm("Event time", false, 56),
+                EventAlarm("Event time", true, 0),
+            ),
             alarmsEnabled = true,
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },
             onSwitchAllNotification = {},
             onRestartNotifications = {},
             onExportClick = {},
-            onImportClick = {},
-            onImportOldClick = {}
+            onImportClick = {}
         )
     }
 }

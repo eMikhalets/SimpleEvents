@@ -3,6 +3,7 @@
 
     <!--  Errors  -->
     <string name="error_internal">Internal error</string>
+    <string name="error_import_events">Events import error</string>
 
     <!--  Dialog  -->
     <string name="dialog_delete_event">Delete this event?</string>
@@ -57,11 +58,11 @@
     <string name="settings_notifications_enable">Enable notifications</string>
     <string name="settings_restart_alarms">Restart everyday notifications</string>
     <string name="settings_alarms_restarted">Notifications have been restarted</string>
-    <string name="settings_alarms_is_enabled">Application alarms enabled: %s</string>
+    <string name="settings_alarms_enabled">Event alarms are enabled</string>
+    <string name="settings_alarms_disabled">Event alarms are disabled</string>
     <string name="settings_backup">Backup</string>
     <string name="settings_backup_export">Export events</string>
     <string name="settings_backup_import">Import events</string>
-    <string name="settings_backup_import_old">Import events old</string>
     <string name="settings_backup_import_error">Import events error</string>
     <string name="settings_backup_imported_success">Events imported</string>
 
