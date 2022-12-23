@@ -41,8 +41,6 @@ import com.emikhalets.simpleevents.presentation.components.AppTextField
 import com.emikhalets.simpleevents.presentation.components.AppTextScreenHeader
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
-import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.formatHomeInfo
 import com.emikhalets.simpleevents.utils.extensions.milliseconds
@@ -153,7 +151,7 @@ private fun EventListItem(
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.backgroundSecondary)
+                    .background(MaterialTheme.colors.background)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
         }
@@ -180,10 +178,10 @@ private fun EventListItem(
                         letterSpacing = 2.sp
                     )
                 }
-                SquareColumn(background = MaterialTheme.colors.backgroundSecondary) {
+                SquareColumn(background = MaterialTheme.colors.background) {
                     AppIcon(
                         drawableRes = R.drawable.ic_round_person_24,
-                        tint = MaterialTheme.colors.onBackgroundSecondary
+                        tint = MaterialTheme.colors.onSecondary
                     )
                 }
                 Column(

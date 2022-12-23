@@ -17,7 +17,8 @@ fun DeleteEventDialog(
         leftButton = stringResource(R.string.dialog_cancel),
         rightButton = stringResource(R.string.dialog_delete),
         onLeftClick = onCancelClick,
-        onRightClick = onDeleteClick
+        onRightClick = onDeleteClick,
+        onDismiss = onCancelClick
     )
 }
 

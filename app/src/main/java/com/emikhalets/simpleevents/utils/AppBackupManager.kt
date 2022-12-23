@@ -46,19 +46,4 @@ class AppBackupManager @Inject constructor(
             emptyList()
         }
     }
-
-    fun importOld(uri: Uri): List<EventEntityOld> {
-        return try {
-            var json = ""
-            context.contentResolver.openFileDescriptor(uri, "r")?.use { descriptor ->
-                BufferedReader(FileReader(descriptor.fileDescriptor)).use { stream ->
-                    json += stream.readLine()
-                }
-            }
-            Json.decodeFromString(json)
-        } catch (e: Exception) {
-            Timber.e(e)
-            emptyList()
-        }
-    }
 }

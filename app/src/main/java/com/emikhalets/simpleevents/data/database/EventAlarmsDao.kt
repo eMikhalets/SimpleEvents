@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventAlarmsDao {
@@ -24,6 +25,9 @@ interface EventAlarmsDao {
 
     @Query("SELECT * FROM event_alarms ORDER BY days ASC")
     suspend fun getAll(): List<EventAlarm>
+
+    @Query("SELECT * FROM event_alarms ORDER BY days ASC")
+    fun getAllFlow(): Flow<List<EventAlarm>>
 
     @Query("DELETE FROM event_alarms")
     suspend fun drop()

@@ -1,5 +1,6 @@
 package com.emikhalets.simpleevents.utils
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -24,6 +25,7 @@ object AppNotificationManager {
     private const val CHANNEL_ID_EVENTS = "simple_events.notification.channel.events"
     private const val CHANNEL_NAME_EVENTS = "Events notifications"
 
+    @SuppressLint("MissingPermission")
     fun sendEventsNotification(context: Context, events: List<EventAlarmWrapper>) {
         val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -37,13 +39,14 @@ object AppNotificationManager {
         nm.createNotificationChannel(getEventsChannel())
 
         val style = NotificationCompat.InboxStyle()
-        events.forEach { notificationEvent ->
-            style.addLine(notificationEvent.notificationTime.nameEn)
-            notificationEvent.events.forEach { style.addLine(it.formatNotificationInfo(context)) }
+        events.forEach { wrapper ->
+            style.addLine(wrapper.alarm.nameEn)
+            wrapper.events.forEach { style.addLine(it.formatNotificationInfo(context)) }
         }
 
         builder.setStyle(style)
 
+        // TODO: handle notification permission
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID_EVENTS, builder.build())
     }
 

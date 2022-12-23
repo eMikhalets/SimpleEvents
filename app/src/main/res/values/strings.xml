@@ -4,6 +4,7 @@
     <!--  Errors  -->
     <string name="error_internal">Internal error</string>
     <string name="error_import_events">Events import error</string>
+    <string name="error_export_events">Events export error</string>
 
     <!--  Dialog  -->
     <string name="dialog_delete_event">Delete this event?</string>
@@ -65,6 +66,7 @@
     <string name="settings_backup_import">Import events</string>
     <string name="settings_backup_import_error">Import events error</string>
     <string name="settings_backup_imported_success">Events imported</string>
+    <string name="settings_backup_exported_success">Events exported</string>
 
 
     <string name="event_type_birthday">Birthday</string>

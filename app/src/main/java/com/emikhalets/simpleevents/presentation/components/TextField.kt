@@ -2,6 +2,8 @@ package com.emikhalets.simpleevents.presentation.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -13,9 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
-import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 
 @Composable
 fun AppTextField(
@@ -38,23 +39,24 @@ fun AppTextField(
             { AppIcon(leadingIcon) }
         } else null,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = MaterialTheme.colors.primary,
-            disabledTextColor = MaterialTheme.colors.onPrimary,
-            backgroundColor = MaterialTheme.colors.backgroundSecondary,
+            textColor = MaterialTheme.colors.onBackground,
+            disabledTextColor = MaterialTheme.colors.onBackground,
+            backgroundColor = MaterialTheme.colors.background,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
             disabledBorderColor = Color.Transparent,
             errorBorderColor = MaterialTheme.colors.error,
-            leadingIconColor = MaterialTheme.colors.primary,
-            disabledLeadingIconColor = MaterialTheme.colors.primary,
+            leadingIconColor = MaterialTheme.colors.onBackground,
+            disabledLeadingIconColor = MaterialTheme.colors.onBackground,
             errorLeadingIconColor = MaterialTheme.colors.error,
-            placeholderColor = MaterialTheme.colors.onBackgroundSecondary,
-            disabledPlaceholderColor = MaterialTheme.colors.onBackgroundSecondary
+            placeholderColor = MaterialTheme.colors.onSecondary,
+            disabledPlaceholderColor = MaterialTheme.colors.onSecondary
         ),
         keyboardOptions = KeyboardOptions(
             capitalization = capitalization,
             keyboardType = type
         ),
+        shape = RoundedCornerShape(50),
         maxLines = maxLines,
         modifier = modifier.fillMaxWidth()
     )
@@ -62,8 +64,11 @@ fun AppTextField(
 
 @Preview(showBackground = true)
 @Composable
-private fun TextButtonPreview() {
+private fun Preview() {
     AppTheme {
-        AppTextField(value = "", onValueChange = {}, placeholder = "Some placeHolder")
+        AppTextField(value = "",
+            onValueChange = {},
+            placeholder = "Some placeHolder",
+            modifier = Modifier.padding(32.dp))
     }
 }

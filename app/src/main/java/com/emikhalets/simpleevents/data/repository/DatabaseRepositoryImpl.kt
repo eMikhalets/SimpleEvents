@@ -4,6 +4,7 @@ import com.emikhalets.simpleevents.data.database.EventAlarmsDao
 import com.emikhalets.simpleevents.data.database.EventsDao
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
@@ -47,7 +48,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         return runCatching { eventAlarmsDao.update(entity) }
     }
 
-    override suspend fun getAllNotifGlobal(): Result<List<EventAlarm>> {
-        return runCatching { eventAlarmsDao.getAll() }
+    override suspend fun getAllNotifGlobal(): Result<Flow<List<EventAlarm>>> {
+        return runCatching { eventAlarmsDao.getAllFlow() }
     }
 }

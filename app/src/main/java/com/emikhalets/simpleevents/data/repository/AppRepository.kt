@@ -6,5 +6,5 @@ import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 interface AppRepository {
 
     suspend fun importEvents(uri: Uri): Result<List<EventEntity>>
-    suspend fun exportEvents(events: List<EventEntity>): Result<Boolean>
+    suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean>
 }

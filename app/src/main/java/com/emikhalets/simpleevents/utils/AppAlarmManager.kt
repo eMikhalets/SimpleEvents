@@ -14,22 +14,19 @@ object AppAlarmManager {
 
     private const val EVENTS_ALARM_REQUEST_CODE = 7
 
-    fun startEventsAlarm(context: Context) {
+    fun setEventsAlarm(context: Context) {
         try {
             val prefs = Prefs(context)
-
             val alarmManager = context.getSystemService(Application.ALARM_SERVICE) as AlarmManager
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 EVENTS_ALARM_REQUEST_CODE,
                 Intent(context, EventsReceiver::class.java),
-                getPendingFlag()
+                getPendingFlag(false)
             )
-            alarmManager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(
-                    getAlarmTimestamp(prefs.eventAlarmHour, prefs.eventAlarmMinute),
-                    pendingIntent
-                ),
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                getAlarmTimestamp(prefs.eventAlarmHour, prefs.eventAlarmMinute),
                 pendingIntent
             )
         } catch (ex: SecurityException) {
@@ -37,16 +34,24 @@ object AppAlarmManager {
         }
     }
 
-    fun startAllAlarms(context: Context) {
-        startEventsAlarm(context)
-    }
-
-    fun isAlarmsRunning(context: Context): Boolean {
-        return isEventAlarmRunning(context)
+    fun cancelAlarm(context: Context) {
+        try {
+            val alarmManager = context.getSystemService(Application.ALARM_SERVICE) as AlarmManager
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                EVENTS_ALARM_REQUEST_CODE,
+                Intent(context, EventsReceiver::class.java),
+                getPendingFlag(true)
+            )
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        } catch (ex: SecurityException) {
+            ex.printStackTrace()
+        }
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    fun isEventAlarmRunning(context: Context): Boolean {
+    fun isAlarmsRunning(context: Context): Boolean {
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             EVENTS_ALARM_REQUEST_CODE,
@@ -56,11 +61,11 @@ object AppAlarmManager {
         return pendingIntent != null
     }
 
-    private fun getPendingFlag(): Int {
+    private fun getPendingFlag(cancel: Boolean): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.FLAG_MUTABLE
         } else {
-            PendingIntent.FLAG_UPDATE_CURRENT
+            if (cancel) PendingIntent.FLAG_CANCEL_CURRENT else PendingIntent.FLAG_UPDATE_CURRENT
         }
     }
 

@@ -38,8 +38,6 @@ import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.dialogs.DeleteEventDialog
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
-import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.formatDateFull
 
@@ -133,7 +131,7 @@ private fun EventItemScreen(
             onImageClick = onImageClick
         )
         Divider(
-            color = MaterialTheme.colors.backgroundSecondary,
+            color = MaterialTheme.colors.background,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
         EventItemContent(
@@ -157,7 +155,7 @@ private fun EventItemHeader(
             drawableRes = R.drawable.ic_round_person_24,
             modifier = Modifier
                 .size(150.dp)
-                .background(MaterialTheme.colors.backgroundSecondary)
+                .background(MaterialTheme.colors.background)
                 .clickable { onImageClick() }
                 .padding(top = 32.dp)
         )
@@ -181,13 +179,13 @@ private fun EventItemHeader(
         }
         AppText(
             text = event.days.toString(),
-            color = MaterialTheme.colors.onBackgroundSecondary,
+            color = MaterialTheme.colors.onSecondary,
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .padding(top = 16.dp)
                 .background(
-                    color = MaterialTheme.colors.backgroundSecondary,
+                    color = MaterialTheme.colors.background,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(horizontal = 32.dp, vertical = 8.dp)

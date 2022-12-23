@@ -7,6 +7,7 @@ import com.emikhalets.simpleevents.domain.usecase.SettingsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,13 +18,17 @@ class SettingsViewModel @Inject constructor(
     override fun createInitialState(): SettingsState = SettingsState()
 
     fun resetError() = setState { it.copy(error = null) }
+    fun resetImported() = setState { it.copy(imported = false) }
+    fun resetExported() = setState { it.copy(exported = false) }
 
     fun loadAllNotificationsGlobal() {
         launchIO {
             setState { it.copy(loading = true) }
             useCase.loadNotificationsGlobal()
                 .onSuccess { result ->
-                    setState { it.copy(loading = false, eventAlarms = result) }
+                    result.collectLatest { list ->
+                        setState { it.copy(loading = false, eventAlarms = list) }
+                    }
                 }
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)
@@ -53,9 +58,9 @@ class SettingsViewModel @Inject constructor(
                     setState {
                         if (result.isEmpty()) {
                             val uiError = UiString.Resource(R.string.error_import_events)
-                            it.copy(loading = false, error = uiError)
+                            it.copy(error = uiError)
                         } else {
-                            it.copy(loading = false, imported = true)
+                            it.copy(imported = true)
                         }
                     }
                 }
@@ -67,5 +72,22 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun exportEvents(uri: Uri) {
+        launchIO {
+            useCase.getAllEvents()
+                .onSuccess { eventsResult ->
+                    useCase.exportEvents(uri, eventsResult)
+                        .onSuccess {
+                            setState { it.copy(exported = true) }
+                        }
+                        .onFailure { error ->
+                            val uiError = UiString.Message(error.message)
+                            setState { it.copy(loading = false, error = uiError) }
+                        }
+                }
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
+                }
+        }
     }
 }

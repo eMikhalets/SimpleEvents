@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 fun AppText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colors.onPrimary,
+    color: Color = MaterialTheme.colors.onSurface,
     fontSize: TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Start,
@@ -45,11 +45,10 @@ fun AppText(
 fun AppTextScreenHeader(text: String) {
     AppText(
         text = text,
-        fontSize = 28.sp,
+        fontSize = 24.sp,
         fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(8.dp)
     )
 }

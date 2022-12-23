@@ -20,10 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
-import com.emikhalets.simpleevents.presentation.theme.onBackgroundSecondary
 import com.emikhalets.simpleevents.utils.extensions.formatDateFull
-import com.emikhalets.simpleevents.utils.extensions.formatTime
 import com.emikhalets.simpleevents.utils.extensions.localDate
 import com.emikhalets.simpleevents.utils.extensions.milliseconds
 import java.time.LocalDate
@@ -98,12 +95,12 @@ private fun Picker(
         color = if (isActive) {
             MaterialTheme.colors.onPrimary
         } else {
-            MaterialTheme.colors.onBackgroundSecondary
+            MaterialTheme.colors.onSecondary
         },
         modifier = modifier
             .background(
-                color = MaterialTheme.colors.backgroundSecondary,
-                shape = RoundedCornerShape(12.dp)
+                color = MaterialTheme.colors.background,
+                shape = RoundedCornerShape(50)
             )
             .clip(RoundedCornerShape(12.dp))
             .clickable(
@@ -118,6 +115,9 @@ private fun Picker(
 @Composable
 private fun Preview() {
     AppTheme {
-        Picker(text = "Some text", isActive = true, onClick = {})
+        Picker(text = "Some text",
+            isActive = true,
+            onClick = {},
+            modifier = Modifier.padding(32.dp))
     }
 }

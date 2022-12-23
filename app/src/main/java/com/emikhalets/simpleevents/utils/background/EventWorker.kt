@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.emikhalets.simpleevents.data.database.AppDatabase
 import com.emikhalets.simpleevents.domain.entity.EventAlarmWrapper
+import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.AppNotificationManager
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 
@@ -13,8 +14,9 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         return try {
-            val notificationsDao = AppDatabase.get(applicationContext).notificationsGlobalDao
-            val eventsDao = AppDatabase.get(applicationContext).eventsDao
+            val database = AppDatabase.get(applicationContext)
+            val alarmsDao = database.eventAlarmsDao
+            val eventsDao = database.eventsDao
 
             val sourceEvents = eventsDao.getAllEntities()
                 .map { it.calculateEventData() }
@@ -22,19 +24,20 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
 
             val eventsList = mutableListOf<EventAlarmWrapper>()
 
-            notificationsDao.getAllEntities().forEach { notificationTime ->
-                if (notificationTime.enabled) {
-                    val list = sourceEvents.filter { it.days == notificationTime.daysLeft }
+            alarmsDao.getAll()
+                .filter { it.enabled }
+                .forEach { notification ->
+                    val list = sourceEvents.filter { it.days == notification.days }
                     if (list.isNotEmpty()) {
-                        eventsList.add(EventAlarmWrapper(notificationTime, list))
+                        eventsList.add(EventAlarmWrapper(notification, list))
                     }
                 }
-            }
 
             if (eventsList.isNotEmpty()) {
                 AppNotificationManager.sendEventsNotification(applicationContext, eventsList)
             }
 
+            AppAlarmManager.setEventsAlarm(applicationContext)
             Result.success()
         } catch (ex: Exception) {
             ex.printStackTrace()

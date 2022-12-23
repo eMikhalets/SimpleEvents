@@ -1,6 +1,5 @@
 package com.emikhalets.simpleevents.presentation.navigation
 
-import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -17,10 +16,7 @@ import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
 private const val ARGS_EVENT_ID = "event_id"
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController,
-    scaffoldState: ScaffoldState,
-) {
+fun AppNavHost(navController: NavHostController) {
     NavHost(navController, AppScreen.Home.route) {
         composable(AppScreen.Home.route) {
             HomeScreen(
@@ -45,7 +41,6 @@ fun AppNavHost(
         composable(AppScreen.Settings.route) {
             SettingsScreen(
                 viewModel = hiltViewModel(),
-                scaffoldState = scaffoldState
             )
         }
 

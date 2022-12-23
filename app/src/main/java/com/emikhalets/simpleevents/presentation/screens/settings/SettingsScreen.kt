@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,23 +34,20 @@ import com.emikhalets.simpleevents.presentation.components.AppIconButton
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.TimePicker
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
+import com.emikhalets.simpleevents.presentation.theme.AppColors
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.Green_600
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.Prefs
 import com.emikhalets.simpleevents.utils.createFile
 import com.emikhalets.simpleevents.utils.documentCreator
 import com.emikhalets.simpleevents.utils.documentPicker
 import com.emikhalets.simpleevents.utils.extensions.formatTime
-import com.emikhalets.simpleevents.utils.extensions.showSnackBar
 import com.emikhalets.simpleevents.utils.extensions.toast
 import com.emikhalets.simpleevents.utils.openFile
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel,
-    scaffoldState: ScaffoldState,
 ) {
     val context = LocalContext.current
     val prefs = Prefs(context)
@@ -77,7 +74,17 @@ fun SettingsScreen(
     }
 
     LaunchedEffect(state.imported) {
-        if (state.imported) toast(context, R.string.settings_backup_imported_success)
+        if (state.imported) {
+            toast(context, R.string.settings_backup_imported_success)
+            viewModel.resetImported()
+        }
+    }
+
+    LaunchedEffect(state.exported) {
+        if (state.exported) {
+            toast(context, R.string.settings_backup_exported_success)
+            viewModel.resetExported()
+        }
     }
 
     SettingsScreen(
@@ -96,13 +103,14 @@ fun SettingsScreen(
             viewModel.updateNotificationGlobal(notification, enabled)
         },
         onSwitchAllNotification = { enabled ->
+            AppAlarmManager.cancelAlarm(context)
             notificationsAll = enabled
             prefs.eventAlarmsEnabled = enabled
         },
         onRestartNotifications = {
-            AppAlarmManager.startAllAlarms(context)
+            AppAlarmManager.setEventsAlarm(context)
             alarmsEnabled = AppAlarmManager.isAlarmsRunning(context)
-            scaffoldState.showSnackBar(context, R.string.settings_alarms_restarted)
+            toast(context, R.string.settings_alarms_restarted)
         },
         onExportClick = { documentCreator.createFile() },
         onImportClick = { documentPicker.openFile() }
@@ -153,13 +161,15 @@ private fun SettingsScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
-            SettingsAllNotifications(
-                enabled = enabled,
-                onSwitchAllNotification = onSwitchAllNotification,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
+            if (eventAlarms.isNotEmpty()) {
+                SettingsAllNotifications(
+                    enabled = enabled,
+                    onSwitchAllNotification = onSwitchAllNotification,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                )
+            }
             SettingsNotifications(
                 enabled = enabled,
                 eventAlarms = eventAlarms,
@@ -211,7 +221,7 @@ private fun SettingsSection(
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colors.backgroundSecondary)
+                .background(color = MaterialTheme.colors.background)
                 .padding(16.dp)
         )
         content()
@@ -257,6 +267,8 @@ private fun SettingsNotifications(
             ) {
                 AppText(
                     text = notification.nameEn,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     modifier = modifier
                         .fillMaxWidth()
                         .weight(1f)
@@ -285,7 +297,7 @@ private fun AlarmEnabledRow(
         if (alarmsEnabled) {
             AppIcon(
                 drawableRes = R.drawable.ic_round_check_circle_24,
-                tint = Green_600
+                tint = AppColors.Green_600
             )
         } else {
             AppIcon(

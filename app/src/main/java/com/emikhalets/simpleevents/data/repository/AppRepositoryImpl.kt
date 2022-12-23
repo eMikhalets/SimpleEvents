@@ -13,7 +13,7 @@ class AppRepositoryImpl @Inject constructor(
         return runCatching { backupManager.import(uri) }
     }
 
-    override suspend fun exportEvents(events: List<EventEntity>): Result<Boolean> {
-        return runCatching { false }
+    override suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean> {
+        return runCatching { backupManager.export(uri, events) }
     }
 }

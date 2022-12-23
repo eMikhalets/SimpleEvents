@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.presentation.theme.backgroundSecondary
 import com.emikhalets.simpleevents.utils.enums.EventType
 
 @Composable
@@ -54,11 +53,11 @@ fun EventTypeSpinner(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colors.backgroundSecondary,
-                    shape = RoundedCornerShape(12.dp)
+                    color = MaterialTheme.colors.background,
+                    shape = RoundedCornerShape(50)
                 )
                 .clickable { expanded = !expanded }
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(50))
                 .padding(16.dp)
         ) {
             AppText(
@@ -71,6 +70,7 @@ fun EventTypeSpinner(
             )
             AppIcon(
                 drawableRes = R.drawable.ic_baseline_arrow_drop_down_24,
+                tint = MaterialTheme.colors.onBackground,
                 modifier = Modifier.rotate(if (!expanded) 0f else 180f)
             )
         }
@@ -89,7 +89,7 @@ fun EventTypeSpinner(
                 ) {
                     Text(
                         text = stringResource(type.nameRes),
-                        color = MaterialTheme.colors.primary,
+                        color = MaterialTheme.colors.onBackground,
                         fontSize = 16.sp
                     )
                 }
@@ -102,6 +102,8 @@ fun EventTypeSpinner(
 @Composable
 private fun Preview() {
     AppTheme {
-        EventTypeSpinner(onTypeSelected = {})
+        EventTypeSpinner(onTypeSelected = {}, modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp))
     }
 }

@@ -1,7 +1,8 @@
 package com.emikhalets.simpleevents.presentation.components.dialogs
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -55,8 +56,8 @@ private fun DialogLayout(
     onLeftClick: () -> Unit,
     onRightClick: () -> Unit,
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(40.dp)
             .background(
@@ -82,7 +83,10 @@ private fun DialogLayout(
                 .fillMaxWidth()
                 .padding(8.dp)
         )
-        Row(Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             if (leftButton != null) {
                 AppTextButton(
                     text = leftButton,
