@@ -35,9 +35,7 @@ fun AppText(
         letterSpacing = letterSpacing,
         maxLines = maxLines,
         overflow = overflow,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier = modifier.fillMaxWidth()
     )
 }
 
@@ -49,6 +47,6 @@ fun AppTextScreenHeader(text: String) {
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(16.dp)
     )
 }

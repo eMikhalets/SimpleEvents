@@ -150,8 +150,7 @@ private fun EventListItem(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.background)
+                    .background(Color.Transparent)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
             )
         }
@@ -161,27 +160,29 @@ private fun EventListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(74.dp)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
                     .clickable { onEventClick(event.id) }
             ) {
-                SquareColumn(background = MaterialTheme.colors.primary) {
+                SquareColumn(backgroundColor = MaterialTheme.colors.primary) {
                     AppText(
                         text = event.days.toString(),
                         color = MaterialTheme.colors.onPrimary,
+                        textAlign = TextAlign.Center,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
                     AppText(
                         text = pluralsResource(R.plurals.home_event_days, event.days),
                         color = MaterialTheme.colors.onPrimary,
+                        textAlign = TextAlign.Center,
                         fontSize = 14.sp,
                         letterSpacing = 2.sp
                     )
                 }
-                SquareColumn(background = MaterialTheme.colors.background) {
+                SquareColumn(backgroundColor = MaterialTheme.colors.background) {
                     AppIcon(
                         drawableRes = R.drawable.ic_round_person_24,
-                        tint = MaterialTheme.colors.onSecondary
+                        tint = MaterialTheme.colors.onSurface
                     )
                 }
                 Column(
@@ -199,7 +200,7 @@ private fun EventListItem(
                     )
                     AppText(
                         text = event.formatHomeInfo(),
-                        color = MaterialTheme.colors.secondary,
+                        color = MaterialTheme.colors.onSecondary,
                         fontSize = 14.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -212,7 +213,7 @@ private fun EventListItem(
 
 @Composable
 private fun SquareColumn(
-    background: Color,
+    backgroundColor: Color,
     content: @Composable () -> Unit,
 ) {
     Column(
@@ -220,7 +221,7 @@ private fun SquareColumn(
         verticalArrangement = Arrangement.Center,
         content = { content() },
         modifier = Modifier
-            .background(background)
+            .background(backgroundColor)
             .fillMaxHeight()
             .aspectRatio(1f)
     )
