@@ -216,13 +216,13 @@ private fun SettingsSection(
     Column(modifier.fillMaxWidth()) {
         AppText(
             text = header,
-            color = MaterialTheme.colors.primary,
-            fontSize = 18.sp,
+            color = MaterialTheme.colors.onSurface,
+            fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = MaterialTheme.colors.background)
-                .padding(16.dp)
+                .background(color = MaterialTheme.colors.surface)
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         )
         content()
     }
@@ -292,7 +292,9 @@ private fun AlarmEnabledRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         if (alarmsEnabled) {
             AppIcon(
@@ -312,7 +314,7 @@ private fun AlarmEnabledRow(
                 stringResource(R.string.settings_alarms_disabled)
             },
             color = if (alarmsEnabled) {
-                MaterialTheme.colors.onSurface
+                MaterialTheme.colors.onBackground
             } else {
                 MaterialTheme.colors.error
             },
@@ -324,9 +326,8 @@ private fun AlarmEnabledRow(
         AppIconButton(
             drawableRes = R.drawable.ic_round_refresh_24,
             onClick = onRestartNotifications,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+            iconColor = MaterialTheme.colors.onSurface,
+            modifier = Modifier.padding(horizontal = 8.dp)
         )
     }
 }
@@ -344,7 +345,7 @@ private fun PreviewSettingsScreen() {
                 EventAlarm("Event time", false, 56),
                 EventAlarm("Event time", true, 0),
             ),
-            alarmsEnabled = true,
+            alarmsEnabled = false,
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },
             onSwitchAllNotification = {},

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,10 +56,12 @@ fun AppButton(
         ),
         modifier = modifier
     ) {
-        Text(
+        AppText(
             text = text,
+            color = MaterialTheme.colors.onPrimary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(10.dp)
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(6.dp)
         )
     }
 }

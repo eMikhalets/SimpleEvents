@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -123,7 +124,6 @@ private fun EventItemScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
             .verticalScroll(rememberScrollState())
     ) {
         EventItemHeader(
@@ -131,7 +131,7 @@ private fun EventItemScreen(
             onImageClick = onImageClick
         )
         Divider(
-            color = MaterialTheme.colors.background,
+            color = MaterialTheme.colors.onSecondary,
             modifier = Modifier.padding(horizontal = 8.dp)
         )
         EventItemContent(
@@ -155,41 +155,37 @@ private fun EventItemHeader(
             drawableRes = R.drawable.ic_round_person_24,
             modifier = Modifier
                 .size(150.dp)
+                .padding(top = 32.dp)
                 .background(MaterialTheme.colors.background)
                 .clickable { onImageClick() }
-                .padding(top = 32.dp)
+                .aspectRatio(1f)
         )
         AppText(
             text = event.name,
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 16.dp)
         )
         AppText(
             text = event.date.formatDateFull(event.withoutYear),
             fontSize = 16.sp,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 8.dp)
         )
         if (!event.withoutYear) {
             AppText(
                 text = stringResource(R.string.event_item_turns, event.age),
                 fontSize = 16.sp,
+                textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
         AppText(
-            text = event.days.toString(),
-            color = MaterialTheme.colors.onSecondary,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .background(
-                    color = MaterialTheme.colors.background,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .padding(horizontal = 32.dp, vertical = 8.dp)
-                .padding(bottom = 16.dp)
+            text = stringResource(R.string.event_item_days_left, event.days),
+            fontSize = 16.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
         )
     }
 }
@@ -207,14 +203,15 @@ private fun EventItemContent(
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colors.secondary,
-                    shape = RoundedCornerShape(12.dp)
+                    color = MaterialTheme.colors.onSecondary,
+                    shape = RoundedCornerShape(26.dp)
                 )
+                .background(color = MaterialTheme.colors.background)
                 .padding(16.dp)
         ) {
             AppText(
                 text = stringResource(R.string.event_item_notes_title).uppercase(),
-                color = MaterialTheme.colors.secondary,
+                color = MaterialTheme.colors.onBackground,
                 letterSpacing = 1.sp,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium

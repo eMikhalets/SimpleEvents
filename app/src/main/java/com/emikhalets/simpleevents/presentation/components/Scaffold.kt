@@ -8,7 +8,6 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -29,13 +28,12 @@ fun AppScaffold(
     scaffoldState: ScaffoldState,
     content: @Composable () -> Unit,
 ) {
-    Surface(color = MaterialTheme.colors.surface) {
-        Scaffold(
-            scaffoldState = scaffoldState,
-            bottomBar = { AppBottomBar(navController) },
-            content = { Box(modifier = Modifier.padding(it), content = { content() }) }
-        )
-    }
+    Scaffold(
+        scaffoldState = scaffoldState,
+        backgroundColor = MaterialTheme.colors.surface,
+        bottomBar = { AppBottomBar(navController) },
+        content = { Box(modifier = Modifier.padding(it), content = { content() }) }
+    )
 }
 
 @Composable

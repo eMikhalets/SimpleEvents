@@ -56,8 +56,8 @@ fun EventTypeSpinner(
                     color = MaterialTheme.colors.background,
                     shape = RoundedCornerShape(50)
                 )
-                .clickable { expanded = !expanded }
                 .clip(RoundedCornerShape(50))
+                .clickable { expanded = !expanded }
                 .padding(16.dp)
         ) {
             AppText(

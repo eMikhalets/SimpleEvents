@@ -23,7 +23,8 @@
     </plurals>
 
     <!--  Event item screen  -->
-    <string name="event_item_turns">Turns %d</string>
+    <string name="event_item_turns">Turns - %d</string>
+    <string name="event_item_days_left">Days left - %d</string>
     <string name="event_item_btn_edit">Edit Event</string>
     <string name="event_item_btn_delete">Delete Event</string>
     <string name="event_item_notes_title">Notes</string>

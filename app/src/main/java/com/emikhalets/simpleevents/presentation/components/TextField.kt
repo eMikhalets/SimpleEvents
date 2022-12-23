@@ -56,7 +56,7 @@ fun AppTextField(
             capitalization = capitalization,
             keyboardType = type
         ),
-        shape = RoundedCornerShape(50),
+        shape = RoundedCornerShape(26.dp),
         maxLines = maxLines,
         modifier = modifier.fillMaxWidth()
     )

@@ -93,7 +93,7 @@ private fun Picker(
     AppText(
         text = text,
         color = if (isActive) {
-            MaterialTheme.colors.onPrimary
+            MaterialTheme.colors.onBackground
         } else {
             MaterialTheme.colors.onSecondary
         },
@@ -102,11 +102,8 @@ private fun Picker(
                 color = MaterialTheme.colors.background,
                 shape = RoundedCornerShape(50)
             )
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = Color.Gray),
-            ) { onClick() }
+            .clip(RoundedCornerShape(50))
+            .clickable{ onClick() }
             .padding(16.dp)
     )
 }
