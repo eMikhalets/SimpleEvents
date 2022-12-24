@@ -7,9 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface SettingsUseCase {
 
-    suspend fun loadNotificationsGlobal(): Result<Flow<List<EventAlarm>>>
-    suspend fun updateNotificationsGlobal(entity: EventAlarm): Result<Int>
+    suspend fun loadEventsAlarm(): Result<Flow<List<EventAlarm>>>
     suspend fun getAllEvents(): Result<List<EventEntity>>
     suspend fun importEvents(uri: Uri): Result<List<EventEntity>>
     suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean>
+    suspend fun updateNotification(notification: EventAlarm): Result<Int>
+    suspend fun deleteNotification(notification: EventAlarm): Result<Int>
 }

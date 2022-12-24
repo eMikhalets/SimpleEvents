@@ -24,7 +24,7 @@ class SettingsViewModel @Inject constructor(
     fun loadAllNotificationsGlobal() {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.loadNotificationsGlobal()
+            useCase.loadEventsAlarm()
                 .onSuccess { result ->
                     result.collectLatest { list ->
                         setState { it.copy(loading = false, eventAlarms = list) }
@@ -40,7 +40,7 @@ class SettingsViewModel @Inject constructor(
     fun updateNotificationGlobal(notification: EventAlarm, enabled: Boolean) {
         launchIO {
             val entity = notification.copy(enabled = enabled)
-            useCase.updateNotificationsGlobal(entity)
+            useCase.updateNotification(entity)
                 .onSuccess {
                     loadAllNotificationsGlobal()
                 }
@@ -84,6 +84,26 @@ class SettingsViewModel @Inject constructor(
                             setState { it.copy(loading = false, error = uiError) }
                         }
                 }
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
+                }
+        }
+    }
+
+    fun updateNotification(notification: EventAlarm) {
+        launchIO {
+            useCase.updateNotification(notification)
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
+                }
+        }
+    }
+
+    fun deleteNotification(notification: EventAlarm) {
+        launchIO {
+            useCase.deleteNotification(notification)
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)
                     setState { it.copy(loading = false, error = uiError) }

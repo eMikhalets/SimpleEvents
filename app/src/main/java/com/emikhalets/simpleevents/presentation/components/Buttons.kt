@@ -61,7 +61,7 @@ fun AppButton(
             color = MaterialTheme.colors.onPrimary,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(6.dp)
+            modifier = Modifier.padding(4.dp)
         )
     }
 }

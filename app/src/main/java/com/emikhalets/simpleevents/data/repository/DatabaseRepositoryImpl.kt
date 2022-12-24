@@ -36,19 +36,23 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     /** Notifications Global Dao */
 
-    override suspend fun insertNotifGlobal(entity: EventAlarm): Result<Long> {
+    override suspend fun insertEventAlarm(entity: EventAlarm): Result<Long> {
         return runCatching { eventAlarmsDao.insert(entity) }
     }
 
-    override suspend fun insertNotifGlobal(list: List<EventAlarm>): Result<List<Long>> {
+    override suspend fun insertEventAlarm(list: List<EventAlarm>): Result<List<Long>> {
         return runCatching { eventAlarmsDao.insert(list) }
     }
 
-    override suspend fun updateNotifGlobal(entity: EventAlarm): Result<Int> {
+    override suspend fun updateEventAlarm(entity: EventAlarm): Result<Int> {
         return runCatching { eventAlarmsDao.update(entity) }
     }
 
-    override suspend fun getAllNotifGlobal(): Result<Flow<List<EventAlarm>>> {
+    override suspend fun deleteEventAlarm(entity: EventAlarm): Result<Int> {
+        return runCatching { eventAlarmsDao.delete(entity) }
+    }
+
+    override suspend fun getAllEventsAlarm(): Result<Flow<List<EventAlarm>>> {
         return runCatching { eventAlarmsDao.getAllFlow() }
     }
 }

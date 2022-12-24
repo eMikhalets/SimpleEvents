@@ -68,6 +68,13 @@
     <string name="settings_backup_import_error">Import events error</string>
     <string name="settings_backup_imported_success">Events imported</string>
     <string name="settings_backup_exported_success">Events exported</string>
+    <string name="settings_edit_notification_title">Edit notification</string>
+    <string name="settings_edit_notification_save">Save</string>
+    <string name="settings_edit_notification_delete">Delete</string>
+    <string name="settings_edit_notification_cancel">Cancel</string>
+    <string name="settings_edit_notification_add">Add notification</string>
+    <string name="settings_edit_notification_days_null">Empty days</string>
+    <string name="settings_edit_notification_name_null">Empty name</string>
 
 
     <string name="event_type_birthday">Birthday</string>

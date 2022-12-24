@@ -1,6 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppIconButton
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.TimePicker
+import com.emikhalets.simpleevents.presentation.components.dialogs.EditNotificationDialog
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppColors
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
@@ -58,6 +61,7 @@ fun SettingsScreen(
     var notificationsAll by remember { mutableStateOf(prefs.eventAlarmsEnabled) }
     var alarmsEnabled by remember { mutableStateOf(AppAlarmManager.isAlarmsRunning(context)) }
     var errorMessage by remember { mutableStateOf("") }
+    var editNotification by remember { mutableStateOf<EventAlarm?>(null) }
 
     val documentCreator = documentCreator { uri -> viewModel.exportEvents(uri) }
     val documentPicker = documentPicker { uri -> viewModel.importEvents(uri) }
@@ -107,14 +111,35 @@ fun SettingsScreen(
             notificationsAll = enabled
             prefs.eventAlarmsEnabled = enabled
         },
+        onEditNotificationClick = {
+            editNotification = it
+        },
         onRestartNotifications = {
             AppAlarmManager.setEventsAlarm(context)
             alarmsEnabled = AppAlarmManager.isAlarmsRunning(context)
             toast(context, R.string.settings_alarms_restarted)
         },
+        onAddNotificationClick = {
+            editNotification = EventAlarm("", 0)
+        },
         onExportClick = { documentCreator.createFile() },
         onImportClick = { documentPicker.openFile() }
     )
+
+    if (editNotification != null) {
+        EditNotificationDialog(
+            notification = editNotification!!,
+            onDismiss = { editNotification = null },
+            onSaveClick = {
+                viewModel.updateNotification(it)
+                editNotification = null
+            },
+            onDeleteClick = {
+                viewModel.deleteNotification(it)
+                editNotification = null
+            }
+        )
+    }
 
     if (errorMessage.isNotEmpty()) {
         ErrorDialog(
@@ -134,7 +159,9 @@ private fun SettingsScreen(
     onTimeChange: (Int, Int) -> Unit,
     onSwitchNotification: (EventAlarm, Boolean) -> Unit,
     onSwitchAllNotification: (Boolean) -> Unit,
+    onEditNotificationClick: (EventAlarm) -> Unit,
     onRestartNotifications: () -> Unit,
+    onAddNotificationClick: () -> Unit,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
 ) {
@@ -174,10 +201,21 @@ private fun SettingsScreen(
                 enabled = enabled,
                 eventAlarms = eventAlarms,
                 onSwitchNotification = onSwitchNotification,
+                onEditNotificationClick = onEditNotificationClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
+            if (eventAlarms.isNotEmpty()) {
+                AppButton(
+                    text = stringResource(R.string.settings_edit_notification_add),
+                    onClick = onAddNotificationClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp)
+                )
+            }
         }
         SettingsSection(
             header = stringResource(R.string.settings_backup),
@@ -257,13 +295,16 @@ private fun SettingsNotifications(
     enabled: Boolean,
     eventAlarms: List<EventAlarm>,
     onSwitchNotification: (EventAlarm, Boolean) -> Unit,
+    onEditNotificationClick: (EventAlarm) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         eventAlarms.forEach { notification ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onEditNotificationClick(notification) }
             ) {
                 AppText(
                     text = notification.nameEn,
@@ -271,8 +312,16 @@ private fun SettingsNotifications(
                     overflow = TextOverflow.Ellipsis,
                     modifier = modifier
                         .fillMaxWidth()
+                        .weight(3f)
+                )
+                AppText(
+                    text = notification.days.toString(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = modifier
+                        .fillMaxWidth()
                         .weight(1f)
-                        .padding(end = 16.dp)
                 )
                 Switch(
                     checked = notification.enabled,
@@ -327,14 +376,14 @@ private fun AlarmEnabledRow(
             drawableRes = R.drawable.ic_round_refresh_24,
             onClick = onRestartNotifications,
             iconColor = MaterialTheme.colors.onSurface,
-            modifier = Modifier.padding(horizontal = 8.dp)
+            modifier = Modifier.padding(start = 8.dp)
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PreviewSettingsScreen() {
+private fun Preview() {
     AppTheme {
         SettingsScreen(
             hour = 7,
@@ -344,12 +393,15 @@ private fun PreviewSettingsScreen() {
                 EventAlarm("Event time", true, 12),
                 EventAlarm("Event time", false, 56),
                 EventAlarm("Event time", true, 0),
+                EventAlarm("Event time Event time Event time", true, 780009),
             ),
             alarmsEnabled = false,
             onTimeChange = { _, _ -> },
             onSwitchNotification = { _, _ -> },
             onSwitchAllNotification = {},
+            onEditNotificationClick = {},
             onRestartNotifications = {},
+            onAddNotificationClick = {},
             onExportClick = {},
             onImportClick = {}
         )

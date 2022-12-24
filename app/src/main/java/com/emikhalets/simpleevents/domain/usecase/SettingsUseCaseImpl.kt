@@ -13,12 +13,8 @@ class SettingsUseCaseImpl @Inject constructor(
     private val databaseRepo: DatabaseRepository,
 ) : SettingsUseCase {
 
-    override suspend fun loadNotificationsGlobal(): Result<Flow<List<EventAlarm>>> {
-        return databaseRepo.getAllNotifGlobal()
-    }
-
-    override suspend fun updateNotificationsGlobal(entity: EventAlarm): Result<Int> {
-        return databaseRepo.updateNotifGlobal(entity)
+    override suspend fun loadEventsAlarm(): Result<Flow<List<EventAlarm>>> {
+        return databaseRepo.getAllEventsAlarm()
     }
 
     override suspend fun getAllEvents(): Result<List<EventEntity>> {
@@ -31,5 +27,13 @@ class SettingsUseCaseImpl @Inject constructor(
 
     override suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean> {
         return appRepository.exportEvents(uri, events)
+    }
+
+    override suspend fun updateNotification(notification: EventAlarm): Result<Int> {
+        return databaseRepo.updateEventAlarm(notification)
+    }
+
+    override suspend fun deleteNotification(notification: EventAlarm): Result<Int> {
+        return databaseRepo.deleteEventAlarm(notification)
     }
 }

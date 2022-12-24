@@ -16,8 +16,9 @@ interface DatabaseRepository {
 
     /** Event Alarms Dao */
 
-    suspend fun insertNotifGlobal(entity: EventAlarm): Result<Long>
-    suspend fun insertNotifGlobal(list: List<EventAlarm>): Result<List<Long>>
-    suspend fun updateNotifGlobal(entity: EventAlarm): Result<Int>
-    suspend fun getAllNotifGlobal(): Result<Flow<List<EventAlarm>>>
+    suspend fun insertEventAlarm(entity: EventAlarm): Result<Long>
+    suspend fun insertEventAlarm(list: List<EventAlarm>): Result<List<Long>>
+    suspend fun updateEventAlarm(entity: EventAlarm): Result<Int>
+    suspend fun deleteEventAlarm(entity: EventAlarm): Result<Int>
+    suspend fun getAllEventsAlarm(): Result<Flow<List<EventAlarm>>>
 }

@@ -16,4 +16,7 @@ data class EventAlarm(
 
     @Ignore
     constructor(nameEn: String, enabled: Boolean, days: Int) : this(0, nameEn, enabled, days)
+
+    @Ignore
+    constructor(nameEn: String, days: Int) : this(0, nameEn, false, days)
 }

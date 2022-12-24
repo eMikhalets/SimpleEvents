@@ -73,15 +73,14 @@ private fun DialogLayout(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(bottom = 8.dp)
+                    .padding(16.dp)
             )
         }
         AppText(
             text = message,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
+                .padding(16.dp)
         )
         Row(
             horizontalArrangement = Arrangement.End,
