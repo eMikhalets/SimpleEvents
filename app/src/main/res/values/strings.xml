@@ -75,6 +75,8 @@
     <string name="settings_edit_notification_add">Add notification</string>
     <string name="settings_edit_notification_days_null">Empty days</string>
     <string name="settings_edit_notification_name_null">Empty name</string>
+    <string name="settings_edit_notification_name">Name</string>
+    <string name="settings_edit_notification_days">Days left</string>
 
 
     <string name="event_type_birthday">Birthday</string>

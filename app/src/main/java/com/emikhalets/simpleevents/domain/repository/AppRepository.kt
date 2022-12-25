@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.data.repository
+package com.emikhalets.simpleevents.domain.repository
 
 import android.net.Uri
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity

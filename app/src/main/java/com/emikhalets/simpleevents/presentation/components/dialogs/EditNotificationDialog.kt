@@ -90,6 +90,7 @@ private fun DialogLayout(
             value = name,
             onValueChange = { name = it },
             capitalization = KeyboardCapitalization.Sentences,
+            placeholder = stringResource(R.string.settings_edit_notification_name),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
@@ -97,6 +98,7 @@ private fun DialogLayout(
         AppTextField(
             value = if (days == null) "" else days.toString(),
             onValueChange = { days = if (it.isEmpty()) null else it.toInt() },
+            placeholder = stringResource(R.string.settings_edit_notification_days),
             type = KeyboardType.Number,
             modifier = Modifier
                 .fillMaxWidth()

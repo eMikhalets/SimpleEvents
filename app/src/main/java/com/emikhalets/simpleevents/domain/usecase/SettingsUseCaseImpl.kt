@@ -1,10 +1,10 @@
 package com.emikhalets.simpleevents.domain.usecase
 
 import android.net.Uri
-import com.emikhalets.simpleevents.data.repository.AppRepository
-import com.emikhalets.simpleevents.data.repository.DatabaseRepository
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.repository.AppRepository
+import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -27,6 +27,10 @@ class SettingsUseCaseImpl @Inject constructor(
 
     override suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean> {
         return appRepository.exportEvents(uri, events)
+    }
+
+    override suspend fun addNotification(notification: EventAlarm): Result<Long> {
+        return databaseRepo.insertEventAlarm(notification)
     }
 
     override suspend fun updateNotification(notification: EventAlarm): Result<Int> {

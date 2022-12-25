@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.domain.usecase
 
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.data.repository.DatabaseRepository
+import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
 class EditEventUseCaseImpl @Inject constructor(

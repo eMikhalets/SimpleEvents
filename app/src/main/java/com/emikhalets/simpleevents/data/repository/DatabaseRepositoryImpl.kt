@@ -4,6 +4,7 @@ import com.emikhalets.simpleevents.data.database.EventAlarmsDao
 import com.emikhalets.simpleevents.data.database.EventsDao
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -37,7 +38,15 @@ class DatabaseRepositoryImpl @Inject constructor(
     /** Notifications Global Dao */
 
     override suspend fun insertEventAlarm(entity: EventAlarm): Result<Long> {
-        return runCatching { eventAlarmsDao.insert(entity) }
+        return runCatching {
+            val isNameExist = eventAlarmsDao.isNotificationNameExist(entity.nameEn)
+            val isDaysExist = eventAlarmsDao.isNotificationDaysExist(entity.days)
+            if (isNameExist || isDaysExist) {
+                throw RuntimeException("This name or days already exists")
+            } else {
+                eventAlarmsDao.insert(entity)
+            }
+        }
     }
 
     override suspend fun insertEventAlarm(list: List<EventAlarm>): Result<List<Long>> {
@@ -45,7 +54,22 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateEventAlarm(entity: EventAlarm): Result<Int> {
-        return runCatching { eventAlarmsDao.update(entity) }
+        return runCatching {
+            var isNameExist = false
+            var isDaysExist = false
+            val oldNotification = eventAlarmsDao.getItem(entity.id)
+            if (entity.nameEn != oldNotification.nameEn) {
+                isNameExist = eventAlarmsDao.isNotificationNameExist(entity.nameEn)
+            }
+            if (entity.days != oldNotification.days) {
+                isDaysExist = eventAlarmsDao.isNotificationDaysExist(entity.days)
+            }
+            if (isNameExist || isDaysExist) {
+                throw RuntimeException("This name or days already exists")
+            } else {
+                eventAlarmsDao.update(entity)
+            }
+        }
     }
 
     override suspend fun deleteEventAlarm(entity: EventAlarm): Result<Int> {

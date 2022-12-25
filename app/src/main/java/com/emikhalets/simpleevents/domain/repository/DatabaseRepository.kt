@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.data.repository
+package com.emikhalets.simpleevents.domain.repository
 
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity

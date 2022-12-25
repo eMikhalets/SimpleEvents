@@ -11,6 +11,7 @@ interface SettingsUseCase {
     suspend fun getAllEvents(): Result<List<EventEntity>>
     suspend fun importEvents(uri: Uri): Result<List<EventEntity>>
     suspend fun exportEvents(uri: Uri, events: List<EventEntity>): Result<Boolean>
+    suspend fun addNotification(notification: EventAlarm): Result<Long>
     suspend fun updateNotification(notification: EventAlarm): Result<Int>
     suspend fun deleteNotification(notification: EventAlarm): Result<Int>
 }

@@ -93,11 +93,15 @@ class SettingsViewModel @Inject constructor(
 
     fun updateNotification(notification: EventAlarm) {
         launchIO {
-            useCase.updateNotification(notification)
-                .onFailure { error ->
-                    val uiError = UiString.Message(error.message)
-                    setState { it.copy(loading = false, error = uiError) }
-                }
+            val result = if (notification.id == 0L) {
+                useCase.addNotification(notification)
+            } else {
+                useCase.updateNotification(notification)
+            }
+            result.onFailure { error ->
+                val uiError = UiString.Message(error.message)
+                setState { it.copy(loading = false, error = uiError) }
+            }
         }
     }
 
