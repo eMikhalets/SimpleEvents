@@ -27,7 +27,7 @@ class App : Application() {
         if (!prefs.defaultEventAlarmsCreated) {
             CoroutineScope(Dispatchers.Default).launch {
                 try {
-                    val dao = AppDatabase.get(this@App).eventAlarmsDao
+                    val dao = AppDatabase.getInstance(this@App).alarmsDao
                     val alarms = listOf(
                         EventAlarm(getString(R.string.notifications_time_month), true, 30),
                         EventAlarm(getString(R.string.notifications_time_week), true, 7),

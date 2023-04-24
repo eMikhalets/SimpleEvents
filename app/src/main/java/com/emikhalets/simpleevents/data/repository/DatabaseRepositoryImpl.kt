@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.data.repository
 
-import com.emikhalets.simpleevents.data.database.EventAlarmsDao
-import com.emikhalets.simpleevents.data.database.EventsDao
+import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
+import com.emikhalets.simpleevents.data.database.dao.EventsDao
 import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
 import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val eventsDao: EventsDao,
-    private val eventAlarmsDao: EventAlarmsDao,
+    private val eventAlarmsDao: AlarmsDao,
 ) : DatabaseRepository {
 
     /** Events Dao */

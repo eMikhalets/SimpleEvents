@@ -14,8 +14,8 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         return try {
-            val database = AppDatabase.get(applicationContext)
-            val alarmsDao = database.eventAlarmsDao
+            val database = AppDatabase.getInstance(applicationContext)
+            val alarmsDao = database.alarmsDao
             val eventsDao = database.eventsDao
 
             val sourceEvents = eventsDao.getAllEntities()

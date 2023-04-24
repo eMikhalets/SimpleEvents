@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.data.database
+package com.emikhalets.simpleevents.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
