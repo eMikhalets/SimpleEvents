@@ -246,15 +246,15 @@ private fun Preview() {
     AppTheme {
         EventItemScreen(
             event = EventEntity(
+                id = 0,
                 name = "Test Full Name",
                 date = System.currentTimeMillis(),
                 eventType = EventType.BIRTHDAY,
                 note = "Some note text",
-                withoutYear = false
-            ).apply {
-                days = 6
+                withoutYear = false,
+                days = 6,
                 age = 42
-            },
+            ),
             onImageClick = {},
             onEditClick = {},
             onDeleteClick = {}

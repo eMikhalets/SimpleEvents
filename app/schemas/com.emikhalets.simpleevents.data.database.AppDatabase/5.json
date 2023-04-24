@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "a803d29ffe31b2a2deb3c9444bdc708e",
+    "identityHash": "b06e096a1b362db2298637d9965833b9",
     "entities": [
       {
         "tableName": "events",
@@ -56,7 +56,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "event_alarms",
+        "tableName": "alarms",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name_en` TEXT NOT NULL, `enabled` INTEGER NOT NULL, `days` INTEGER NOT NULL)",
         "fields": [
           {
@@ -97,7 +97,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a803d29ffe31b2a2deb3c9444bdc708e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b06e096a1b362db2298637d9965833b9')"
     ]
   }
 }

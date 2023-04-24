@@ -156,7 +156,7 @@ private fun DialogLayout(
 private fun Preview() {
     AppTheme {
         EditNotificationDialog(
-            notification = AlarmEntity("Notification name", 30),
+            notification = AlarmEntity(0, "Notification name", true, 30),
             onDismiss = {},
             onSaveClick = {},
             onDeleteClick = {}

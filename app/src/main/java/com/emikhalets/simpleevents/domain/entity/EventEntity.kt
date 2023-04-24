@@ -1,9 +1,7 @@
 package com.emikhalets.simpleevents.domain.entity
 
 import com.emikhalets.simpleevents.utils.enums.EventType
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class EventEntity(
     val id: Long,
     val date: Long,

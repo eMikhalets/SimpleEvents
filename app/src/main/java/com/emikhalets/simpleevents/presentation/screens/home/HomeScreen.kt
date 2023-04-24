@@ -235,61 +235,67 @@ private fun Preview() {
             eventsList = listOf(
                 HomeMonthHeader("Month header"),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 6
-                    age = 0
-                }),
+                    note = "Some note text",
+                    days = 6,
+                    age = 0,
+                    withoutYear = false
+                )),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 6
-                    age = 1
-                }),
+                    note = "Some note text",
+                    days = 6,
+                    age = 1,
+                    withoutYear = false
+                )),
                 HomeMonthHeader("Month header"),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 0
-                    age = 42
-                }),
+                    note = "Some note text",
+                    days = 0,
+                    age = 42,
+                    withoutYear = false
+                )),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 1
-                    age = 42
-                }),
+                    note = "Some note text",
+                    days = 1,
+                    age = 42,
+                    withoutYear = false
+                )),
                 HomeMonthHeader("Month header"),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 6
-                    age = 42
-                }),
+                    note = "Some note text",
+                    days = 6,
+                    age = 42,
+                    withoutYear = false
+                )),
                 HomeEventEntity(EventEntity(
+                    id = 0,
                     name = "Test Full Name",
                     date = LocalDate.of(2021, 1, 12).milliseconds,
                     eventType = EventType.BIRTHDAY,
-                    note = "Some note text"
-                ).apply {
-                    days = 6
-                    age = 42
-                })
+                    note = "Some note text",
+                    days = 6,
+                    age = 42,
+                    withoutYear = false
+                ))
             ),
             searchQuery = "Some query",
             onSearchQueryChange = {},

@@ -19,18 +19,18 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
             val eventsDao = database.eventsDao
 
             val sourceEvents = eventsDao.getAllEntities()
-                .map { it.calculateEventData() }
-                .sortedBy { it.days }
+//                .map { it.calculateEventData() }
+//                .sortedBy { it.days }
 
             val eventsList = mutableListOf<AlarmWithEventsEntity>()
 
             alarmsDao.getAll()
                 .filter { it.enabled }
                 .forEach { notification ->
-                    val list = sourceEvents.filter { it.days == notification.days }
-                    if (list.isNotEmpty()) {
-                        eventsList.add(AlarmWithEventsEntity(notification, list))
-                    }
+//                    val list = sourceEvents.filter { it.days == notification.days }
+//                    if (list.isNotEmpty()) {
+//                        eventsList.add(AlarmWithEventsEntity(notification, list))
+//                    }
                 }
 
             if (eventsList.isNotEmpty()) {

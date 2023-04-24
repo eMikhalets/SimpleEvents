@@ -120,7 +120,7 @@ fun SettingsScreen(
             toast(context, R.string.settings_alarms_restarted)
         },
         onAddNotificationClick = {
-            editNotification = AlarmEntity("", 0)
+            editNotification = AlarmEntity(0, "", false, 0)
         },
         onExportClick = { documentCreator.createFile() },
         onImportClick = { documentPicker.openFile() }
@@ -390,10 +390,10 @@ private fun Preview() {
             minute = 9,
             enabled = true,
             eventAlarms = listOf(
-                AlarmEntity("Event time", true, 12),
-                AlarmEntity("Event time", false, 56),
-                AlarmEntity("Event time", true, 0),
-                AlarmEntity("Event time Event time Event time", true, 780009),
+                AlarmEntity(0, "Event time", true, 12),
+                AlarmEntity(0, "Event time", false, 56),
+                AlarmEntity(0, "Event time", true, 0),
+                AlarmEntity(0, "Event time Event time Event time", true, 780009),
             ),
             alarmsEnabled = false,
             onTimeChange = { _, _ -> },
