@@ -10,13 +10,13 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
 import com.emikhalets.simpleevents.data.database.dao.EventsDao
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 @Database(
     entities = [
         EventEntity::class,
-        EventAlarm::class,
+        AlarmEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = Migration1To2::class),

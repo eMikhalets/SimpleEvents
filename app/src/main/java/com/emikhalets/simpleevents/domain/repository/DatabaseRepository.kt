@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.domain.repository
 
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseRepository {
@@ -16,9 +16,9 @@ interface DatabaseRepository {
 
     /** Event Alarms Dao */
 
-    suspend fun insertEventAlarm(entity: EventAlarm): Result<Long>
-    suspend fun insertEventAlarm(list: List<EventAlarm>): Result<List<Long>>
-    suspend fun updateEventAlarm(entity: EventAlarm): Result<Int>
-    suspend fun deleteEventAlarm(entity: EventAlarm): Result<Int>
-    suspend fun getAllEventsAlarm(): Result<Flow<List<EventAlarm>>>
+    suspend fun insertEventAlarm(entity: AlarmEntity): Result<Long>
+    suspend fun insertEventAlarm(list: List<AlarmEntity>): Result<List<Long>>
+    suspend fun updateEventAlarm(entity: AlarmEntity): Result<Int>
+    suspend fun deleteEventAlarm(entity: AlarmEntity): Result<Int>
+    suspend fun getAllEventsAlarm(): Result<Flow<List<AlarmEntity>>>
 }

@@ -5,32 +5,32 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
+import com.emikhalets.simpleevents.data.database.entity.AlarmDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlarmsDao {
 
     @Insert
-    suspend fun insert(entity: EventAlarm): Long
+    suspend fun insert(entity: AlarmDb): Long
 
     @Insert
-    suspend fun insert(list: List<EventAlarm>): List<Long>
+    suspend fun insert(list: List<AlarmDb>): List<Long>
 
     @Update
-    suspend fun update(entity: EventAlarm): Int
+    suspend fun update(entity: AlarmDb): Int
 
     @Delete
-    suspend fun delete(entity: EventAlarm): Int
+    suspend fun delete(entity: AlarmDb): Int
 
     @Query("SELECT * FROM alarms WHERE id = :id")
-    suspend fun getItem(id: Long): EventAlarm
+    suspend fun getItem(id: Long): AlarmDb
 
     @Query("SELECT * FROM alarms ORDER BY days ASC")
-    suspend fun getAll(): List<EventAlarm>
+    suspend fun getAll(): List<AlarmDb>
 
     @Query("SELECT * FROM alarms ORDER BY days ASC")
-    fun getAllFlow(): Flow<List<EventAlarm>>
+    fun getAllFlow(): Flow<List<AlarmDb>>
 
     @Query("SELECT EXISTS (SELECT * FROM alarms WHERE name_en = :name)")
     fun isNotificationNameExist(name: String): Boolean

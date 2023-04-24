@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
+import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.presentation.components.AppButton
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.AppTextField
@@ -36,10 +36,10 @@ import com.emikhalets.simpleevents.utils.extensions.toast
 
 @Composable
 fun EditNotificationDialog(
-    notification: EventAlarm,
+    notification: AlarmEntity,
     onDismiss: () -> Unit,
-    onSaveClick: (EventAlarm) -> Unit,
-    onDeleteClick: (EventAlarm) -> Unit,
+    onSaveClick: (AlarmEntity) -> Unit,
+    onDeleteClick: (AlarmEntity) -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -56,9 +56,9 @@ fun EditNotificationDialog(
 
 @Composable
 private fun DialogLayout(
-    notification: EventAlarm,
-    onSaveClick: (EventAlarm) -> Unit,
-    onDeleteClick: (EventAlarm) -> Unit,
+    notification: AlarmEntity,
+    onSaveClick: (AlarmEntity) -> Unit,
+    onDeleteClick: (AlarmEntity) -> Unit,
     onCancelClick: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -156,7 +156,7 @@ private fun DialogLayout(
 private fun Preview() {
     AppTheme {
         EditNotificationDialog(
-            notification = EventAlarm("Notification name", 30),
+            notification = AlarmEntity("Notification name", 30),
             onDismiss = {},
             onSaveClick = {},
             onDeleteClick = {}

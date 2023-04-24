@@ -5,31 +5,31 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.data.database.entity.EventDb
 
 @Dao
 interface EventsDao {
 
     @Insert
-    suspend fun insert(entity: EventEntity): Long
+    suspend fun insert(entity: EventDb): Long
 
     @Insert
-    suspend fun insert(entities: List<EventEntity>): List<Long>
+    suspend fun insert(entities: List<EventDb>): List<Long>
 
     @Update
-    suspend fun update(entity: EventEntity): Int
+    suspend fun update(entity: EventDb): Int
 
     @Update
-    suspend fun updateAll(entities: List<EventEntity>): Int
+    suspend fun updateAll(entities: List<EventDb>): Int
 
     @Delete
-    suspend fun delete(entity: EventEntity): Int
+    suspend fun delete(entity: EventDb): Int
 
     @Query("SELECT * FROM events")
-    suspend fun getAllEntities(): List<EventEntity>
+    suspend fun getAllEntities(): List<EventDb>
 
     @Query("SELECT * FROM events WHERE id = :id")
-    suspend fun getEntityById(id: Long): EventEntity
+    suspend fun getEntityById(id: Long): EventDb
 
     @Query("DELETE FROM events")
     suspend fun drop()

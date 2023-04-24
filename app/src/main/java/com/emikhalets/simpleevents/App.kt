@@ -2,7 +2,7 @@ package com.emikhalets.simpleevents
 
 import android.app.Application
 import com.emikhalets.simpleevents.data.database.AppDatabase
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
+import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.utils.AppNotificationManager
 import com.emikhalets.simpleevents.utils.Prefs
 import dagger.hilt.android.HiltAndroidApp
@@ -29,11 +29,11 @@ class App : Application() {
                 try {
                     val dao = AppDatabase.getInstance(this@App).alarmsDao
                     val alarms = listOf(
-                        EventAlarm(getString(R.string.notifications_time_month), true, 30),
-                        EventAlarm(getString(R.string.notifications_time_week), true, 7),
-                        EventAlarm(getString(R.string.notifications_time_two_days), true, 2),
-                        EventAlarm(getString(R.string.notifications_time_day), true, 1),
-                        EventAlarm(getString(R.string.notifications_time_today), true, 0),
+                        AlarmEntity(getString(R.string.notifications_time_month), true, 30),
+                        AlarmEntity(getString(R.string.notifications_time_week), true, 7),
+                        AlarmEntity(getString(R.string.notifications_time_two_days), true, 2),
+                        AlarmEntity(getString(R.string.notifications_time_day), true, 1),
+                        AlarmEntity(getString(R.string.notifications_time_today), true, 0),
                     )
                     dao.drop()
                     dao.insert(alarms)
