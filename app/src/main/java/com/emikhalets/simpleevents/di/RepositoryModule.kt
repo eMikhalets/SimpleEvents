@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.utils.di
+package com.emikhalets.simpleevents.di
 
 import com.emikhalets.simpleevents.domain.repository.AppRepository
 import com.emikhalets.simpleevents.data.repository.AppRepositoryImpl

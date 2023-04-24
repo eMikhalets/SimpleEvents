@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.utils.di
+package com.emikhalets.simpleevents.di
 
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
 import com.emikhalets.simpleevents.domain.usecase.AddEventUseCaseImpl

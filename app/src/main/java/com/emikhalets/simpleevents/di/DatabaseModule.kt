@@ -1,4 +1,4 @@
-package com.emikhalets.simpleevents.utils.di
+package com.emikhalets.simpleevents.di
 
 import android.content.Context
 import com.emikhalets.simpleevents.data.database.AppDatabase
