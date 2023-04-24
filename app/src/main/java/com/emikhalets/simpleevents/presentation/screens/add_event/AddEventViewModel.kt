@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.add_event
 
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.AddEventUseCase
+import com.emikhalets.simpleevents.domain.usecase.events.AddEventUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.enums.EventType
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEventViewModel @Inject constructor(
-    private val userCase: AddEventUseCase,
+    private val addEventUseCase: AddEventUseCase,
 ) : BaseViewModel<AddEventState>() {
 
     override fun createInitialState(): AddEventState = AddEventState()
@@ -25,9 +25,21 @@ class AddEventViewModel @Inject constructor(
     ) {
         launchIO {
             setState { it.copy(loading = true) }
-            userCase.saveEvent(EventEntity(date, name, type, withoutYear))
+            val entity = EventEntity(
+                id = 0,
+                date = date,
+                name = name,
+                eventType = type,
+                note = "",
+                withoutYear = withoutYear,
+                days = 0,
+                age = 0,
+            )
+            addEventUseCase(entity)
                 .onSuccess { result ->
-                    setState { it.copy(loading = false, savedId = result) }
+                    if (result is Long) {
+                        setState { it.copy(loading = false, savedId = result) }
+                    }
                 }
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)

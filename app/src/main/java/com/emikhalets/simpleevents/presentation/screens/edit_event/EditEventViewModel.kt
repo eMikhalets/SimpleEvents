@@ -1,7 +1,8 @@
 package com.emikhalets.simpleevents.presentation.screens.edit_event
 
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.EditEventUseCase
+import com.emikhalets.simpleevents.domain.usecase.events.AddEventUseCase
+import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditEventViewModel @Inject constructor(
-    private val useCase: EditEventUseCase,
+    private val getEventsUseCase: GetEventsUseCase,
+    private val addEventUseCase: AddEventUseCase,
 ) : BaseViewModel<EditEventState>() {
 
     override fun createInitialState(): EditEventState = EditEventState()
@@ -21,7 +23,7 @@ class EditEventViewModel @Inject constructor(
     fun loadEvent(id: Long) {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.loadEvent(id)
+            getEventsUseCase(id)
                 .onSuccess { result ->
                     val event = result.calculateEventData()
                     setState { it.copy(loading = false, event = event) }
@@ -36,7 +38,7 @@ class EditEventViewModel @Inject constructor(
     fun updateEvent(event: EventEntity) {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.updateEvent(event)
+            addEventUseCase(event)
                 .onSuccess {
                     setState { it.copy(loading = false, updated = true) }
                 }
