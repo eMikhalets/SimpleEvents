@@ -8,13 +8,15 @@ import androidx.room.DeleteTable
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
+import com.emikhalets.simpleevents.data.database.dao.EventsDao
+import com.emikhalets.simpleevents.data.database.entity.AlarmDb
+import com.emikhalets.simpleevents.data.database.entity.EventDb
 
 @Database(
     entities = [
-        EventEntity::class,
-        EventAlarm::class,
+        EventDb::class,
+        AlarmDb::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = Migration1To2::class),
@@ -28,10 +30,22 @@ import com.emikhalets.simpleevents.domain.entity.database.EventEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val eventsDao: EventsDao
-    abstract val eventAlarmsDao: EventAlarmsDao
+    abstract val alarmsDao: AlarmsDao
 
     companion object {
-        fun get(context: Context): AppDatabase {
+
+        @Volatile
+        private var instance: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also {
+                    instance = it
+                }
+            }
+        }
+
+        private fun buildDatabase(context: Context): AppDatabase {
             return Room
                 .databaseBuilder(context, AppDatabase::class.java, "SimpleEvents")
                 .build()

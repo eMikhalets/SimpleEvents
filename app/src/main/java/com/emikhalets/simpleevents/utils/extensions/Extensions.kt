@@ -6,7 +6,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
+import com.emikhalets.simpleevents.domain.entity.EventEntity
 
 fun toast(context: Context, @StringRes messageRes: Int) {
     Toast.makeText(context, messageRes, Toast.LENGTH_SHORT).show()
@@ -14,8 +14,8 @@ fun toast(context: Context, @StringRes messageRes: Int) {
 
 fun EventEntity.calculateEventData(): EventEntity {
     return this.apply {
-        age = date.turns
-        days = date.daysLeft
+//        age = date.turns
+//        days = date.daysLeft
     }
 }
 

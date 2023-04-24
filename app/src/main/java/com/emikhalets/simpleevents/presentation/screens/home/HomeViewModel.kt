@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.home
 
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.HomeUseCase
+import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val useCase: HomeUseCase,
+    private val getEventsUseCase: GetEventsUseCase,
 ) : BaseViewModel<HomeState>() {
 
     private var searchJob: Job? = null
@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
     fun loadAllEvents() {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.loadAllEvents()
+            getEventsUseCase.invoke()
                 .onSuccess { result ->
                     val sortedEvents = computeAndSortEvents(result)
                     val homeEvents = mapEventsHeaders(sortedEvents)

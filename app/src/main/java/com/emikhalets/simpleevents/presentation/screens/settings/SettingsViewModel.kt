@@ -2,8 +2,13 @@ package com.emikhalets.simpleevents.presentation.screens.settings
 
 import android.net.Uri
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.database.EventAlarm
-import com.emikhalets.simpleevents.domain.usecase.SettingsUseCase
+import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.domain.usecase.alarms.AddAlarmUseCase
+import com.emikhalets.simpleevents.domain.usecase.alarms.DeleteAlarmUseCase
+import com.emikhalets.simpleevents.domain.usecase.alarms.GetAlarmsUseCase
+import com.emikhalets.simpleevents.domain.usecase.backups.ExportEventsUseCase
+import com.emikhalets.simpleevents.domain.usecase.backups.ImportEventsUseCase
+import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val useCase: SettingsUseCase,
+    private val getAlarmsUseCase: GetAlarmsUseCase,
+    private val addAlarmsUseCase: AddAlarmUseCase,
+    private val deleteAlarmUseCase: DeleteAlarmUseCase,
+    private val importEventsUseCase: ImportEventsUseCase,
+    private val exportEventsUseCase: ExportEventsUseCase,
+    private val getEventsUseCase: GetEventsUseCase,
 ) : BaseViewModel<SettingsState>() {
 
     override fun createInitialState(): SettingsState = SettingsState()
@@ -24,7 +34,7 @@ class SettingsViewModel @Inject constructor(
     fun loadAllNotificationsGlobal() {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.loadEventsAlarm()
+            getAlarmsUseCase()
                 .onSuccess { result ->
                     result.collectLatest { list ->
                         setState { it.copy(loading = false, eventAlarms = list) }
@@ -37,10 +47,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateNotificationGlobal(notification: EventAlarm, enabled: Boolean) {
+    fun updateNotificationGlobal(notification: AlarmEntity, enabled: Boolean) {
         launchIO {
             val entity = notification.copy(enabled = enabled)
-            useCase.updateNotification(entity)
+            addAlarmsUseCase(entity)
                 .onSuccess {
                     loadAllNotificationsGlobal()
                 }
@@ -53,7 +63,7 @@ class SettingsViewModel @Inject constructor(
 
     fun importEvents(uri: Uri) {
         launchIO {
-            useCase.importEvents(uri)
+            importEventsUseCase(uri)
                 .onSuccess { result ->
                     setState {
                         if (result.isEmpty()) {
@@ -73,9 +83,9 @@ class SettingsViewModel @Inject constructor(
 
     fun exportEvents(uri: Uri) {
         launchIO {
-            useCase.getAllEvents()
+            getEventsUseCase()
                 .onSuccess { eventsResult ->
-                    useCase.exportEvents(uri, eventsResult)
+                    exportEventsUseCase(uri, eventsResult)
                         .onSuccess {
                             setState { it.copy(exported = true) }
                         }
@@ -91,23 +101,19 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateNotification(notification: EventAlarm) {
+    fun updateNotification(notification: AlarmEntity) {
         launchIO {
-            val result = if (notification.id == 0L) {
-                useCase.addNotification(notification)
-            } else {
-                useCase.updateNotification(notification)
-            }
-            result.onFailure { error ->
-                val uiError = UiString.Message(error.message)
-                setState { it.copy(loading = false, error = uiError) }
-            }
+            addAlarmsUseCase(notification)
+                .onFailure { error ->
+                    val uiError = UiString.Message(error.message)
+                    setState { it.copy(loading = false, error = uiError) }
+                }
         }
     }
 
-    fun deleteNotification(notification: EventAlarm) {
+    fun deleteNotification(notification: AlarmEntity) {
         launchIO {
-            useCase.deleteNotification(notification)
+            deleteAlarmUseCase(notification)
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)
                     setState { it.copy(loading = false, error = uiError) }

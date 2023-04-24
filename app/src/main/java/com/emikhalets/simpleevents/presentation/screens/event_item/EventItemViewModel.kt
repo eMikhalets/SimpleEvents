@@ -1,7 +1,8 @@
 package com.emikhalets.simpleevents.presentation.screens.event_item
 
-import com.emikhalets.simpleevents.domain.entity.database.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.EventItemUseCase
+import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.usecase.events.DeleteEventUseCase
+import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EventItemViewModel @Inject constructor(
-    private val useCase: EventItemUseCase,
+    private val getEventsUseCase: GetEventsUseCase,
+    private val deleteEventUseCase: DeleteEventUseCase,
 ) : BaseViewModel<EventItemState>() {
 
     override fun createInitialState(): EventItemState = EventItemState()
@@ -20,7 +22,7 @@ class EventItemViewModel @Inject constructor(
     fun loadEvent(id: Long) {
         launchIO {
             setState { it.copy(loading = true) }
-            useCase.loadEvent(id)
+            getEventsUseCase(id)
                 .onSuccess { result ->
                     val event = result.calculateEventData()
                     setState { it.copy(loading = false, event = event) }
@@ -39,7 +41,7 @@ class EventItemViewModel @Inject constructor(
         }
 
         launchIO {
-            useCase.deleteEvent(entity)
+            deleteEventUseCase(entity)
                 .onSuccess {
                     setState { it.copy(deleted = true) }
                 }
