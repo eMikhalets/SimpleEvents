@@ -39,10 +39,11 @@ class DatabaseRepositoryImpl @Inject constructor(
         }.onFailure { it.printStackTrace() }
     }
 
-    override suspend fun getAllEvents(): Result<List<EventEntity>> {
+    override suspend fun getAllEvents(): Result<Flow<List<EventEntity>>> {
         return runCatching {
-            val dbList = eventsDao.getAllEntities()
-            EventMapper.mapDbListToList(dbList)
+            eventsDao.getAllEntities().map {
+                EventMapper.mapDbListToList(it)
+            }
         }.onFailure { it.printStackTrace() }
     }
 

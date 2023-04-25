@@ -72,7 +72,7 @@ fun SettingsScreen(
 
     LaunchedEffect(state.error) {
         if (state.error != null) {
-            errorMessage = state.error!!.asString(context)
+            errorMessage = state.error!!.asString()
             viewModel.resetError()
         }
     }
