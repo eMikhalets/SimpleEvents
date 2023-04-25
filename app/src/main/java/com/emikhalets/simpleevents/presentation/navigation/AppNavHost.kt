@@ -19,6 +19,7 @@ import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListVi
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsScreen
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsViewModel
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
+import com.emikhalets.simpleevents.presentation.screens.settings.SettingsViewModel
 
 private const val ARGS_EVENT_ID = "event_id"
 
@@ -60,8 +61,11 @@ fun AppNavHost(navController: NavHostController) {
         }
 
         composable(AppScreen.Settings.route) {
+            val viewModel: SettingsViewModel = hiltViewModel()
+            val state by viewModel.state.collectAsState()
             SettingsScreen(
-                viewModel = hiltViewModel(),
+                state = state,
+                onAction = viewModel::setAction,
             )
         }
 

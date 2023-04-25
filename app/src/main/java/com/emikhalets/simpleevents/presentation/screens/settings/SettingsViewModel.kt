@@ -24,11 +24,11 @@ class SettingsViewModel @Inject constructor(
     private val importEventsUseCase: ImportEventsUseCase,
     private val exportEventsUseCase: ExportEventsUseCase,
     private val getEventsUseCase: GetEventsUseCase,
-) : BaseViewModel<SettingsState, EventsListAction>() {
+) : BaseViewModel<SettingsState, SettingsAction>() {
 
     override fun createInitialState(): SettingsState = SettingsState()
 
-    override fun handleEvent(action: EventsListAction) {
+    override fun handleEvent(action: SettingsAction) {
     }
 
     fun resetError() = setState { it.copy(error = null) }

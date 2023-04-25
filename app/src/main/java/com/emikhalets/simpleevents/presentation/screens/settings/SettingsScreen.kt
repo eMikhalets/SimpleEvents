@@ -13,7 +13,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,11 +49,11 @@ import com.emikhalets.simpleevents.utils.openFile
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
+    state: SettingsState,
+    onAction: (SettingsAction) -> Unit,
 ) {
     val context = LocalContext.current
     val prefs = Prefs(context)
-    val state by viewModel.state.collectAsState()
 
     var hourInit by remember { mutableStateOf(prefs.eventAlarmHour) }
     var minuteInit by remember { mutableStateOf(prefs.eventAlarmMinute) }
@@ -63,31 +62,31 @@ fun SettingsScreen(
     var errorMessage by remember { mutableStateOf("") }
     var editNotification by remember { mutableStateOf<AlarmEntity?>(null) }
 
-    val documentCreator = documentCreator { uri -> viewModel.exportEvents(uri) }
-    val documentPicker = documentPicker { uri -> viewModel.importEvents(uri) }
+    val documentCreator = documentCreator { uri -> onAction(SettingsAction.ExportClick(uri)) }
+    val documentPicker = documentPicker { uri -> onAction(SettingsAction.ImportClick(uri)) }
 
     LaunchedEffect(Unit) {
-        viewModel.loadAllNotificationsGlobal()
+        onAction(SettingsAction.GetAlarms)
     }
 
     LaunchedEffect(state.error) {
         if (state.error != null) {
-            errorMessage = state.error!!.asString()
-            viewModel.resetError()
+            errorMessage = state.error.asString()
+            onAction(SettingsAction.ApplyError)
         }
     }
 
     LaunchedEffect(state.imported) {
         if (state.imported) {
             toast(context, R.string.settings_backup_imported_success)
-            viewModel.resetImported()
+            onAction(SettingsAction.ApplyImported)
         }
     }
 
     LaunchedEffect(state.exported) {
         if (state.exported) {
             toast(context, R.string.settings_backup_exported_success)
-            viewModel.resetExported()
+            onAction(SettingsAction.ApplyExported)
         }
     }
 
@@ -104,7 +103,7 @@ fun SettingsScreen(
             minuteInit = minute
         },
         onSwitchNotification = { notification, enabled ->
-            viewModel.updateNotificationGlobal(notification, enabled)
+            onAction(SettingsAction.SwitchAlarm(notification, enabled))
         },
         onSwitchAllNotification = { enabled ->
             AppAlarmManager.cancelAlarm(context)
@@ -131,11 +130,11 @@ fun SettingsScreen(
             notification = editNotification!!,
             onDismiss = { editNotification = null },
             onSaveClick = {
-                viewModel.updateNotification(it)
+                onAction(SettingsAction.UpdateAlarm(it))
                 editNotification = null
             },
             onDeleteClick = {
-                viewModel.deleteNotification(it)
+                onAction(SettingsAction.DeleteAlarm(it))
                 editNotification = null
             }
         )
