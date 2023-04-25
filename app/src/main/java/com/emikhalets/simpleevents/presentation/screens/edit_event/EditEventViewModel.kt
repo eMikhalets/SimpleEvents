@@ -3,6 +3,7 @@ package com.emikhalets.simpleevents.presentation.screens.edit_event
 import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.events.AddEventUseCase
 import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
@@ -13,9 +14,12 @@ import javax.inject.Inject
 class EditEventViewModel @Inject constructor(
     private val getEventsUseCase: GetEventsUseCase,
     private val addEventUseCase: AddEventUseCase,
-) : BaseViewModel<EditEventState>() {
+) : BaseViewModel<EditEventState, EventsListAction>() {
 
     override fun createInitialState(): EditEventState = EditEventState()
+
+    override fun handleEvent(action: EventsListAction) {
+    }
 
     fun resetError() = setState { it.copy(error = null) }
     fun resetUpdated() = setState { it.copy(updated = false) }

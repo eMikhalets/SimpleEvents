@@ -9,6 +9,7 @@ import com.emikhalets.simpleevents.domain.usecase.alarms.GetAlarmsUseCase
 import com.emikhalets.simpleevents.domain.usecase.backups.ExportEventsUseCase
 import com.emikhalets.simpleevents.domain.usecase.backups.ImportEventsUseCase
 import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +24,12 @@ class SettingsViewModel @Inject constructor(
     private val importEventsUseCase: ImportEventsUseCase,
     private val exportEventsUseCase: ExportEventsUseCase,
     private val getEventsUseCase: GetEventsUseCase,
-) : BaseViewModel<SettingsState>() {
+) : BaseViewModel<SettingsState, SettingsAction>() {
 
     override fun createInitialState(): SettingsState = SettingsState()
+
+    override fun handleEvent(action: SettingsAction) {
+    }
 
     fun resetError() = setState { it.copy(error = null) }
     fun resetImported() = setState { it.copy(imported = false) }
@@ -85,14 +89,14 @@ class SettingsViewModel @Inject constructor(
         launchIO {
             getEventsUseCase()
                 .onSuccess { eventsResult ->
-                    exportEventsUseCase(uri, eventsResult)
-                        .onSuccess {
-                            setState { it.copy(exported = true) }
-                        }
-                        .onFailure { error ->
-                            val uiError = UiString.Message(error.message)
-                            setState { it.copy(loading = false, error = uiError) }
-                        }
+//                    exportEventsUseCase(uri, eventsResult)
+//                        .onSuccess {
+//                            setState { it.copy(exported = true) }
+//                        }
+//                        .onFailure { error ->
+//                            val uiError = UiString.Message(error.message)
+//                            setState { it.copy(loading = false, error = uiError) }
+//                        }
                 }
                 .onFailure { error ->
                     val uiError = UiString.Message(error.message)

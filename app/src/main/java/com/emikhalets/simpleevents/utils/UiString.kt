@@ -1,9 +1,7 @@
 package com.emikhalets.simpleevents.utils
 
-import android.content.Context
+import android.content.res.Resources
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.emikhalets.simpleevents.R
 
 sealed class UiString {
@@ -17,15 +15,9 @@ sealed class UiString {
         vararg val args: Any,
     ) : UiString()
 
-    @Composable
     fun asString(): String = when (this) {
-        is Message -> value ?: stringResource(R.string.error_internal)
-        is Resource -> stringResource(resId, *args)
-    }
-
-    fun asString(context: Context): String = when (this) {
-        is Message -> value ?: context.getString(R.string.error_internal)
-        is Resource -> context.getString(resId, *args)
+        is Message -> value ?: Resources.getSystem().getString(R.string.error_internal)
+        is Resource -> Resources.getSystem().getString(resId, *args)
     }
 
     companion object {

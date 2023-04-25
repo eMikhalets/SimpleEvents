@@ -2,6 +2,8 @@ package com.emikhalets.simpleevents.data.mapper
 
 import com.emikhalets.simpleevents.data.database.entity.EventDb
 import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.utils.extensions.daysLeft
+import com.emikhalets.simpleevents.utils.extensions.turns
 
 object EventMapper {
 
@@ -12,8 +14,8 @@ object EventMapper {
         eventType = entity.eventType,
         note = entity.note,
         withoutYear = entity.withoutYear,
-        days = 0,
-        age = 0
+        days = entity.date.daysLeft,
+        age = entity.date.turns
     )
 
     fun mapEntityToDb(entity: EventEntity): EventDb = EventDb(

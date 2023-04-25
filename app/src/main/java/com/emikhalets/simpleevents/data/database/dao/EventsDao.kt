@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.emikhalets.simpleevents.data.database.entity.EventDb
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EventsDao {
@@ -26,7 +27,7 @@ interface EventsDao {
     suspend fun delete(entity: EventDb): Int
 
     @Query("SELECT * FROM events")
-    suspend fun getAllEntities(): List<EventDb>
+    fun getAllEntities(): Flow<List<EventDb>>
 
     @Query("SELECT * FROM events WHERE id = :id")
     suspend fun getEntityById(id: Long): EventDb

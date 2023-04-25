@@ -11,7 +11,7 @@ interface DatabaseRepository {
     suspend fun insertEvent(entity: EventEntity): Result<Long>
     suspend fun updateEvent(entity: EventEntity): Result<Int>
     suspend fun deleteEvent(entity: EventEntity): Result<Int>
-    suspend fun getAllEvents(): Result<List<EventEntity>>
+    suspend fun getAllEvents(): Result<Flow<List<EventEntity>>>
     suspend fun getEntityById(eventId: Long): Result<EventEntity>
 
     /** Event Alarms Dao */
