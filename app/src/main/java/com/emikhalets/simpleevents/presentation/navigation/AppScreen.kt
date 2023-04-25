@@ -13,9 +13,9 @@ sealed class AppScreen(val route: String, @DrawableRes val iconRes: Int) {
 
     object Settings : AppScreen("settings", R.drawable.ic_baseline_settings_24)
 
-    object AddEvent : AppScreen("add_event", R.drawable.ic_round_add_circle_24_white)
-
     object Event : AppScreen("event", 0)
+
+    object AddEvent : AppScreen("add_event", R.drawable.ic_round_add_circle_24_white)
 
     object EditEvent : AppScreen("edit_event", 0)
 }

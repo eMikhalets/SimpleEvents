@@ -40,7 +40,15 @@ fun AppScaffold(
 private fun AppBottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val screens = remember { listOf(AppScreen.EventsList, AppScreen.AddEvent, AppScreen.Settings) }
+
+    val screens = remember {
+        listOf(
+            AppScreen.EventsList,
+            AppScreen.EventsCalendar,
+            AppScreen.Groups,
+            AppScreen.Settings
+        )
+    }
 
     BottomNavigation {
         screens.forEach { screen ->
