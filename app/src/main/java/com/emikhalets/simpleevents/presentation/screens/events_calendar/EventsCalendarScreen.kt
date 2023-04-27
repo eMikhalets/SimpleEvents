@@ -48,7 +48,7 @@ import kotlin.math.ceil
 fun EventsCalendarScreen(
     state: EventsCalendarState,
     onAction: (EventsCalendarAction) -> Unit,
-    onEventClick: (Long) -> Unit,
+    onMonthClick: (Month) -> Unit,
 ) {
     var year by remember { mutableStateOf(LocalDate.now().year) }
     var errorMessage by remember { mutableStateOf("") }
@@ -72,7 +72,7 @@ fun EventsCalendarScreen(
             year += if (increase) 1 else -1
             // TODO: load event for year
         },
-        onEventClick = onEventClick
+        onMonthClick = onMonthClick
     )
 
     if (errorMessage.isNotEmpty()) {
@@ -88,7 +88,7 @@ private fun ScreenContent(
     state: EventsCalendarState,
     year: Int,
     onYearChange: (Boolean) -> Unit,
-    onEventClick: (Long) -> Unit,
+    onMonthClick: (Month) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         YearSwitcher(
@@ -99,7 +99,7 @@ private fun ScreenContent(
         CalendarBox(
             timestamp = LocalDate.now().milliseconds,
             eventsList = state.eventsList,
-            onEventClick = onEventClick
+            onMonthClick = onMonthClick
         )
     }
 }
@@ -140,21 +140,21 @@ private fun YearSwitcher(
 private fun CalendarBox(
     eventsList: List<EventEntity>,
     timestamp: Long,
-    onEventClick: (Long) -> Unit,
+    onMonthClick: (Month) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier.fillMaxWidth()
     ) {
-        repeat(12) {
+        repeat(12) { month ->
             item {
                 MonthBox(
-                    month = timestamp.localDate.withMonth(it + 1).month,
+                    month = timestamp.localDate.withMonth(month + 1).month,
                     year = timestamp.localDate.year,
                     isLeapYear = timestamp.localDate.isLeapYear,
-                    eventsList = eventsList,
-                    onEventClick = onEventClick,
+                    eventsList = eventsList.filter { it.date.localDate.monthValue == month + 1 },
+                    onMonthClick = onMonthClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(4.dp)
@@ -170,10 +170,12 @@ private fun MonthBox(
     year: Int,
     isLeapYear: Boolean,
     eventsList: List<EventEntity>,
-    onEventClick: (Long) -> Unit,
+    onMonthClick: (Month) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.clickable { onMonthClick(month) }
+    ) {
         MonthHeader(
             month = month
         )
@@ -240,7 +242,9 @@ private fun MonthDays(
                     } else {
                         MonthDay(
                             day = dayOfMonth,
-                            event = null
+                            eventsList = eventsList.filter {
+                                it.date.localDate.dayOfMonth == dayOfMonth
+                            }
                         )
                     }
                 }
@@ -252,20 +256,20 @@ private fun MonthDays(
 @Composable
 private fun MonthDay(
     day: Int,
-    event: EventEntity?,
+    eventsList: List<EventEntity>,
     modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .padding(2.dp)
-            .background(color = if (event != null) MaterialTheme.colors.primary else Color.Transparent)
+            .background(color = if (eventsList.isNotEmpty()) MaterialTheme.colors.primary else Color.Transparent)
     ) {
         Text(
             text = day.toString(),
             fontSize = 10.sp,
             textAlign = TextAlign.Center,
-            color = if (event != null) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+            color = if (eventsList.isNotEmpty()) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
         )
     }
 }
@@ -278,7 +282,7 @@ private fun Preview() {
             state = EventsCalendarState(),
             year = 2023,
             onYearChange = {},
-            onEventClick = {}
+            onMonthClick = {}
         )
     }
 }
