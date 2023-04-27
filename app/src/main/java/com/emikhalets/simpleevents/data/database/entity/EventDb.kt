@@ -16,4 +16,5 @@ data class EventDb(
     @ColumnInfo(name = "eventType") val eventType: EventType,
     @ColumnInfo(name = "note") val note: String = "",
     @ColumnInfo(name = "without_year", defaultValue = "false") val withoutYear: Boolean = false,
+    @ColumnInfo(name = "group_id", defaultValue = "false") val groupId: Long = 0L,
 )

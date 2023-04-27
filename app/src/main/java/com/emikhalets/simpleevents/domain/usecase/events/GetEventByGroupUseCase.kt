@@ -1,13 +1,12 @@
 package com.emikhalets.simpleevents.domain.usecase.events
 
+import com.emikhalets.simpleevents.domain.entity.GroupEntity
 import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
 import javax.inject.Inject
 
-class GetEventsUseCase @Inject constructor(
+class GetEventByGroupUseCase @Inject constructor(
     private val databaseRepo: DatabaseRepository,
 ) {
 
-    suspend operator fun invoke() = databaseRepo.getAllEvents()
-
-    suspend operator fun invoke(id: Long) = databaseRepo.getEventById(id)
+    suspend operator fun invoke(entity: GroupEntity) = databaseRepo.getEventsByGroup(entity)
 }

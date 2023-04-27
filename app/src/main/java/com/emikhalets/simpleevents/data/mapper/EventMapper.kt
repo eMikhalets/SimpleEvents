@@ -14,6 +14,7 @@ object EventMapper {
         eventType = entity.eventType,
         note = entity.note,
         withoutYear = entity.withoutYear,
+        groupId = entity.groupId,
         days = entity.date.daysLeft,
         age = entity.date.turns
     )
@@ -24,7 +25,8 @@ object EventMapper {
         name = entity.name,
         eventType = entity.eventType,
         note = entity.note,
-        withoutYear = entity.withoutYear
+        withoutYear = entity.withoutYear,
+        groupId = entity.groupId
     )
 
     fun mapDbListToList(list: List<EventDb>): List<EventEntity> = list.map {

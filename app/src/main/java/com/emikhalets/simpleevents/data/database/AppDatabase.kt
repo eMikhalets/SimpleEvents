@@ -10,13 +10,16 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
 import com.emikhalets.simpleevents.data.database.dao.EventsDao
+import com.emikhalets.simpleevents.data.database.dao.GroupsDao
 import com.emikhalets.simpleevents.data.database.entity.AlarmDb
 import com.emikhalets.simpleevents.data.database.entity.EventDb
+import com.emikhalets.simpleevents.data.database.entity.GroupDb
 
 @Database(
     entities = [
         EventDb::class,
         AlarmDb::class,
+        GroupDb::class,
     ],
     autoMigrations = [
         AutoMigration(from = 1, to = 2, spec = Migration1To2::class),
@@ -24,13 +27,14 @@ import com.emikhalets.simpleevents.data.database.entity.EventDb
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 4, to = 5, spec = Migration4To5::class)
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val eventsDao: EventsDao
     abstract val alarmsDao: AlarmsDao
+    abstract val groupsDao: GroupsDao
 
     companion object {
 

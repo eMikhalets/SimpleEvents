@@ -2,10 +2,13 @@ package com.emikhalets.simpleevents.data.repository
 
 import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
 import com.emikhalets.simpleevents.data.database.dao.EventsDao
+import com.emikhalets.simpleevents.data.database.dao.GroupsDao
 import com.emikhalets.simpleevents.data.mapper.AlarmMapper
 import com.emikhalets.simpleevents.data.mapper.EventMapper
+import com.emikhalets.simpleevents.data.mapper.GroupMapper
 import com.emikhalets.simpleevents.domain.entity.AlarmEntity
 import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.entity.GroupEntity
 import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,6 +17,7 @@ import javax.inject.Inject
 class DatabaseRepositoryImpl @Inject constructor(
     private val eventsDao: EventsDao,
     private val eventAlarmsDao: AlarmsDao,
+    private val groupsDao: GroupsDao,
 ) : DatabaseRepository {
 
     /** Events Dao */
@@ -47,10 +51,18 @@ class DatabaseRepositoryImpl @Inject constructor(
         }.onFailure { it.printStackTrace() }
     }
 
-    override suspend fun getEntityById(eventId: Long): Result<EventEntity> {
+    override suspend fun getEventById(eventId: Long): Result<EventEntity> {
         return runCatching {
             val dbEntity = eventsDao.getEntityById(eventId)
             EventMapper.mapDbToEntity(dbEntity)
+        }.onFailure { it.printStackTrace() }
+    }
+
+    override suspend fun getEventsByGroup(entity: GroupEntity): Result<Flow<List<EventEntity>>> {
+        return runCatching {
+            eventsDao.getAllByGroupId(entity.id).map {
+                EventMapper.mapDbListToList(it)
+            }
         }.onFailure { it.printStackTrace() }
     }
 
@@ -107,6 +119,45 @@ class DatabaseRepositoryImpl @Inject constructor(
         return runCatching {
             eventAlarmsDao.getAllFlow().map {
                 AlarmMapper.mapDbListToList(it)
+            }
+        }.onFailure { it.printStackTrace() }
+    }
+
+    /** Groups Dao */
+
+    override suspend fun insertGroup(entity: GroupEntity): Result<Long> {
+        return runCatching {
+            val dbEntity = GroupMapper.mapEntityToDb(entity)
+            groupsDao.insert(dbEntity)
+        }.onFailure { it.printStackTrace() }
+    }
+
+    override suspend fun updateGroup(entity: GroupEntity): Result<Int> {
+        return runCatching {
+            val dbEntity = GroupMapper.mapEntityToDb(entity)
+            groupsDao.update(dbEntity)
+        }.onFailure { it.printStackTrace() }
+    }
+
+    override suspend fun deleteGroup(entity: GroupEntity): Result<Int> {
+        return runCatching {
+            val dbEntity = GroupMapper.mapEntityToDb(entity)
+            groupsDao.delete(dbEntity)
+        }.onFailure { it.printStackTrace() }
+    }
+
+    override suspend fun getAllGroups(): Result<Flow<List<GroupEntity>>> {
+        return runCatching {
+            groupsDao.getAllEntities().map {
+                GroupMapper.mapDbListToList(it)
+            }
+        }.onFailure { it.printStackTrace() }
+    }
+
+    override suspend fun getGroupById(id: Long): Result<Flow<GroupEntity>> {
+        return runCatching {
+            groupsDao.getEntityByIdFlow(id).map {
+                GroupMapper.mapDbToEntity(it)
             }
         }.onFailure { it.printStackTrace() }
     }

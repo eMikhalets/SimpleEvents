@@ -9,6 +9,7 @@ data class EventEntity(
     val eventType: EventType,
     val note: String,
     val withoutYear: Boolean,
+    val groupId: Long,
     val days: Int,
     val age: Int,
 )
