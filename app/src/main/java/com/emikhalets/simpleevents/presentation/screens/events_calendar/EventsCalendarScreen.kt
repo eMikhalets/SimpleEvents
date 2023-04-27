@@ -279,7 +279,9 @@ private fun MonthDay(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            state = EventsCalendarState(),
+            state = EventsCalendarState(
+                eventsList = emptyList()
+            ),
             year = 2023,
             onYearChange = {},
             onMonthClick = {}
