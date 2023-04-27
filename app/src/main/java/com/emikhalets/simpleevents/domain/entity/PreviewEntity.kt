@@ -5,6 +5,7 @@ import com.emikhalets.simpleevents.utils.extensions.daysLeft
 import com.emikhalets.simpleevents.utils.extensions.milliseconds
 import com.emikhalets.simpleevents.utils.extensions.turns
 import java.time.LocalDate
+import kotlin.random.Random
 
 object PreviewEntity {
 
@@ -17,8 +18,17 @@ object PreviewEntity {
             eventType = EventType.BIRTHDAY,
             note = "",
             withoutYear = false,
+            groupId = 0,
             days = date.daysLeft,
             age = date.turns
+        )
+    }
+
+    fun getGroupEntity(id: Long): GroupEntity {
+        return GroupEntity(
+            id = id,
+            name = "Name id",
+            isAlarmsEnabled = Random.nextBoolean()
         )
     }
 
@@ -42,5 +52,9 @@ object PreviewEntity {
                 getEventEntity(5),
             ),
         )
+    }
+
+    fun getGroupsList(): List<GroupEntity> {
+        return List(10) { getGroupEntity(it + 1L) }
     }
 }

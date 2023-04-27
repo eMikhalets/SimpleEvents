@@ -36,6 +36,7 @@ class AddEventViewModel @Inject constructor(
                 eventType = type,
                 note = "",
                 withoutYear = withoutYear,
+                groupId = 0,
                 days = 0,
                 age = 0,
             )

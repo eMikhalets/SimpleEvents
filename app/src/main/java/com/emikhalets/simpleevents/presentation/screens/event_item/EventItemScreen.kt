@@ -252,6 +252,7 @@ private fun Preview() {
                 eventType = EventType.BIRTHDAY,
                 note = "Some note text",
                 withoutYear = false,
+                groupId = 0,
                 days = 6,
                 age = 42
             ),

@@ -4,6 +4,7 @@ import android.content.Context
 import com.emikhalets.simpleevents.data.database.AppDatabase
 import com.emikhalets.simpleevents.data.database.dao.AlarmsDao
 import com.emikhalets.simpleevents.data.database.dao.EventsDao
+import com.emikhalets.simpleevents.data.database.dao.GroupsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +32,11 @@ object DatabaseModule {
     @Provides
     fun providesEventAlarmsDao(database: AppDatabase): AlarmsDao {
         return database.alarmsDao
+    }
+
+    @Singleton
+    @Provides
+    fun providesGroupsDao(database: AppDatabase): GroupsDao {
+        return database.groupsDao
     }
 }

@@ -4,5 +4,5 @@ import com.emikhalets.simpleevents.utils.AppAction
 
 sealed class GroupsAction : AppAction {
     object AcceptError : GroupsAction()
-    object GetEvents : GroupsAction()
+    object GetGroups : GroupsAction()
 }

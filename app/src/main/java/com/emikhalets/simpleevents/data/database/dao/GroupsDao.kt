@@ -23,7 +23,7 @@ interface GroupsDao {
     @Query("SELECT * FROM groups")
     fun getAllEntities(): Flow<List<GroupDb>>
 
-    @Query("SELECT * FROM groups WHERE id = :id")
+    @Query("SELECT * FROM groups WHERE id = :id ORDER BY name ASC")
     fun getEntityByIdFlow(id: Long): Flow<GroupDb>
 
     @Query("SELECT * FROM groups WHERE id = :id")

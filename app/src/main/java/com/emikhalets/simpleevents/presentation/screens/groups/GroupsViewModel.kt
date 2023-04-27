@@ -21,7 +21,7 @@ class GroupsViewModel @Inject constructor(
 
     override fun handleEvent(action: GroupsAction) {
         when (action) {
-            GroupsAction.GetEvents -> getEvents()
+            GroupsAction.GetGroups -> getEvents()
             GroupsAction.AcceptError -> resetError()
         }
     }
