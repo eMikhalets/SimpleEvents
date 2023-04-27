@@ -1,40 +1,35 @@
 package com.emikhalets.simpleevents.presentation.screens.groups
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.usecase.groups.GetGroupsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupsViewModel @Inject constructor(
-    private val getEventsUseCase: GetEventsUseCase,
+    private val getGroupsUseCase: GetGroupsUseCase,
 ) : BaseViewModel<GroupsState, GroupsAction>() {
-
-    private var searchJob: Job? = null
-    private var eventsList = listOf<EventEntity>()
 
     override fun createInitialState() = GroupsState()
 
     override fun handleEvent(action: GroupsAction) {
         when (action) {
-            GroupsAction.GetGroups -> getEvents()
+            GroupsAction.GetGroups -> getGroups()
             GroupsAction.AcceptError -> resetError()
         }
     }
 
     private fun resetError() = setState { it.copy(error = null) }
 
-    private fun getEvents() {
+    private fun getGroups() {
         launchIO {
             setState { it.copy(loading = true) }
-            getEventsUseCase()
+            getGroupsUseCase()
                 .onSuccess { result ->
                     result.collectLatest { list ->
-//                        setState { it.copy(loading = false, eventsMap = mapEventsList(list)) }
+                        setState { it.copy(loading = false, groupsList = list) }
                     }
                 }
                 .onFailure { error ->
