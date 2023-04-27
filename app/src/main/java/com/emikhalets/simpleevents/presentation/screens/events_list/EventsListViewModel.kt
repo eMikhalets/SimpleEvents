@@ -4,7 +4,7 @@ import com.emikhalets.simpleevents.domain.entity.EventEntity
 import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
-import com.emikhalets.simpleevents.utils.extensions.getStartOfMonth
+import com.emikhalets.simpleevents.utils.extensions.getMonthEdges
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -64,6 +64,6 @@ class EventsListViewModel @Inject constructor(
         return events
             .sortedBy { event -> event.days }
             .also { eventsList = it }
-            .groupBy { it.date.getStartOfMonth() }
+            .groupBy { it.date.getMonthEdges().first }
     }
 }

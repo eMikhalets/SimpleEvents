@@ -1,21 +1,23 @@
 package com.emikhalets.simpleevents.presentation.screens.events_calendar
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,31 +27,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emikhalets.simpleevents.R
 import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.presentation.components.AppIcon
-import com.emikhalets.simpleevents.presentation.components.AppText
-import com.emikhalets.simpleevents.presentation.components.AppTextField
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
 import com.emikhalets.simpleevents.presentation.theme.AppTheme
-import com.emikhalets.simpleevents.utils.extensions.formatDate
-import com.emikhalets.simpleevents.utils.extensions.formatHomeInfo
-import com.emikhalets.simpleevents.utils.extensions.pluralsResource
+import com.emikhalets.simpleevents.utils.extensions.localDate
+import com.emikhalets.simpleevents.utils.extensions.milliseconds
+import java.time.LocalDate
+import java.time.Month
+import java.time.YearMonth
+import java.time.format.TextStyle
+import java.util.*
+import kotlin.math.ceil
 
 @Composable
 fun EventsCalendarScreen(
     state: EventsCalendarState,
     onAction: (EventsCalendarAction) -> Unit,
-    onEventClick: (Long) -> Unit,
+    onMonthClick: (Month) -> Unit,
 ) {
-    var searchQuery by remember { mutableStateOf("") }
+    var year by remember { mutableStateOf(LocalDate.now().year) }
     var errorMessage by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
@@ -66,8 +67,12 @@ fun EventsCalendarScreen(
 
     ScreenContent(
         state = state,
-        searchQuery = searchQuery,
-        onEventClick = onEventClick
+        year = year,
+        onYearChange = { increase ->
+            year += if (increase) 1 else -1
+            // TODO: load event for year
+        },
+        onMonthClick = onMonthClick
     )
 
     if (errorMessage.isNotEmpty()) {
@@ -81,168 +86,192 @@ fun EventsCalendarScreen(
 @Composable
 private fun ScreenContent(
     state: EventsCalendarState,
-    searchQuery: String,
-    onEventClick: (Long) -> Unit,
+    year: Int,
+    onYearChange: (Boolean) -> Unit,
+    onMonthClick: (Month) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        SearchBox(
-            searchQuery = searchQuery,
-            onSearchQueryChange = {},
+        YearSwitcher(
+            year = year,
+            onYearChange = onYearChange
         )
-        EventsListBox(
-            eventsMap = emptyMap(),
-            onEventClick = onEventClick
+        Divider()
+        CalendarBox(
+            timestamp = LocalDate.now().milliseconds,
+            eventsList = state.eventsList,
+            onMonthClick = onMonthClick
         )
     }
 }
 
 @Composable
-private fun SearchBox(
-    searchQuery: String,
-    onSearchQueryChange: (String) -> Unit,
-) {
-    AppTextField(
-        value = searchQuery,
-        onValueChange = onSearchQueryChange,
-        placeholder = stringResource(R.string.home_search_placeholder),
-        leadingIcon = R.drawable.ic_round_search_24,
-        maxLines = 1,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 16.dp)
-    )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun EventsListBox(
-    eventsMap: Map<Long, List<EventEntity>>,
-    onEventClick: (Long) -> Unit,
+private fun YearSwitcher(
+    year: Int,
+    onYearChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (eventsMap.isNotEmpty()) {
-        LazyColumn(modifier = modifier.fillMaxWidth()) {
-            eventsMap.forEach { (date, events) ->
-                stickyHeader {
-                    EventsListHeader(
-                        date = date,
-                        onHeaderClick = {}
-                    )
-                }
-                items(events) { event ->
-                    EventListItem(
-                        event = event,
-                        onEventClick = onEventClick
-                    )
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBackIos,
+            contentDescription = null,
+            modifier = Modifier.clickable { onYearChange(false) }
+        )
+        Text(
+            text = year.toString(),
+            fontSize = 24.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(horizontal = 40.dp)
+        )
+        Icon(
+            imageVector = Icons.Default.ArrowForwardIos,
+            contentDescription = null,
+            modifier = Modifier.clickable { onYearChange(false) }
+        )
+    }
+}
+
+@Composable
+private fun CalendarBox(
+    eventsList: List<EventEntity>,
+    timestamp: Long,
+    onMonthClick: (Month) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        repeat(12) { month ->
+            item {
+                MonthBox(
+                    month = timestamp.localDate.withMonth(month + 1).month,
+                    year = timestamp.localDate.year,
+                    isLeapYear = timestamp.localDate.isLeapYear,
+                    eventsList = eventsList.filter { it.date.localDate.monthValue == month + 1 },
+                    onMonthClick = onMonthClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MonthBox(
+    month: Month,
+    year: Int,
+    isLeapYear: Boolean,
+    eventsList: List<EventEntity>,
+    onMonthClick: (Month) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.clickable { onMonthClick(month) }
+    ) {
+        MonthHeader(
+            month = month
+        )
+        MonthDays(
+            month = month,
+            year = year,
+            isLeapYear = isLeapYear,
+            eventsList = eventsList
+        )
+    }
+}
+
+@Composable
+private fun MonthHeader(
+    month: Month,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault()),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            listOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su").forEach { name ->
+                Text(
+                    text = name,
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colors.secondary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MonthDays(
+    month: Month,
+    year: Int,
+    isLeapYear: Boolean,
+    eventsList: List<EventEntity>,
+    modifier: Modifier = Modifier,
+) {
+    val daysInMonth = month.length(isLeapYear)
+    val firstDayOfMonth = YearMonth.of(year, month).atDay(1).dayOfWeek.value % 7
+    val weeks = ceil((firstDayOfMonth + daysInMonth).toDouble() / 7).toInt()
+
+    Column(modifier = modifier) {
+        repeat(weeks) { week ->
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                for (dayOfWeek in 0 until 7) {
+                    val dayOfMonth = dayOfWeek + week * 7 - firstDayOfMonth + 1
+                    if (dayOfMonth <= 0 || dayOfMonth > daysInMonth) {
+                        Box(modifier = Modifier.weight(1f))
+                    } else {
+                        MonthDay(
+                            day = dayOfMonth,
+                            eventsList = eventsList.filter {
+                                it.date.localDate.dayOfMonth == dayOfMonth
+                            }
+                        )
+                    }
                 }
             }
         }
-    } else {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            AppText(
-                text = stringResource(R.string.home_empty_events),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-
-            )
-        }
     }
 }
 
 @Composable
-private fun EventsListHeader(
-    date: Long,
-    onHeaderClick: (Long) -> Unit,
+private fun MonthDay(
+    day: Int,
+    eventsList: List<EventEntity>,
+    modifier: Modifier = Modifier,
 ) {
-    AppText(
-        text = date.formatDate("MMMM yyyy"),
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier
-            .background(Color.Transparent)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .clickable { onHeaderClick(date) }
-    )
-}
-
-@Composable
-private fun EventListItem(
-    event: EventEntity,
-    onEventClick: (Long) -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(74.dp)
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clickable { onEventClick(event.id) }
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .padding(2.dp)
+            .background(color = if (eventsList.isNotEmpty()) MaterialTheme.colors.primary else Color.Transparent)
     ) {
-        SquareColumn(backgroundColor = MaterialTheme.colors.primary) {
-            AppText(
-                text = event.days.toString(),
-                color = MaterialTheme.colors.onPrimary,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium
-            )
-            AppText(
-                text = pluralsResource(R.plurals.home_event_days, event.days),
-                color = MaterialTheme.colors.onPrimary,
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                letterSpacing = 2.sp
-            )
-        }
-        SquareColumn(backgroundColor = MaterialTheme.colors.background) {
-            AppIcon(
-                drawableRes = R.drawable.ic_round_person_24,
-                tint = MaterialTheme.colors.onSurface
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp)
-        ) {
-            AppText(
-                text = event.name,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            AppText(
-                text = event.formatHomeInfo(),
-                color = MaterialTheme.colors.onSecondary,
-                fontSize = 14.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+        Text(
+            text = day.toString(),
+            fontSize = 10.sp,
+            textAlign = TextAlign.Center,
+            color = if (eventsList.isNotEmpty()) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface,
+        )
     }
-}
-
-@Composable
-private fun SquareColumn(
-    backgroundColor: Color,
-    content: @Composable () -> Unit,
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        content = { content() },
-        modifier = Modifier
-            .background(backgroundColor)
-            .fillMaxHeight()
-            .aspectRatio(1f)
-    )
 }
 
 @Preview(showBackground = true)
@@ -250,9 +279,12 @@ private fun SquareColumn(
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            state = EventsCalendarState(),
-            searchQuery = "Some query",
-            onEventClick = {}
+            state = EventsCalendarState(
+                eventsList = emptyList()
+            ),
+            year = 2023,
+            onYearChange = {},
+            onMonthClick = {}
         )
     }
 }

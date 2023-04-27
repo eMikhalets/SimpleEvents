@@ -11,22 +11,20 @@ import java.util.*
 
 // End and Start of dates
 
-fun Long.getStartOfMonth(): Long {
-    return this.localDate.withDayOfMonth(1).milliseconds
+fun Long.getMonthEdges(): Pair<Long, Long> {
+    val date = this.localDate
+    val start = date.withDayOfMonth(1).milliseconds
+    val days = date.lengthOfMonth()
+    val end = date.withDayOfMonth(days).milliseconds
+    return Pair(start, end)
 }
 
-fun Long.getEndOfMonth(): Long {
-    val days = this.localDate.lengthOfMonth()
-    return this.localDate.withDayOfMonth(days).milliseconds
-}
-
-fun Long.getStartOfYear(): Long {
-    return this.localDate.withDayOfYear(1).milliseconds
-}
-
-fun Long.getEndOfYear(): Long {
-    val days = this.localDate.lengthOfYear()
-    return this.localDate.withDayOfYear(days).milliseconds
+fun Long.getYearEdges(): Pair<Long, Long> {
+    val date = this.localDate
+    val start = date.withDayOfYear(1).milliseconds
+    val days = date.lengthOfYear()
+    val end = date.withDayOfYear(days).milliseconds
+    return Pair(start, end)
 }
 
 // Date formatting
