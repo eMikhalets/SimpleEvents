@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -15,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,7 +98,8 @@ private fun ScreenContent(
         }
         EventsListBox(
             list = state.eventsList,
-            onEventClick = onEventClick
+            onEventClick = onEventClick,
+            modifier = Modifier.weight(1f)
         )
     }
 }
@@ -114,10 +115,15 @@ private fun GroupInfoBox(
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Text(
                 text = entity.name,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -132,29 +138,28 @@ private fun GroupInfoBox(
             Icon(
                 imageVector = Icons.Default.Delete,
                 contentDescription = null,
-                modifier = Modifier.clickable { onDeleteClick() }
+                modifier = Modifier
+                    .clickable { onDeleteClick() }
+                    .padding(start = 32.dp)
             )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.group_item_alarms),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
+                fontSize = 18.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
             )
-            Icon(
-                imageVector = Icons.Default.NotificationsActive,
-                contentDescription = null
-            )
             Switch(
                 checked = entity.isAlarmsEnabled,
                 onCheckedChange = { onAlarmSwitch(it) },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
     }
@@ -187,12 +192,13 @@ private fun EventItemBox(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .clickable { onEventClick(event.id) }
     ) {
         Icon(
             imageVector = Icons.Default.Person,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.size(40.dp)
         )
         Text(
             text = event.name,
