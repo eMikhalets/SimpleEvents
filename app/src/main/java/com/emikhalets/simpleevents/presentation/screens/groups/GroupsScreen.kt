@@ -38,6 +38,8 @@ import com.emikhalets.simpleevents.presentation.theme.AppTheme
 fun GroupsScreen(
     state: GroupsState,
     onAction: (GroupsAction) -> Unit,
+    onGroupClick: (Long) -> Unit,
+    onAddGroupClick: () -> Unit,
 ) {
     var errorMessage by remember { mutableStateOf("") }
 
@@ -55,9 +57,9 @@ fun GroupsScreen(
 
     ScreenContent(
         state = state,
-        onGroupClick = {},
-        onGroupSwitch = { entity, enabled -> },
-        onAddGroupClick = {}
+        onGroupClick = onGroupClick,
+        onGroupSwitch = { entity, enabled -> onAction(GroupsAction.UpdateGroup(entity, enabled)) },
+        onAddGroupClick = onAddGroupClick
     )
 
     if (errorMessage.isNotEmpty()) {
@@ -71,7 +73,7 @@ fun GroupsScreen(
 @Composable
 private fun ScreenContent(
     state: GroupsState,
-    onGroupClick: (GroupEntity) -> Unit,
+    onGroupClick: (Long) -> Unit,
     onGroupSwitch: (GroupEntity, Boolean) -> Unit,
     onAddGroupClick: () -> Unit,
 ) {
@@ -97,7 +99,7 @@ private fun ScreenContent(
 @Composable
 private fun GroupsListBox(
     list: List<GroupEntity>,
-    onGroupClick: (GroupEntity) -> Unit,
+    onGroupClick: (Long) -> Unit,
     onGroupSwitch: (GroupEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -116,7 +118,7 @@ private fun GroupsListBox(
 @Composable
 private fun GroupItemBox(
     group: GroupEntity,
-    onGroupClick: (GroupEntity) -> Unit,
+    onGroupClick: (Long) -> Unit,
     onGroupSwitch: (GroupEntity, Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -125,7 +127,7 @@ private fun GroupItemBox(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clickable { onGroupClick(group) }
+            .clickable { onGroupClick(group.id) }
     ) {
         Text(
             text = group.name,

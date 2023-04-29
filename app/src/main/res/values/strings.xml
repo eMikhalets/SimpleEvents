@@ -3,6 +3,7 @@
 
     <!--  Errors  -->
     <string name="error_internal">Internal error</string>
+    <string name="error_delete">Error while deleting</string>
     <string name="error_import_events">Events import error</string>
     <string name="error_export_events">Events export error</string>
 
@@ -53,6 +54,9 @@
     <string name="add_event_turns">Turns: %d</string>
     <string name="add_event_days_left">Days left: %d</string>
     <string name="add_event_without_year">Without year</string>
+
+    <!--  Groups screen  -->
+    <string name="group_item_alarms">Enable alarm for group</string>
 
     <!--  Settings screen  -->
     <string name="settings_notifications">Notifications</string>

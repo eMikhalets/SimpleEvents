@@ -16,6 +16,8 @@ import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCa
 import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCalendarViewModel
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListScreen
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListViewModel
+import com.emikhalets.simpleevents.presentation.screens.group_item.GroupItemScreen
+import com.emikhalets.simpleevents.presentation.screens.group_item.GroupItemViewModel
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsScreen
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsViewModel
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
@@ -51,12 +53,14 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
 
-        composable(AppScreen.EventsCalendar.route) {
+        composable(AppScreen.Groups.route) {
             val viewModel: GroupsViewModel = hiltViewModel()
             val state by viewModel.state.collectAsState()
             GroupsScreen(
                 state = state,
                 onAction = viewModel::setAction,
+                onGroupClick = {},
+                onAddGroupClick = {}
             )
         }
 
@@ -64,6 +68,17 @@ fun AppNavHost(navController: NavHostController) {
             val viewModel: SettingsViewModel = hiltViewModel()
             val state by viewModel.state.collectAsState()
             SettingsScreen(
+                state = state,
+                onAction = viewModel::setAction,
+            )
+        }
+
+        // TODO: set arguments
+        composable(AppScreen.GroupItem.route) {
+            val viewModel: GroupItemViewModel = hiltViewModel()
+            val state by viewModel.state.collectAsState()
+            GroupItemScreen(
+                groupId = null,
                 state = state,
                 onAction = viewModel::setAction,
             )

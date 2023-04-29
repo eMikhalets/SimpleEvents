@@ -13,7 +13,7 @@ object PreviewEntity {
         val date = LocalDate.now().milliseconds
         return EventEntity(
             id = id,
-            name = "Name id",
+            name = "Event Name $id",
             date = date,
             eventType = EventType.BIRTHDAY,
             note = "",
@@ -22,6 +22,23 @@ object PreviewEntity {
             days = date.daysLeft,
             age = date.turns
         )
+    }
+
+    fun getEventsList(size: Int): List<EventEntity> {
+        val date = LocalDate.now().milliseconds
+        return List(size) {
+            EventEntity(
+                id = it + 1L,
+                name = "Event Name ${it + 1L}",
+                date = date,
+                eventType = EventType.BIRTHDAY,
+                note = "",
+                withoutYear = false,
+                groupId = 0,
+                days = date.daysLeft,
+                age = date.turns
+            )
+        }
     }
 
     fun getGroupEntity(id: Long): GroupEntity {
