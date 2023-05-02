@@ -15,6 +15,8 @@ sealed class AppScreen(val route: String, @DrawableRes val iconRes: Int) {
 
     object GroupItem : AppScreen("group_item", 0)
 
+    object GroupEdit : AppScreen("group_edit", 0)
+
     object Event : AppScreen("event", 0)
 
     object AddEvent : AppScreen("add_event", R.drawable.ic_round_add_circle_24_white)

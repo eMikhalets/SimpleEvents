@@ -56,7 +56,9 @@
     <string name="add_event_without_year">Without year</string>
 
     <!--  Groups screen  -->
+    <string name="groups_list_empty">No groups</string>
     <string name="group_item_alarms">Enable alarm for group</string>
+    <string name="group_edit_save">Save</string>
 
     <!--  Settings screen  -->
     <string name="settings_notifications">Notifications</string>

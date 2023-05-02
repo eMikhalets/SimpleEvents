@@ -16,6 +16,8 @@ import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCa
 import com.emikhalets.simpleevents.presentation.screens.events_calendar.EventsCalendarViewModel
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListScreen
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListViewModel
+import com.emikhalets.simpleevents.presentation.screens.group_edit.GroupEditScreen
+import com.emikhalets.simpleevents.presentation.screens.group_edit.GroupEditViewModel
 import com.emikhalets.simpleevents.presentation.screens.group_item.GroupItemScreen
 import com.emikhalets.simpleevents.presentation.screens.group_item.GroupItemViewModel
 import com.emikhalets.simpleevents.presentation.screens.groups.GroupsScreen
@@ -24,6 +26,7 @@ import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsViewModel
 
 private const val ARGS_EVENT_ID = "event_id"
+private const val ARGS_GROUP_ID = "group_id"
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
@@ -59,8 +62,12 @@ fun AppNavHost(navController: NavHostController) {
             GroupsScreen(
                 state = state,
                 onAction = viewModel::setAction,
-                onGroupClick = {},
-                onAddGroupClick = {}
+                onGroupClick = {
+                    navController.navigate("${AppScreen.GroupItem.route}/$it")
+                },
+                onAddGroupClick = {
+                    navController.navigate("${AppScreen.GroupEdit.route}/${null}")
+                }
             )
         }
 
@@ -73,14 +80,30 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
 
-        // TODO: set arguments
-        composable(AppScreen.GroupItem.route) {
+        composable(
+            route = "${AppScreen.GroupItem.route}/{$ARGS_GROUP_ID}",
+            arguments = listOf(navArgument(ARGS_GROUP_ID) { type = NavType.LongType })
+        ) {
             val viewModel: GroupItemViewModel = hiltViewModel()
             val state by viewModel.state.collectAsState()
             GroupItemScreen(
-                groupId = null,
+                groupId = it.arguments?.getLong(ARGS_GROUP_ID),
                 state = state,
                 onAction = viewModel::setAction,
+            )
+        }
+
+        composable(
+            route = "${AppScreen.GroupEdit.route}/{$ARGS_GROUP_ID}",
+            arguments = listOf(navArgument(ARGS_GROUP_ID) { type = NavType.LongType })
+        ) {
+            val viewModel: GroupEditViewModel = hiltViewModel()
+            val state by viewModel.state.collectAsState()
+            GroupEditScreen(
+                groupId = it.arguments?.getLong(ARGS_GROUP_ID),
+                state = state,
+                onAction = viewModel::setAction,
+                onGroupSaved = { navController.popBackStack() }
             )
         }
 
