@@ -7,7 +7,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.FileReader
@@ -27,7 +26,6 @@ class AppBackupManager @Inject constructor(
             }
             true
         } catch (e: Exception) {
-            Timber.e(e)
             false
         }
     }
@@ -42,7 +40,6 @@ class AppBackupManager @Inject constructor(
             }
             Json.decodeFromString(json)
         } catch (e: Exception) {
-            Timber.e(e)
             emptyList()
         }
     }

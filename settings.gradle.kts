@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -11,6 +13,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+    versionCatalogs {
+        create("libs") {
+            from(files("gradle/deps.versions.toml"))
+        }
+    }
 }
-rootProject.name = "SimpleEvents"
-include ':app'
+rootProject.name = "EventsApp"
+include(":app")

@@ -16,8 +16,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIos
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -117,22 +115,22 @@ private fun YearSwitcher(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBackIos,
-            contentDescription = null,
-            modifier = Modifier.clickable { onYearChange(false) }
-        )
+//        Icon(
+//            imageVector = Icons.Default.ArrowBackIos,
+//            contentDescription = null,
+//            modifier = Modifier.clickable { onYearChange(false) }
+//        )
         Text(
             text = year.toString(),
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(horizontal = 40.dp)
         )
-        Icon(
-            imageVector = Icons.Default.ArrowForwardIos,
-            contentDescription = null,
-            modifier = Modifier.clickable { onYearChange(false) }
-        )
+//        Icon(
+//            imageVector = Icons.Default.ArrowForwardIos,
+//            contentDescription = null,
+//            modifier = Modifier.clickable { onYearChange(false) }
+//        )
     }
 }
 

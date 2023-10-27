@@ -45,7 +45,7 @@ fun AppNavHost(navController: NavHostController) {
             EventsCalendarScreen(
                 state = state,
                 onAction = viewModel::setAction,
-                onEventClick = { eventId ->
+                onMonthClick = { eventId ->
                     navController.navigate("${AppScreen.Event.route}/$eventId")
                 }
             )
