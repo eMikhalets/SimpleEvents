@@ -5,11 +5,11 @@ import com.emikhalets.simpleevents.domain.AppResult
 import com.emikhalets.simpleevents.domain.model.EventModel
 import javax.inject.Inject
 
-class DeleteEventUseCase @Inject constructor(
+class UpdateEventUseCase @Inject constructor(
     private val repository: AppRepository,
 ) {
 
     suspend operator fun invoke(model: EventModel): AppResult<Int> {
-        return repository.deleteEvent(model)
+        return repository.updateEvent(model)
     }
 }

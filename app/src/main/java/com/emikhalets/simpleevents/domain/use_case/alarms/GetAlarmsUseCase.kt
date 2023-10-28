@@ -1,11 +1,15 @@
 package com.emikhalets.simpleevents.domain.use_case.alarms
 
-import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
+import com.emikhalets.simpleevents.data.AppRepository
+import com.emikhalets.simpleevents.domain.model.AlarmModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class GetAlarmsUseCase @Inject constructor(
-    private val databaseRepo: DatabaseRepository,
+    private val repository: AppRepository,
 ) {
 
-    suspend operator fun invoke() = databaseRepo.getAllEventsAlarm()
+    operator fun invoke(): Flow<List<AlarmModel>> {
+        return repository.getAllAlarms()
+    }
 }

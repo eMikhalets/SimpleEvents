@@ -1,13 +1,20 @@
 package com.emikhalets.simpleevents.domain.use_case.events
 
-import com.emikhalets.simpleevents.domain.repository.DatabaseRepository
+import com.emikhalets.simpleevents.data.AppRepository
+import com.emikhalets.simpleevents.domain.AppResult
+import com.emikhalets.simpleevents.domain.model.EventModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
 class GetEventsUseCase @Inject constructor(
-    private val databaseRepo: DatabaseRepository,
+    private val repository: AppRepository,
 ) {
 
-    suspend operator fun invoke() = databaseRepo.getAllEvents()
+    operator fun invoke(): Flow<List<EventModel>> {
+        return repository.getAllEvents()
+    }
 
-    suspend operator fun invoke(id: Long) = databaseRepo.getEntityById(id)
+    suspend operator fun invoke(id: Long): AppResult<EventModel> {
+        return repository.getEventById(id)
+    }
 }
