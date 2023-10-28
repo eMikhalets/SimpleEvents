@@ -1,6 +1,6 @@
 package com.emikhalets.simpleevents.presentation.screens.events_calendar
 
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel

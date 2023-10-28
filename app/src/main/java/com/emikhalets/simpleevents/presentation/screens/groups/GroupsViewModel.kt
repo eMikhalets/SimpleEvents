@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.groups
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.model.EventModel
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ class GroupsViewModel @Inject constructor(
 ) : BaseViewModel<GroupsState, GroupsAction>() {
 
     private var searchJob: Job? = null
-    private var eventsList = listOf<EventEntity>()
+    private var eventsList = listOf<EventModel>()
 
     override fun createInitialState() = GroupsState()
 

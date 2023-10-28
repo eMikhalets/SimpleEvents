@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">SimpleEvents</string>
+    <string name="app_name">EventsApp</string>
 
     <!--  Errors  -->
     <string name="error_internal">Internal error</string>
     <string name="error_import_events">Events import error</string>
     <string name="error_export_events">Events export error</string>
+    <string name="error_alarm_exist">Alarm already exists</string>
 
     <!--  Dialog  -->
     <string name="dialog_delete_event">Delete this event?</string>

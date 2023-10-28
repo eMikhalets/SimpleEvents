@@ -3,11 +3,10 @@ package com.emikhalets.simpleevents.utils.background
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.emikhalets.simpleevents.data.database.AppDatabase
-import com.emikhalets.simpleevents.domain.entity.AlarmWithEventsEntity
+import com.emikhalets.simpleevents.core.database.AppDatabase
+import com.emikhalets.simpleevents.domain.model.AlarmWithEventsModel
 import com.emikhalets.simpleevents.utils.AppAlarmManager
 import com.emikhalets.simpleevents.utils.AppNotificationManager
-import com.emikhalets.simpleevents.utils.extensions.calculateEventData
 
 class EventWorker(context: Context, parameters: WorkerParameters) :
     CoroutineWorker(context, parameters) {
@@ -22,7 +21,7 @@ class EventWorker(context: Context, parameters: WorkerParameters) :
 //                .map { it.calculateEventData() }
 //                .sortedBy { it.days }
 
-            val eventsList = mutableListOf<AlarmWithEventsEntity>()
+            val eventsList = mutableListOf<AlarmWithEventsModel>()
 
             alarmsDao.getAll()
                 .filter { it.enabled }

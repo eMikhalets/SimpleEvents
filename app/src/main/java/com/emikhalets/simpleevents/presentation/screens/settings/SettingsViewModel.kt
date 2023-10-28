@@ -2,14 +2,13 @@ package com.emikhalets.simpleevents.presentation.screens.settings
 
 import android.net.Uri
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.AlarmEntity
-import com.emikhalets.simpleevents.domain.usecase.alarms.AddAlarmUseCase
-import com.emikhalets.simpleevents.domain.usecase.alarms.DeleteAlarmUseCase
-import com.emikhalets.simpleevents.domain.usecase.alarms.GetAlarmsUseCase
-import com.emikhalets.simpleevents.domain.usecase.backups.ExportEventsUseCase
-import com.emikhalets.simpleevents.domain.usecase.backups.ImportEventsUseCase
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
+import com.emikhalets.simpleevents.domain.model.AlarmModel
+import com.emikhalets.simpleevents.domain.use_case.alarms.AddAlarmUseCase
+import com.emikhalets.simpleevents.domain.use_case.alarms.DeleteAlarmUseCase
+import com.emikhalets.simpleevents.domain.use_case.alarms.GetAlarmsUseCase
+import com.emikhalets.simpleevents.domain.use_case.backups.ExportEventsUseCase
+import com.emikhalets.simpleevents.domain.use_case.backups.ImportEventsUseCase
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,7 +50,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateNotificationGlobal(notification: AlarmEntity, enabled: Boolean) {
+    fun updateNotificationGlobal(notification: AlarmModel, enabled: Boolean) {
         launchIO {
             val entity = notification.copy(enabled = enabled)
             addAlarmsUseCase(entity)
@@ -105,7 +104,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateNotification(notification: AlarmEntity) {
+    fun updateNotification(notification: AlarmModel) {
         launchIO {
             addAlarmsUseCase(notification)
                 .onFailure { error ->
@@ -115,7 +114,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun deleteNotification(notification: AlarmEntity) {
+    fun deleteNotification(notification: AlarmModel) {
         launchIO {
             deleteAlarmUseCase(notification)
                 .onFailure { error ->

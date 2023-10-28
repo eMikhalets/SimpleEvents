@@ -1,8 +1,8 @@
 package com.emikhalets.simpleevents.presentation.screens.edit_event
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.AddEventUseCase
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.model.EventModel
+import com.emikhalets.simpleevents.domain.use_case.events.AddEventUseCase
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
@@ -39,7 +39,7 @@ class EditEventViewModel @Inject constructor(
         }
     }
 
-    fun updateEvent(event: EventEntity) {
+    fun updateEvent(event: EventModel) {
         launchIO {
             setState { it.copy(loading = true) }
             addEventUseCase(event)

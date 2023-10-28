@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.model.EventModel
 import com.emikhalets.simpleevents.presentation.components.AppButton
 import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppText
@@ -116,7 +116,7 @@ fun EventItemScreen(
 
 @Composable
 private fun EventItemScreen(
-    event: EventEntity,
+    event: EventModel,
     onImageClick: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
@@ -144,7 +144,7 @@ private fun EventItemScreen(
 
 @Composable
 private fun EventItemHeader(
-    event: EventEntity,
+    event: EventModel,
     onImageClick: () -> Unit,
 ) {
     Column(
@@ -192,7 +192,7 @@ private fun EventItemHeader(
 
 @Composable
 private fun EventItemContent(
-    event: EventEntity,
+    event: EventModel,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
@@ -245,7 +245,7 @@ private fun EventItemContent(
 private fun Preview() {
     AppTheme {
         EventItemScreen(
-            event = EventEntity(
+            event = EventModel(
                 id = 0,
                 name = "Test Full Name",
                 date = System.currentTimeMillis(),

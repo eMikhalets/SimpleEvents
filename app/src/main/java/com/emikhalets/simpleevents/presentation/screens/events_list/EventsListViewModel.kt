@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.events_list
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.model.EventModel
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.getMonthEdges
@@ -17,7 +17,7 @@ class EventsListViewModel @Inject constructor(
 ) : BaseViewModel<EventsListState, EventsListAction>() {
 
     private var searchJob: Job? = null
-    private var eventsList = listOf<EventEntity>()
+    private var eventsList = listOf<EventModel>()
 
     override fun createInitialState() = EventsListState()
 
@@ -60,7 +60,7 @@ class EventsListViewModel @Inject constructor(
         }
     }
 
-    private fun mapEventsList(events: List<EventEntity>): Map<Long, List<EventEntity>> {
+    private fun mapEventsList(events: List<EventModel>): Map<Long, List<EventModel>> {
         return events
             .sortedBy { event -> event.days }
             .also { eventsList = it }

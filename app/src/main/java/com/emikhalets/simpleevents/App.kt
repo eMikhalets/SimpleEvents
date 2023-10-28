@@ -1,8 +1,9 @@
 package com.emikhalets.simpleevents
 
 import android.app.Application
-import com.emikhalets.simpleevents.data.database.AppDatabase
-import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.core.common.extensions.AppLog
+import com.emikhalets.simpleevents.core.database.AppDatabase
+import com.emikhalets.simpleevents.domain.model.AlarmModel
 import com.emikhalets.simpleevents.utils.AppNotificationManager
 import com.emikhalets.simpleevents.utils.Prefs
 import dagger.hilt.android.HiltAndroidApp
@@ -15,7 +16,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        AppLog.initialize()
         AppNotificationManager.createNotificationChannels(applicationContext)
         createDefaultEventAlarms()
     }
@@ -28,33 +29,33 @@ class App : Application() {
                 try {
                     val dao = AppDatabase.getInstance(this@App).alarmsDao
                     val alarms = listOf(
-                        AlarmEntity(
+                        AlarmModel(
                             id = 1,
-                            nameEn = getString(R.string.notifications_time_month),
+                            name = getString(R.string.notifications_time_month),
                             enabled = true,
                             days = 30,
                         ),
-                        AlarmEntity(
+                        AlarmModel(
                             id = 2,
-                            nameEn = getString(R.string.notifications_time_week),
+                            name = getString(R.string.notifications_time_week),
                             enabled = true,
                             days = 7,
                         ),
-                        AlarmEntity(
+                        AlarmModel(
                             id = 3,
-                            nameEn = getString(R.string.notifications_time_two_days),
+                            name = getString(R.string.notifications_time_two_days),
                             enabled = true,
                             days = 2,
                         ),
-                        AlarmEntity(
+                        AlarmModel(
                             id = 4,
-                            nameEn = getString(R.string.notifications_time_day),
+                            name = getString(R.string.notifications_time_day),
                             enabled = true,
                             days = 1,
                         ),
-                        AlarmEntity(
+                        AlarmModel(
                             id = 5,
-                            nameEn = getString(R.string.notifications_time_today),
+                            name = getString(R.string.notifications_time_today),
                             enabled = true,
                             days = 0,
                         ),

@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.domain.model.AlarmModel
 import com.emikhalets.simpleevents.presentation.components.AppButton
 import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppIconButton
@@ -60,7 +60,7 @@ fun SettingsScreen(
     var notificationsAll by remember { mutableStateOf(prefs.eventAlarmsEnabled) }
     var alarmsEnabled by remember { mutableStateOf(AppAlarmManager.isAlarmsRunning(context)) }
     var errorMessage by remember { mutableStateOf("") }
-    var editNotification by remember { mutableStateOf<AlarmEntity?>(null) }
+    var editNotification by remember { mutableStateOf<AlarmModel?>(null) }
 
     val documentCreator = documentCreator { uri -> onAction(SettingsAction.ExportClick(uri)) }
     val documentPicker = documentPicker { uri -> onAction(SettingsAction.ImportClick(uri)) }
@@ -119,7 +119,7 @@ fun SettingsScreen(
             toast(context, R.string.settings_alarms_restarted)
         },
         onAddNotificationClick = {
-            editNotification = AlarmEntity(0, "", false, 0)
+            editNotification = AlarmModel(0, "", false, 0)
         },
         onExportClick = { documentCreator.createFile() },
         onImportClick = { documentPicker.openFile() }
@@ -153,12 +153,12 @@ private fun SettingsScreen(
     hour: Int,
     minute: Int,
     enabled: Boolean,
-    eventAlarms: List<AlarmEntity>,
+    eventAlarms: List<AlarmModel>,
     alarmsEnabled: Boolean,
     onTimeChange: (Int, Int) -> Unit,
-    onSwitchNotification: (AlarmEntity, Boolean) -> Unit,
+    onSwitchNotification: (AlarmModel, Boolean) -> Unit,
     onSwitchAllNotification: (Boolean) -> Unit,
-    onEditNotificationClick: (AlarmEntity) -> Unit,
+    onEditNotificationClick: (AlarmModel) -> Unit,
     onRestartNotifications: () -> Unit,
     onAddNotificationClick: () -> Unit,
     onExportClick: () -> Unit,
@@ -292,9 +292,9 @@ private fun SettingsAllNotifications(
 @Composable
 private fun SettingsNotifications(
     enabled: Boolean,
-    eventAlarms: List<AlarmEntity>,
-    onSwitchNotification: (AlarmEntity, Boolean) -> Unit,
-    onEditNotificationClick: (AlarmEntity) -> Unit,
+    eventAlarms: List<AlarmModel>,
+    onSwitchNotification: (AlarmModel, Boolean) -> Unit,
+    onEditNotificationClick: (AlarmModel) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -306,7 +306,7 @@ private fun SettingsNotifications(
                     .clickable { onEditNotificationClick(notification) }
             ) {
                 AppText(
-                    text = notification.nameEn,
+                    text = notification.name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = modifier
@@ -389,10 +389,10 @@ private fun Preview() {
             minute = 9,
             enabled = true,
             eventAlarms = listOf(
-                AlarmEntity(0, "Event time", true, 12),
-                AlarmEntity(0, "Event time", false, 56),
-                AlarmEntity(0, "Event time", true, 0),
-                AlarmEntity(0, "Event time Event time Event time", true, 780009),
+                AlarmModel(0, "Event time", true, 12),
+                AlarmModel(0, "Event time", false, 56),
+                AlarmModel(0, "Event time", true, 0),
+                AlarmModel(0, "Event time Event time Event time", true, 780009),
             ),
             alarmsEnabled = false,
             onTimeChange = { _, _ -> },

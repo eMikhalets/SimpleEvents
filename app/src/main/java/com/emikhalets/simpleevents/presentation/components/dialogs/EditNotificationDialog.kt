@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.AlarmEntity
+import com.emikhalets.simpleevents.domain.model.AlarmModel
 import com.emikhalets.simpleevents.presentation.components.AppButton
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.AppTextField
@@ -36,10 +36,10 @@ import com.emikhalets.simpleevents.utils.extensions.toast
 
 @Composable
 fun EditNotificationDialog(
-    notification: AlarmEntity,
+    notification: AlarmModel,
     onDismiss: () -> Unit,
-    onSaveClick: (AlarmEntity) -> Unit,
-    onDeleteClick: (AlarmEntity) -> Unit,
+    onSaveClick: (AlarmModel) -> Unit,
+    onDeleteClick: (AlarmModel) -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismiss,
@@ -56,15 +56,15 @@ fun EditNotificationDialog(
 
 @Composable
 private fun DialogLayout(
-    notification: AlarmEntity,
-    onSaveClick: (AlarmEntity) -> Unit,
-    onDeleteClick: (AlarmEntity) -> Unit,
+    notification: AlarmModel,
+    onSaveClick: (AlarmModel) -> Unit,
+    onDeleteClick: (AlarmModel) -> Unit,
     onCancelClick: () -> Unit,
 ) {
     val context = LocalContext.current
-    var name by remember { mutableStateOf(notification.nameEn) }
+    var name by remember { mutableStateOf(notification.name) }
     var days by remember {
-        mutableStateOf(if (notification.nameEn.isNotEmpty()) notification.days else null)
+        mutableStateOf(if (notification.name.isNotEmpty()) notification.days else null)
     }
 
     Column(
@@ -110,7 +110,7 @@ private fun DialogLayout(
                 .fillMaxWidth()
                 .padding(8.dp, 16.dp)
         ) {
-            if (notification.nameEn.isEmpty()) {
+            if (notification.name.isEmpty()) {
                 AppButton(
                     text = stringResource(R.string.settings_edit_notification_cancel),
                     onClick = { onCancelClick() },
@@ -141,7 +141,7 @@ private fun DialogLayout(
                             toast(context, R.string.settings_edit_notification_days_null)
                         }
                         else -> {
-                            onSaveClick(notification.copy(nameEn = name, days = days!!))
+                            onSaveClick(notification.copy(name = name, days = days!!))
                         }
                     }
                 },
@@ -156,7 +156,7 @@ private fun DialogLayout(
 private fun Preview() {
     AppTheme {
         EditNotificationDialog(
-            notification = AlarmEntity(0, "Notification name", true, 30),
+            notification = AlarmModel(0, "Notification name", true, 30),
             onDismiss = {},
             onSaveClick = {},
             onDeleteClick = {}

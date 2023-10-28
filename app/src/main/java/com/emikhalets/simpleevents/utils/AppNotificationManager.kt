@@ -13,7 +13,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.AlarmWithEventsEntity
+import com.emikhalets.simpleevents.domain.model.AlarmWithEventsModel
 import com.emikhalets.simpleevents.presentation.MainActivity
 import com.emikhalets.simpleevents.utils.extensions.formatNotificationInfo
 
@@ -24,7 +24,7 @@ object AppNotificationManager {
     private const val CHANNEL_ID_EVENTS = "simple_events.notification.channel.events"
     private const val CHANNEL_NAME_EVENTS = "Events notifications"
 
-    fun sendEventsNotification(context: Context, events: List<AlarmWithEventsEntity>) {
+    fun sendEventsNotification(context: Context, events: List<AlarmWithEventsModel>) {
         val nm = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID_EVENTS)
@@ -38,7 +38,7 @@ object AppNotificationManager {
 
         val style = NotificationCompat.InboxStyle()
         events.forEach { wrapper ->
-            style.addLine(wrapper.alarm.nameEn)
+            style.addLine(wrapper.alarm.name)
             wrapper.events.forEach { style.addLine(it.formatNotificationInfo(context)) }
         }
 

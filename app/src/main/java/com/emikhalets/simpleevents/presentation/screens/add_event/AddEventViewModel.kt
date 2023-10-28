@@ -1,7 +1,7 @@
 package com.emikhalets.simpleevents.presentation.screens.add_event
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.AddEventUseCase
+import com.emikhalets.simpleevents.domain.model.EventModel
+import com.emikhalets.simpleevents.domain.use_case.events.AddEventUseCase
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
@@ -29,7 +29,7 @@ class AddEventViewModel @Inject constructor(
     ) {
         launchIO {
             setState { it.copy(loading = true) }
-            val entity = EventEntity(
+            val entity = EventModel(
                 id = 0,
                 date = date,
                 name = name,

@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
-import com.emikhalets.simpleevents.domain.entity.EventEntity
+import com.emikhalets.simpleevents.domain.model.EventModel
 import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppText
 import com.emikhalets.simpleevents.presentation.components.AppTextField
@@ -115,7 +115,7 @@ private fun SearchBox(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun EventsListBox(
-    eventsMap: Map<Long, List<EventEntity>>,
+    eventsMap: Map<Long, List<EventModel>>,
     onEventClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -172,7 +172,7 @@ private fun EventsListHeader(
 
 @Composable
 private fun EventListItem(
-    event: EventEntity,
+    event: EventModel,
     onEventClick: (Long) -> Unit,
 ) {
     Row(

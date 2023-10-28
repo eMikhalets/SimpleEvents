@@ -1,8 +1,8 @@
 package com.emikhalets.simpleevents.presentation.screens.event_item
 
-import com.emikhalets.simpleevents.domain.entity.EventEntity
-import com.emikhalets.simpleevents.domain.usecase.events.DeleteEventUseCase
-import com.emikhalets.simpleevents.domain.usecase.events.GetEventsUseCase
+import com.emikhalets.simpleevents.domain.model.EventModel
+import com.emikhalets.simpleevents.domain.use_case.events.DeleteEventUseCase
+import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
@@ -38,7 +38,7 @@ class EventItemViewModel @Inject constructor(
         }
     }
 
-    fun deleteEvent(entity: EventEntity?) {
+    fun deleteEvent(entity: EventModel?) {
         if (entity == null) {
             setState { it.copy(error = UiString.internal) }
             return
