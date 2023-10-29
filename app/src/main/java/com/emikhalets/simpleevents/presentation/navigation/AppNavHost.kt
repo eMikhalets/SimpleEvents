@@ -11,7 +11,6 @@ import com.emikhalets.simpleevents.presentation.screens.add_event.AddEventScreen
 import com.emikhalets.simpleevents.presentation.screens.edit_event.EditEventScreen
 import com.emikhalets.simpleevents.presentation.screens.event_item.EventItemScreen
 import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListScreen
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListViewModel
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsScreen
 import com.emikhalets.simpleevents.presentation.screens.settings.SettingsViewModel
 
@@ -20,11 +19,8 @@ fun AppNavHost(navController: NavHostController) {
     NavHost(navController, AppRoute.EventsList) {
 
         composable(AppRoute.EventsList) {
-            val viewModel: EventsListViewModel = hiltViewModel()
-            val state by viewModel.state.collectAsState()
             EventsListScreen(
-                state = state,
-                onAction = viewModel::setAction,
+                viewModel = hiltViewModel(),
                 onEventClick = { navController.navigate(eventDetailsRoute(it)) }
             )
         }

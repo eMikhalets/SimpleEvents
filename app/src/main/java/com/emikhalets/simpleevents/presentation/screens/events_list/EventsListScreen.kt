@@ -15,9 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,42 +29,45 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.emikhalets.simpleevents.R
+import com.emikhalets.simpleevents.core.ui.extentions.ScreenPreview
+import com.emikhalets.simpleevents.core.ui.theme.AppTheme
+import com.emikhalets.simpleevents.domain.asString
 import com.emikhalets.simpleevents.domain.model.EventModel
 import com.emikhalets.simpleevents.presentation.components.AppIcon
 import com.emikhalets.simpleevents.presentation.components.AppText
-import com.emikhalets.simpleevents.presentation.components.AppTextField
 import com.emikhalets.simpleevents.presentation.components.dialogs.ErrorDialog
-import com.emikhalets.simpleevents.presentation.theme.AppTheme
+import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListContract.Action
+import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListContract.State
+import com.emikhalets.simpleevents.utils.enums.EventType
 import com.emikhalets.simpleevents.utils.extensions.formatDate
 import com.emikhalets.simpleevents.utils.extensions.formatHomeInfo
 import com.emikhalets.simpleevents.utils.extensions.pluralsResource
+import java.util.Date
 
 @Composable
 fun EventsListScreen(
-    state: EventsListState,
-    onAction: (EventsListAction) -> Unit,
+    viewModel: EventsListViewModel,
     onEventClick: (Long) -> Unit,
 ) {
+    val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
+
     var searchQuery by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit) {
-        onAction(EventsListAction.GetEvents)
-    }
 
     LaunchedEffect(state.error) {
         val error = state.error
         if (error != null) {
-            errorMessage = error.asString()
-            onAction(EventsListAction.AcceptError)
+            errorMessage = error.asString(context)
+            viewModel.setAction(Action.DropError)
         }
     }
 
@@ -69,7 +76,7 @@ fun EventsListScreen(
         searchQuery = searchQuery,
         onSearchQueryChange = { newQuery ->
             searchQuery = newQuery
-            onAction(EventsListAction.SearchEvents(searchQuery))
+            viewModel.setAction(Action.SearchEvents(searchQuery))
         },
         onEventClick = onEventClick
     )
@@ -84,7 +91,7 @@ fun EventsListScreen(
 
 @Composable
 private fun ScreenContent(
-    state: EventsListState,
+    state: State,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     onEventClick: (Long) -> Unit,
@@ -106,11 +113,12 @@ private fun SearchBox(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
 ) {
-    AppTextField(
+    OutlinedTextField(
         value = searchQuery,
         onValueChange = onSearchQueryChange,
-        placeholder = stringResource(R.string.home_search_placeholder),
-        leadingIcon = R.drawable.ic_round_search_24,
+        placeholder = { Text(stringResource(R.string.home_search_placeholder)) },
+        leadingIcon = { AppIcon(R.drawable.ic_round_search_24) },
+        shape = RoundedCornerShape(26.dp),
         maxLines = 1,
         modifier = Modifier
             .fillMaxWidth()
@@ -204,12 +212,6 @@ private fun EventListItem(
                 letterSpacing = 2.sp
             )
         }
-        SquareColumn(backgroundColor = MaterialTheme.colors.background) {
-            AppIcon(
-                drawableRes = R.drawable.ic_round_person_24,
-                tint = MaterialTheme.colors.onSurface
-            )
-        }
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
@@ -250,13 +252,34 @@ private fun SquareColumn(
     )
 }
 
-@Preview(showBackground = true)
+@ScreenPreview
 @Composable
 private fun Preview() {
     AppTheme {
         ScreenContent(
-            state = EventsListState(
-                eventsMap = PreviewEntity.getEventListScreenEvents()
+            state = State(
+                eventsMap = mapOf(
+                    Date().time to listOf(
+                        EventModel(
+                            1, Date().time, "Name 1", EventType.BIRTHDAY,
+                            "", false, 1, 12
+                        ),
+                        EventModel(
+                            2, Date().time, "Name 2", EventType.BIRTHDAY,
+                            "", false, 2, 12
+                        ),
+                    ),
+                    Date().time + 1 to listOf(
+                        EventModel(
+                            3, Date().time, "Name 4", EventType.BIRTHDAY,
+                            "", false, 5, 12
+                        ),
+                        EventModel(
+                            4, Date().time, "Name 5", EventType.BIRTHDAY,
+                            "", false, 6, 12
+                        ),
+                    ),
+                )
             ),
             searchQuery = "Some query",
             onSearchQueryChange = {},

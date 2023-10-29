@@ -3,7 +3,6 @@ package com.emikhalets.simpleevents.presentation.screens.edit_event
 import com.emikhalets.simpleevents.domain.model.EventModel
 import com.emikhalets.simpleevents.domain.use_case.events.AddEventUseCase
 import com.emikhalets.simpleevents.domain.use_case.events.GetEventsUseCase
-import com.emikhalets.simpleevents.presentation.screens.events_list.EventsListAction
 import com.emikhalets.simpleevents.utils.BaseViewModel
 import com.emikhalets.simpleevents.utils.UiString
 import com.emikhalets.simpleevents.utils.extensions.calculateEventData
